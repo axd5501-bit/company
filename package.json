@@ -1,0 +1,64 @@
+{
+  "name": "biztalk-english",
+  "productName": "BizTalk English",
+  "version": "1.0.0",
+  "description": "비즈니스 미팅 중심 사내 영어 학습 프로그램",
+  "author": "사내 교육팀",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"tests/*.test.js\"",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.9.3",
+    "electron-builder": "26.17.0"
+  },
+  "build": {
+    "appId": "com.company.biztalk-english",
+    "productName": "BizTalk English",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "app/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "BizTalk-English-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "BizTalk English",
+      "installerLanguages": ["ko_KR"],
+      "language": "1042"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["universal"]
+        }
+      ],
+      "category": "public.app-category.education",
+      "artifactName": "BizTalk-English-${version}-mac.${ext}",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "발음 연습 녹음을 위해 마이크를 사용합니다."
+      }
+    }
+  }
+}
