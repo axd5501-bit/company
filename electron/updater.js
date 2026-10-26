@@ -5,19 +5,11 @@
  * - macOS: 코드 서명이 없으면 자동 설치가 안 되므로, 새 버전이 나오면 다운로드 페이지를 안내한다.
  */
 const { app, dialog, shell, net } = require('electron');
+const { isNewer } = require('./version');
 
 const LATEST_API = 'https://api.github.com/repos/axd5501-bit/company/releases/latest';
 const RELEASES_PAGE = 'https://github.com/axd5501-bit/company/releases/latest';
 const CHECK_EVERY = 6 * 60 * 60 * 1000;
-
-/** "2.10.0" 이 "2.9.3" 보다 새 버전인지 */
-function isNewer(a, b) {
-  const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
-  for (let i = 0; i < 3; i++) {
-    if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) > (pb[i] || 0);
-  }
-  return false;
-}
 
 function ask(win, options) {
   return win ? dialog.showMessageBox(win, options) : dialog.showMessageBox(options);
@@ -82,4 +74,3 @@ module.exports = function setupUpdates(getWindow) {
   if (process.platform === 'win32') setupWindows(getWindow);
   else if (process.platform === 'darwin') setupMac(getWindow);
 };
-module.exports.isNewer = isNewer;
