@@ -50,8 +50,55 @@ jobs:
           name: ${{ matrix.name }}
           path: ${{ matrix.files }}
           if-no-files-found: error
-      - name: Attach to GitHub release
-        if: startsWith(github.ref, 'refs/tags/v')
+
+  # Releases 페이지에 설치 파일 올리기 (GitHub 계정 없이도 다운로드 가능)
+  # - 기본 브랜치에 package.json 의 새 버전이 올라오면 v<버전> 릴리스를 자동으로 만든다 (이미 있으면 건너뜀)
+  # - v* 태그를 직접 올려도 된다
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 릴리스 버전 확인
+        id: ver
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="v$(node -p "require('./package.json').version")"
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "$tag 릴리스가 이미 있어 건너뜁니다."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - if: steps.ver.outputs.skip != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - if: steps.ver.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ matrix.files }}
+          tag_name: ${{ steps.ver.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: BizTalk English ${{ steps.ver.outputs.tag }}
+          files: |
+            dist/*.exe
+            dist/*.dmg
+          fail_on_unmatched_files: true
+          body: |
+            ## 설치 방법
+
+            아래 **Assets**에서 내 컴퓨터에 맞는 파일을 받으세요. GitHub 계정이 없어도 됩니다.
+
+            - **Windows**: `BizTalk-English-Setup-…exe`를 받아 실행합니다.
+              처음 실행할 때 "Windows의 PC 보호" 창이 뜨면 **추가 정보 → 실행**을 누르세요.
+            - **macOS**: `BizTalk-English-…-mac.dmg`를 열고 앱을 응용 프로그램 폴더로 옮깁니다.
+              처음에는 Finder에서 앱을 **우클릭 → 열기**로 실행하세요.
+            - **휴대폰**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ 을 열고 **홈 화면에 추가**를 누르세요.
+
+            학습 기록은 각 기기에 저장됩니다. 기기를 옮길 때는 **설정 → 학습 데이터 → 내보내기 / 가져오기**를 쓰세요.

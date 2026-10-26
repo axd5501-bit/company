@@ -61,12 +61,15 @@ HVAC 트랙은 실무 단위와 개념을 함께 다룹니다: 냉동톤↔kW↔
 
 ### PC (설치 파일)
 
-설치 파일은 GitHub Actions가 자동으로 빌드합니다.
+**다운로드: [Releases 최신 버전](https://github.com/axd5501-bit/company/releases/latest)** — GitHub 계정 없이 받을 수 있습니다.
 
-- 저장소 **Actions** 탭 → *Build installers* → 하단 **Artifacts**
-  - `BizTalk-English-Windows` → `BizTalk-English-Setup-x.y.z.exe`
-  - `BizTalk-English-macOS` → `BizTalk-English-x.y.z-mac.dmg`
-- 정식 배포: `v2.0.0` 같은 태그를 만들면 **Releases** 페이지에 설치 파일이 첨부됩니다.
+- Windows: `BizTalk-English-Setup-x.y.z.exe`
+- macOS: `BizTalk-English-x.y.z-mac.dmg`
+
+설치 파일은 GitHub Actions(*Build installers*)가 자동으로 빌드합니다.
+- 기본 브랜치에 `package.json`의 `version`을 올려서 push하면 `v<버전>` 릴리스가 자동으로 만들어지고 설치 파일이 첨부됩니다.
+- `v2.5.0` 같은 태그를 직접 올려도 됩니다.
+- 릴리스 전 테스트 빌드는 **Actions** 탭 → 실행 기록 → 하단 **Artifacts**에서 받을 수 있습니다. 이 경로는 GitHub 로그인이 필요합니다.
 
 설치 시 참고:
 - **Windows**: 코드 서명이 없어 처음 실행할 때 "Windows의 PC 보호" 창이 뜨면 **추가 정보 → 실행**을 누르세요.
