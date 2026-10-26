@@ -86,7 +86,8 @@
   function phrasebookResults(pb) {
     const results = pb.filter === 'custom' ? [] : C.searchExpressions(App.LESSONS, pb.q, {
       track: App.TRACKS.some(function (t) { return t.id === pb.filter; }) ? pb.filter : null,
-      favorites: pb.filter === 'favorites' ? App.state.favorites : null
+      favorites: pb.filter === 'favorites' ? App.state.favorites : null,
+      termsOnly: pb.filter === 'terms'
     });
     let customs = [];
     if (pb.filter === 'custom' || pb.filter === 'favorites' || pb.filter === 'all') {
@@ -97,11 +98,14 @@
         return !q || (c.en + ' ' + c.ko).toLowerCase().indexOf(q) !== -1;
       });
     }
-    const rows = results.map(function (r) { return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, tip: r.expr.tip, source: r.lesson.icon + ' ' + r.lesson.title, href: '#/lesson/' + r.lesson.id }; })
+    const rows = results.map(function (r) {
+      return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, tip: r.expr.term ? '예문 · ' + r.expr.ex : r.expr.tip, term: r.expr.term,
+        source: r.lesson.icon + ' ' + r.lesson.title, href: '#/lesson/' + r.lesson.id };
+    })
       .concat(customs.map(function (id) { const p = App.phrase(id); return { id: id, en: p.en, ko: p.ko, tip: p.tip, source: p.source }; }));
     if (!rows.length) return '<div class="card center muted">' + (pb.filter === 'favorites' ? '아직 즐겨찾기한 표현이 없어요. ☆ 를 눌러 추가해 보세요.' : '검색 결과가 없어요.') + '</div>';
     return '<p class="muted small result-count">' + rows.length + '개 표현</p>' + rows.map(function (r) {
-      return '<article class="pb-row card"><div class="grow"><p class="en">' + esc(r.en) + '</p><p class="muted">' + esc(r.ko) + '</p>' +
+      return '<article class="pb-row card' + (r.term ? ' is-term' : '') + '"><div class="grow"><p class="en">' + (r.term ? '<span class="term-tag">TERM</span>' : '') + esc(r.en) + '</p><p class="muted">' + esc(r.ko) + '</p>' +
         (r.tip ? '<p class="tip small">💡 ' + esc(r.tip) + '</p>' : '') +
         (r.href ? '<a class="pb-source" href="' + r.href + '">' + esc(r.source) + '</a>' : '<span class="pb-source">' + esc(r.source) + '</span>') + '</div>' +
         '<div class="pb-actions"><button class="btn icon-only" data-action="speak" data-text="' + esc(r.en) + '" title="듣기">' + icon('speaker') + '</button>' +
@@ -116,7 +120,7 @@
       if (!s.pb) s.pb = { q: '', filter: 'all' };
       const pb = s.pb;
       const filters = [['all', '전체']].concat(App.TRACKS.map(function (t) { return [t.id, t.icon + ' ' + t.title]; }))
-        .concat([['favorites', '⭐ 즐겨찾기']]);
+        .concat([['terms', '🧩 기술 용어'], ['favorites', '⭐ 즐겨찾기']]);
       if (Object.keys(App.state.custom).length) filters.push(['custom', '🤖 AI 회의 표현']);
       return '<header class="page-head"><h1>표현 사전</h1><p class="muted">회의 직전 빠르게 찾아보고, 필요한 표현만 모아 인쇄하세요.</p></header>' +
         '<div class="search-bar"><input type="search" id="pb-search" data-input="pb-search" placeholder="영어나 한국어로 검색 (예: 일정, agree)" value="' + esc(pb.q) + '">' +
@@ -227,7 +231,7 @@
         '<button class="btn danger" data-action="reset">학습 기록 초기화</button></div></section>' +
         '<section class="card"><h3>휴대폰에서 쓰기</h3><p class="muted small">웹 주소로 열었다면 브라우저 메뉴의 <b>홈 화면에 추가</b>를 누르세요. 앱처럼 아이콘이 생기고 오프라인에서도 열립니다.<br>' +
         'iPhone(Safari): 공유 버튼 → 홈 화면에 추가 · Android(Chrome): ⋮ 메뉴 → 홈 화면에 추가</p></section>' +
-        '<p class="muted small center">BizTalk English · 폰트: Pretendard (SIL OFL 1.1)</p>';
+        '<p class="muted small center">BizTalk English · 폰트: Pretendard, Bricolage Grotesque, JetBrains Mono (SIL OFL 1.1)</p>';
     }
   };
 

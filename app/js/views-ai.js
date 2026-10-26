@@ -28,6 +28,12 @@
     { id: 'presentation-qa', icon: '🎤', title: '발표 후 질의응답', you: '발표자',
       partner: 'Tom Wilson, a skeptical senior executive',
       situation: 'The learner has just presented a plan to enter a new market. The executive asks tough questions about risks, costs and the timeline.' },
+    { id: 'design-review', icon: '📐', title: '기술 설계 검토', you: '설계 담당 엔지니어',
+      partner: 'Dr. Alex Novak, Principal Architect',
+      situation: 'A design review. The learner presents the technical design of a new system, and the architect asks about the architecture, requirements, scalability, failure modes, trade-offs and test plans. Use realistic engineering vocabulary.' },
+    { id: 'incident-review', icon: '🚨', title: '장애 회고 (포스트모템)', you: '엔지니어링 리드',
+      partner: 'Rachel Kim, Head of Operations',
+      situation: 'The morning after a production outage. The meeting covers what happened, the timeline, customer impact, the root cause, the temporary workaround and corrective actions. Keep it blameless but demanding.' },
     { id: 'custom', icon: '✏️', title: '직접 상황 만들기', custom: true }
   ];
 

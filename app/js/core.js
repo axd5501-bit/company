@@ -145,6 +145,18 @@
         s.options.filter(function (_, i) { return i !== s.answer; }), rng, s.explain);
     });
 
+    // 기술 용어가 있는 레슨은 용어 문제 2개 (뜻 → 용어, 용어 → 뜻)
+    const terms = lesson.terms || [];
+    if (terms.length >= 4) {
+      const picked = shuffle(terms, rng).slice(0, 2);
+      const others = function (t) { return shuffle(terms.filter(function (x) { return x !== t; }), rng).slice(0, 3); };
+      const q1 = choiceQuestion('다음 뜻의 기술 용어는?', picked[0].en, others(picked[0]).map(function (x) { return x.en; }), rng, picked[0].ex);
+      q1.sub = picked[0].ko;
+      const q2 = choiceQuestion('다음 기술 용어의 뜻은?', picked[1].ko, others(picked[1]).map(function (x) { return x.ko; }), rng, picked[1].ex);
+      q2.sub = picked[1].en;
+      qs.push(q1, q2);
+    }
+
     const types = ['ko2en', 'blank', 'order'];
     const exprs = shuffle(lesson.expressions, rng);
     for (let i = 0; qs.length < count && i < exprs.length; i++) {
@@ -352,9 +364,10 @@
     const out = [];
     lessons.forEach(function (l) {
       if (opts.track && l.track !== opts.track) return;
-      l.expressions.forEach(function (e) {
+      const items = opts.termsOnly ? (l.terms || []) : l.expressions.concat(l.terms || []);
+      items.forEach(function (e) {
         if (opts.favorites && opts.favorites.indexOf(e.id) === -1) return;
-        if (q && (e.en + ' ' + e.ko + ' ' + (e.tip || '')).toLowerCase().indexOf(q) === -1) return;
+        if (q && (e.en + ' ' + e.ko + ' ' + (e.tip || '') + ' ' + (e.ex || '')).toLowerCase().indexOf(q) === -1) return;
         out.push({ expr: e, lesson: l });
       });
     });

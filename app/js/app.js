@@ -20,8 +20,13 @@
     l.expressions.forEach(function (e) { EXPRS[e.id] = { expr: e, lesson: l }; });
   });
 
+  const TERMS = {};
+  LESSONS.forEach(function (l) {
+    (l.terms || []).forEach(function (t) { TERMS[t.id] = { term: t, lesson: l }; });
+  });
+
   const App = {
-    C: C, LESSONS: LESSONS, TRACKS: TRACKS, SCENARIOS: window.SCENARIOS, EXPRS: EXPRS,
+    C: C, LESSONS: LESSONS, TRACKS: TRACKS, SCENARIOS: window.SCENARIOS, EXPRS: EXPRS, TERMS: TERMS,
     IS_ELECTRON: IS_ELECTRON, SR: SR, CAN_RECORD: CAN_RECORD,
     views: {}, actions: {}, changes: {},
     route: { name: 'home', args: [] },
@@ -83,10 +88,12 @@
   App.findLesson = function (id) { return LESSONS.find(function (l) { return l.id === id; }); };
   App.findTrack = function (id) { return TRACKS.find(function (t) { return t.id === id; }); };
 
-  /** 복습 카드·사전에서 쓰는 표현 조회 (레슨 표현 + AI 회의에서 저장한 표현) */
+  /** 복습 카드·사전에서 쓰는 표현 조회 (레슨 표현 + 기술 용어 + AI 회의에서 저장한 표현) */
   App.phrase = function (id) {
     const item = EXPRS[id];
     if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, tip: item.expr.tip, source: item.lesson.icon + ' ' + item.lesson.title };
+    const t = TERMS[id];
+    if (t) return { id: id, en: t.term.en, ko: t.term.ko, tip: '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
     const c = App.state.custom[id];
     if (c) return { id: id, en: c.en, ko: c.ko, tip: c.tip, source: '🤖 AI 회의에서 저장' };
     return null;

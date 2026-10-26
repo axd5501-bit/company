@@ -3,6 +3,7 @@
  * - expressions[].blank : 빈칸 퀴즈에서 비워 둘 단어 (en 안에 반드시 포함)
  * - dialogue.you        : 롤플레이에서 학습자가 맡는 역할
  * - situations[].answer : options 의 정답 인덱스 (화면에서는 섞여서 나옴)
+ * - terms (선택)        : 기술 용어 카드 { en, ko, ex(예문) }. 퀴즈·복습·사전·스피드 챌린지에 함께 나온다
  */
 (function (root) {
   const LESSONS = [
@@ -439,6 +440,145 @@
         { q: "상대에게 그 시간이 괜찮은지 물을 때 가장 자연스러운 것은?", options: ["Does 10 a.m. work for you?", "Is 10 a.m. possible to you?", "Can you possible at 10?", "10 a.m. is okay to you?"], answer: 0, explain: "work for ~ 는 일정이 맞는지 물을 때 가장 많이 씁니다." },
         { q: "'그날은 일정이 꽉 차 있다'를 정중하게 말하려면?", options: ["I'm afraid I'm tied up that day.", "I'm busy. No.", "That day is impossible for me forever.", "I have no time for you."], answer: 0, explain: "be tied up = 바쁘다. I'm afraid 로 부드럽게 시작하세요." }
       ]
+    },
+    {
+      id: 'design-review',
+      icon: '📐',
+      title: '설계 검토',
+      titleEn: 'Design Review',
+      goal: '시스템 구조와 설계 판단의 근거를 설명하고, 기술적 질문과 반론에 답할 수 있다.',
+      expressions: [
+        { en: "Let me walk you through the system architecture.", ko: "시스템 아키텍처를 단계별로 설명드리겠습니다.", blank: "architecture" },
+        { en: "This design meets all the functional requirements.", ko: "이 설계는 모든 기능 요구사항을 충족합니다.", tip: "functional / non-functional requirements = 기능 / 비기능 요구사항", blank: "requirements" },
+        { en: "The main trade-off here is performance versus cost.", ko: "여기서 핵심 트레이드오프는 성능 대 비용입니다.", tip: "trade-off = 하나를 얻으려면 다른 하나를 포기해야 하는 관계", blank: "trade-off" },
+        { en: "What are the design constraints we need to consider?", ko: "고려해야 할 설계 제약 조건은 무엇인가요?", blank: "constraints" },
+        { en: "Have we considered how this will scale?", ko: "이 구조가 규모가 커질 때 어떻게 확장될지 검토해 봤나요?", tip: "scale = (사용량·규모가 늘어날 때) 감당하며 확장되다", blank: "scale" },
+        { en: "I'd suggest building a prototype before we commit to this approach.", ko: "이 방식으로 확정하기 전에 프로토타입을 먼저 만들어 볼 것을 제안합니다.", tip: "commit to ~ = ~으로 확정하다, 전념하다", blank: "prototype" },
+        { en: "Can we freeze the spec by the end of this week?", ko: "이번 주 말까지 사양을 확정할 수 있을까요?", tip: "freeze the spec = 사양을 더 이상 바꾸지 않도록 동결하다", blank: "freeze" }
+      ],
+      terms: [
+        { en: "architecture", ko: "아키텍처, 시스템 구조", ex: "The new architecture separates the data layer from the UI." },
+        { en: "requirement", ko: "요구사항", ex: "Low latency is a key requirement for this system." },
+        { en: "specification (spec)", ko: "사양, 스펙", ex: "Please check the spec before you start coding." },
+        { en: "constraint", ko: "제약 조건", ex: "Power consumption is our biggest design constraint." },
+        { en: "trade-off", ko: "트레이드오프, 상충 관계", ex: "There's a trade-off between accuracy and speed." },
+        { en: "scalability", ko: "확장성", ex: "Scalability will matter once we have more users." },
+        { en: "prototype", ko: "시제품, 프로토타입", ex: "We'll test the prototype with real users next week." },
+        { en: "dependency", ko: "의존성 (다른 부품·시스템에 의존하는 관계)", ex: "This module has a dependency on a third-party library." }
+      ],
+      dialogue: {
+        setting: '새 센서 플랫폼의 설계를 수석 아키텍트와 PM 앞에서 발표합니다.',
+        you: 'A',
+        roles: { A: '나 (담당 엔지니어)', B: 'Dr. Novak (수석 아키텍트)', C: 'Hannah (PM)' },
+        lines: [
+          { s: 'A', en: "Let me walk you through the system architecture for the new sensor platform.", ko: "새 센서 플랫폼의 시스템 아키텍처를 단계별로 설명드리겠습니다." },
+          { s: 'A', en: "This design meets all the functional requirements in the spec.", ko: "이 설계는 사양서의 모든 기능 요구사항을 충족합니다." },
+          { s: 'B', en: "Have we considered how this will scale when we add more devices?", ko: "디바이스가 늘어나면 이 구조가 어떻게 확장될지 검토해 봤나요?" },
+          { s: 'A', en: "Yes. The main trade-off here is performance versus cost, so we chose a modular design.", ko: "네. 여기서 핵심 트레이드오프는 성능 대 비용이라서 모듈형 설계를 택했습니다." },
+          { s: 'B', en: "What about the dependency on the third-party library?", ko: "서드파티 라이브러리 의존성은 어떻게 하죠?" },
+          { s: 'A', en: "That's a valid concern. I'd suggest building a prototype before we commit to this approach.", ko: "타당한 우려입니다. 이 방식으로 확정하기 전에 프로토타입을 먼저 만들어 볼 것을 제안합니다." },
+          { s: 'C', en: "Agreed. Can we freeze the spec by the end of this week?", ko: "동의해요. 이번 주 말까지 사양을 확정할 수 있을까요?" },
+          { s: 'A', en: "Yes, I'll update the design document by Thursday.", ko: "네, 목요일까지 설계 문서를 업데이트하겠습니다." }
+        ]
+      },
+      situations: [
+        { q: "'성능과 비용이 서로 상충한다'는 설계 판단을 설명할 때 가장 자연스러운 표현은?", options: ["The main trade-off is performance versus cost.", "Performance and cost are fighting.", "We exchange performance with cost.", "Cost wins performance."], answer: 0, explain: "trade-off는 엔지니어링 회의에서 가장 자주 쓰는 단어 중 하나입니다." },
+        { q: "사양을 더 이상 바꾸지 않도록 확정하자고 할 때?", options: ["Can we freeze the spec?", "Can we ice the spec?", "Can we stop the spec moving?", "Can we close the spec door?"], answer: 0, explain: "freeze the spec / lock down the requirements 모두 자주 씁니다." },
+        { q: "'확장성'을 뜻하는 단어는?", options: ["scalability", "scaling-ness", "expandity", "growability"], answer: 0, explain: "Will it scale? (확장 가능한가?) 형태로도 자주 묻습니다." }
+      ]
+    },
+    {
+      id: 'troubleshooting',
+      icon: '🛠️',
+      title: '장애 분석 & 근본 원인',
+      titleEn: 'Troubleshooting & Root Cause',
+      goal: '장애 상황과 원인, 임시 조치와 재발 방지책을 논리적으로 보고할 수 있다.',
+      expressions: [
+        { en: "We've identified the root cause of the failure.", ko: "고장의 근본 원인을 파악했습니다.", blank: "root" },
+        { en: "Were you able to reproduce the issue?", ko: "그 문제를 재현할 수 있었나요?", tip: "reproduce = (버그·결함을) 같은 조건에서 다시 일으키다", blank: "reproduce" },
+        { en: "The defect only occurs under high load.", ko: "이 결함은 고부하 상황에서만 발생합니다.", blank: "defect" },
+        { en: "As a temporary workaround, we rolled back to the previous version.", ko: "임시 해결책으로 이전 버전으로 롤백했습니다.", tip: "workaround = 임시방편 / roll back = 이전 상태로 되돌리다", blank: "workaround" },
+        { en: "The failure rate dropped from 3% to 0.5% after the fix.", ko: "수정 후 불량률이 3%에서 0.5%로 떨어졌습니다.", blank: "rate" },
+        { en: "We need to put corrective actions in place to prevent this from happening again.", ko: "재발 방지를 위한 시정 조치를 마련해야 합니다.", blank: "corrective" },
+        { en: "Let's do a quick post-mortem to see what we can learn.", ko: "무엇을 배울 수 있는지 간단히 사후 분석을 해 봅시다.", tip: "post-mortem = 장애·프로젝트 후 원인과 교훈을 정리하는 회의", blank: "post-mortem" }
+      ],
+      terms: [
+        { en: "root cause", ko: "근본 원인", ex: "A loose connector was the root cause of the outage." },
+        { en: "reproduce", ko: "재현하다", ex: "We couldn't reproduce the bug on the test server." },
+        { en: "defect", ko: "결함", ex: "The defect was found during the final inspection." },
+        { en: "workaround", ko: "임시 해결책", ex: "Restarting the service is only a workaround." },
+        { en: "roll back", ko: "롤백하다 (이전 버전으로 되돌리다)", ex: "If the update fails, we'll roll back immediately." },
+        { en: "failure rate", ko: "고장률, 불량률", ex: "The failure rate is within the industry standard." },
+        { en: "corrective action", ko: "시정 조치", ex: "The supplier submitted a corrective action plan." },
+        { en: "post-mortem", ko: "사후 분석, 회고", ex: "The post-mortem showed we needed better monitoring." }
+      ],
+      dialogue: {
+        setting: '어젯밤 생산 라인 제어 시스템에 장애가 발생했습니다. 다음 날 아침 원인 분석 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (엔지니어링 리드)', B: 'Raj (운영 매니저)' },
+        lines: [
+          { s: 'B', en: "What happened with the control system last night?", ko: "어젯밤 제어 시스템에 무슨 일이 있었나요?" },
+          { s: 'A', en: "We've identified the root cause of the failure. A memory leak caused the controller to crash.", ko: "고장의 근본 원인을 파악했습니다. 메모리 누수 때문에 컨트롤러가 다운됐습니다." },
+          { s: 'B', en: "Were you able to reproduce the issue?", ko: "그 문제를 재현할 수 있었나요?" },
+          { s: 'A', en: "Yes. The defect only occurs under high load, so it didn't show up in our tests.", ko: "네. 이 결함은 고부하 상황에서만 발생해서 테스트에서는 드러나지 않았습니다." },
+          { s: 'B', en: "How did you get the line running again?", ko: "라인은 어떻게 다시 가동했죠?" },
+          { s: 'A', en: "As a temporary workaround, we rolled back to the previous version.", ko: "임시 해결책으로 이전 버전으로 롤백했습니다." },
+          { s: 'B', en: "Okay. How do we make sure this doesn't happen again?", ko: "좋아요. 재발하지 않게 하려면 어떻게 해야 하죠?" },
+          { s: 'A', en: "We need to put corrective actions in place, including a load test. Let's do a quick post-mortem on Friday.", ko: "부하 테스트를 포함한 시정 조치를 마련해야 합니다. 금요일에 간단히 사후 분석을 하죠." }
+        ]
+      },
+      situations: [
+        { q: "'그 문제를 재현할 수 있었나요?'를 영어로?", options: ["Were you able to reproduce the issue?", "Could you remake the problem?", "Did the issue copy again?", "Can you replay the bug?"], answer: 0, explain: "reproduce는 버그나 결함을 같은 조건에서 다시 일으키는 것을 말합니다." },
+        { q: "근본 해결 전에 쓰는 '임시 방편'을 뜻하는 단어는?", options: ["workaround", "workaway", "fix-up", "half-solution"], answer: 0, explain: "근본 해결책은 permanent fix 또는 long-term fix라고 합니다." },
+        { q: "장애 후 원인과 교훈을 정리하는 회의를 무엇이라고 하나요?", options: ["post-mortem", "after-party", "death meeting", "back-check"], answer: 0, explain: "요즘은 blameless retrospective(비난 없는 회고)라고도 합니다." }
+      ]
+    },
+    {
+      id: 'testing-quality',
+      icon: '🧪',
+      title: '테스트 & 품질 보고',
+      titleEn: 'Testing & Quality',
+      goal: '테스트 결과와 품질 지표를 정확한 용어로 보고하고, 출시 여부를 논의할 수 있다.',
+      expressions: [
+        { en: "All test cases passed except for the stress test.", ko: "스트레스 테스트를 제외한 모든 테스트 케이스가 통과했습니다.", blank: "passed" },
+        { en: "The measurement is within the tolerance range.", ko: "측정값이 허용 오차 범위 안에 있습니다.", tip: "tolerance = 허용 오차 / out of tolerance = 허용 오차 초과", blank: "tolerance" },
+        { en: "We found a regression in the latest build.", ko: "최신 빌드에서 회귀 결함을 발견했습니다.", tip: "regression = 수정 후 예전에 잘 되던 기능이 다시 고장 나는 것", blank: "regression" },
+        { en: "What are the acceptance criteria for this feature?", ko: "이 기능의 인수 기준은 무엇인가요?", tip: "acceptance criteria = 완료·합격으로 인정하는 기준", blank: "criteria" },
+        { en: "The yield improved to 98% this month.", ko: "이번 달 수율이 98%로 개선되었습니다.", tip: "yield = 수율 (전체 생산량 중 양품 비율)", blank: "yield" },
+        { en: "We can't release it until QA signs off.", ko: "QA 승인이 나기 전에는 출시할 수 없습니다.", tip: "sign off (on ~) = (~을) 공식 승인하다", blank: "signs" },
+        { en: "Let's prioritize the critical bugs before the release.", ko: "출시 전에 치명적인 버그부터 우선 처리합시다.", blank: "prioritize" }
+      ],
+      terms: [
+        { en: "test case", ko: "테스트 케이스", ex: "We added ten new test cases for the payment module." },
+        { en: "tolerance", ko: "허용 오차", ex: "The part is 0.02 mm out of tolerance." },
+        { en: "regression", ko: "회귀 (결함)", ex: "The regression was caused by last week's update." },
+        { en: "acceptance criteria", ko: "인수 기준", ex: "Let's agree on the acceptance criteria first." },
+        { en: "yield", ko: "수율", ex: "Low yield is increasing our production cost." },
+        { en: "sign off", ko: "(공식) 승인하다", ex: "The client signed off on the final design." },
+        { en: "bottleneck", ko: "병목", ex: "The database has become our main bottleneck." },
+        { en: "throughput", ko: "처리량", ex: "The new line doubled our throughput." }
+      ],
+      dialogue: {
+        setting: '출시 2주 전, 테스트 결과를 공유하는 품질 점검 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (QA 엔지니어)', B: 'Laura (PM)', C: 'Ken (개발 리드)' },
+        lines: [
+          { s: 'B', en: "Where are we with testing?", ko: "테스트는 어디까지 진행됐나요?" },
+          { s: 'A', en: "All test cases passed except for the stress test.", ko: "스트레스 테스트를 제외한 모든 테스트 케이스가 통과했습니다." },
+          { s: 'C', en: "What went wrong in the stress test?", ko: "스트레스 테스트는 뭐가 문제였죠?" },
+          { s: 'A', en: "Throughput dropped by 40% at peak load. We think the database is the bottleneck.", ko: "최대 부하에서 처리량이 40% 떨어졌습니다. 데이터베이스가 병목인 것 같습니다." },
+          { s: 'C', en: "Is that the only issue?", ko: "그게 유일한 문제인가요?" },
+          { s: 'A', en: "No, we also found a regression in the latest build. The login feature is broken again.", ko: "아니요, 최신 빌드에서 회귀 결함도 발견했습니다. 로그인 기능이 다시 고장 났어요." },
+          { s: 'B', en: "Can we still release on schedule?", ko: "그래도 일정대로 출시할 수 있을까요?" },
+          { s: 'A', en: "We can't release it until QA signs off. Let's prioritize the critical bugs before the release.", ko: "QA 승인 전에는 출시할 수 없습니다. 출시 전에 치명적인 버그부터 우선 처리합시다." },
+          { s: 'B', en: "Agreed. Ken, can your team fix them by Friday?", ko: "동의해요. 켄, 팀에서 금요일까지 고칠 수 있나요?" }
+        ]
+      },
+      situations: [
+        { q: "'측정값이 허용 오차 안에 있다'를 영어로?", options: ["It's within the tolerance range.", "It's inside the allowing mistake.", "It's in the error permission.", "It's under the okay range."], answer: 0, explain: "out of tolerance(허용 오차 초과)도 함께 알아 두세요." },
+        { q: "수정 후 예전에 잘 되던 기능이 다시 고장 났을 때 쓰는 말은?", options: ["regression", "regeneration", "recession", "repetition"], answer: 0, explain: "regression test는 이런 결함을 잡기 위한 테스트입니다." },
+        { q: "'QA 승인이 나야 출시할 수 있다'를 영어로?", options: ["We can't release it until QA signs off.", "We can't release it until QA signs in.", "We can't release until QA writes name.", "QA must sign up before release."], answer: 0, explain: "sign off on ~ = ~을 최종 승인하다." }
+      ]
     }
   ];
 
@@ -451,14 +591,17 @@
     { id: 'communication', icon: '🌐', title: '소통 & 원격 협업', titleEn: 'Communication', color: 'teal',
       desc: '되묻고 확인하고, 화상회의와 일정 조율하기', lessons: ['clarifying', 'online', 'scheduling'] },
     { id: 'results', icon: '📈', title: '보고 & 협상', titleEn: 'Reporting & Negotiation', color: 'amber',
-      desc: '숫자로 보고하고, 발표하고, 조건을 협상하기', lessons: ['reporting', 'presentation-qa', 'negotiation'] }
+      desc: '숫자로 보고하고, 발표하고, 조건을 협상하기', lessons: ['reporting', 'presentation-qa', 'negotiation'] },
+    { id: 'engineering', icon: '🔧', title: '엔지니어링 미팅', titleEn: 'Engineering Meetings', color: 'rose',
+      desc: '설계 검토, 장애 분석, 테스트 결과를 기술 용어로 말하기', lessons: ['design-review', 'troubleshooting', 'testing-quality'] }
   ];
 
   const LEVELS = {
     'small-talk': '기초', opening: '기초', closing: '기초',
     opinions: '기초', 'agree-disagree': '중급', brainstorming: '중급',
     clarifying: '기초', online: '기초', scheduling: '기초',
-    reporting: '중급', 'presentation-qa': '중급', negotiation: '고급'
+    reporting: '중급', 'presentation-qa': '중급', negotiation: '고급',
+    'design-review': '중급', troubleshooting: '중급', 'testing-quality': '중급'
   };
 
   LESSONS.forEach(function (lesson) {
@@ -467,6 +610,11 @@
     // 표현마다 고유 id 부여 (복습 카드 키로 사용)
     lesson.expressions.forEach(function (expr, i) {
       expr.id = lesson.id + '-' + (i + 1);
+    });
+    // 기술 용어 카드 (엔지니어링 레슨)
+    (lesson.terms || []).forEach(function (term, i) {
+      term.id = lesson.id + '-t' + (i + 1);
+      term.term = true;
     });
   });
 

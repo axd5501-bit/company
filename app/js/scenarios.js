@@ -282,6 +282,98 @@
           ]
         }
       ]
+    },
+    {
+      id: 'design-review-defense',
+      icon: '🏗️',
+      title: '설계 검토에서 수석 아키텍트의 반론 대응',
+      track: 'engineering',
+      level: '고급',
+      brief: '내가 설계한 시스템을 검토하는 자리입니다. 수석 아키텍트가 구조, 장애 대응, 검증 계획을 날카롭게 파고듭니다. 근거와 수치로 설득하세요.',
+      you: '설계 담당 엔지니어',
+      roles: { N: 'Dr. Novak (수석 아키텍트)' },
+      steps: [
+        {
+          s: 'N', skill: 'clear',
+          en: "So, why did you choose a microservices architecture for this project?",
+          ko: "이 프로젝트에 왜 마이크로서비스 아키텍처를 선택했나요?",
+          choices: [
+            { en: "The main reason is scalability. Each service can scale independently as traffic grows.", grade: 2,
+              feedback: "결론(확장성)을 먼저 말하고 기술적 근거를 덧붙였습니다.",
+              reply: { en: "Fair enough. But doesn't it add a lot of complexity?", ko: "일리 있네요. 하지만 복잡도가 많이 늘지 않나요?" } },
+            { en: "Because it's popular these days and many companies use it.", grade: 1,
+              feedback: "유행은 기술적 근거가 아닙니다. 요구사항과 연결해 설명하세요.",
+              reply: { en: "Popularity isn't a technical reason.", ko: "인기는 기술적 이유가 아니에요." } },
+            { en: "I just thought it was better.", grade: 0,
+              feedback: "근거 없는 답변은 설계 검토에서 신뢰를 잃습니다.",
+              reply: { en: "That's not very convincing.", ko: "그다지 설득력이 없네요." } }
+          ]
+        },
+        {
+          s: 'N', skill: 'polite',
+          en: "Honestly, I think this design is over-engineered.",
+          ko: "솔직히 이 설계는 필요 이상으로 복잡하다고 생각해요.",
+          choices: [
+            { en: "I see where you're coming from. Which parts do you think we could simplify?", grade: 2,
+              feedback: "비판을 인정하고 구체적인 피드백을 요청했습니다.",
+              reply: { en: "The message queue, for a start.", ko: "우선 메시지 큐부터요." } },
+            { en: "I don't think so. It's fine.", grade: 1,
+              feedback: "방어적으로 들립니다. 상대의 근거를 먼저 물어보세요.",
+              reply: { en: "Well, let me explain why I disagree.", ko: "그럼 제가 왜 동의하지 않는지 설명하죠." } },
+            { en: "You don't understand the design.", grade: 0,
+              feedback: "상대의 이해력을 문제 삼으면 논의가 감정싸움이 됩니다.",
+              reply: { en: "I've been designing systems for twenty years.", ko: "저는 20년 동안 시스템을 설계해 왔어요." } }
+          ]
+        },
+        {
+          s: 'N', skill: 'clear',
+          en: "What happens if the message queue goes down?",
+          ko: "메시지 큐가 다운되면 어떻게 되죠?",
+          choices: [
+            { en: "Good question. We have a failover setup, so a backup queue takes over within 30 seconds.", grade: 2,
+              feedback: "장애 대응책을 구체적인 수치와 함께 명확하게 설명했습니다.",
+              reply: { en: "Has that failover been tested?", ko: "그 페일오버는 테스트해 봤나요?" } },
+            { en: "It should be okay, I think.", grade: 1,
+              feedback: "추측성 답변은 리스크를 숨기는 것처럼 들립니다.",
+              reply: { en: "'Should be' isn't good enough.", ko: "'괜찮을 것 같다'로는 부족해요." } },
+            { en: "That will never happen.", grade: 0,
+              feedback: "엔지니어링에서 '절대'는 금물입니다. 장애 시나리오에는 대비책을 제시하세요.",
+              reply: { en: "Everything fails eventually.", ko: "모든 건 언젠가 고장 나요." } }
+          ]
+        },
+        {
+          s: 'N', skill: 'lead',
+          en: "Has any of this been tested under real conditions?",
+          ko: "이 중에 실제 조건에서 테스트해 본 게 있나요?",
+          choices: [
+            { en: "Not yet. I'll run a load test this week and share the results by Friday.", grade: 2,
+              feedback: "부족한 점을 인정하고 검증 계획과 기한을 제시했습니다.",
+              reply: { en: "Good. That's what I wanted to hear.", ko: "좋아요. 그 말을 듣고 싶었어요." } },
+            { en: "Not yet, but we will test it sometime.", grade: 1,
+              feedback: "'언젠가'는 계획이 아닙니다. 구체적인 일정을 말하세요.",
+              reply: { en: "When exactly?", ko: "정확히 언제요?" } },
+            { en: "Testing is the QA team's job.", grade: 0,
+              feedback: "책임을 다른 팀에 넘기면 설계 담당자로서 신뢰를 잃습니다.",
+              reply: { en: "You own this design, so you own the risk.", ko: "이 설계의 책임자니까 리스크도 당신 몫이에요." } }
+          ]
+        },
+        {
+          s: 'N', skill: 'lead',
+          en: "Okay. So, what are the next steps?",
+          ko: "좋아요. 그럼 다음 단계는요?",
+          choices: [
+            { en: "I'll simplify the queue design, run the load test, and update the design document before the next review.", grade: 2,
+              feedback: "피드백 반영 사항과 다음 검토 전까지 할 일을 명확히 정리했습니다.",
+              reply: { en: "Sounds like a plan. Good work.", ko: "좋은 계획이네요. 수고했어요." } },
+            { en: "I'll think about your feedback.", grade: 1,
+              feedback: "무엇을 바꿀지 구체적으로 말해야 합니다.",
+              reply: { en: "Please be more specific next time.", ko: "다음에는 좀 더 구체적으로 말해 주세요." } },
+            { en: "I think we can just go ahead as planned.", grade: 0,
+              feedback: "검토에서 나온 지적을 무시하면 다음 회의가 더 어려워집니다.",
+              reply: { en: "Not until these issues are resolved.", ko: "이 문제들이 해결되기 전에는 안 돼요." } }
+          ]
+        }
+      ]
     }
   ];
 

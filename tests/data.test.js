@@ -38,7 +38,7 @@ test('시뮬레이션 시나리오 형식이 올바르다', () => {
 test('레슨 id 와 표현 id 가 고유하다', () => {
   const lessonIds = LESSONS.map(l => l.id);
   assert.equal(new Set(lessonIds).size, lessonIds.length);
-  const exprIds = LESSONS.flatMap(l => l.expressions.map(e => e.id));
+  const exprIds = LESSONS.flatMap(l => l.expressions.map(e => e.id).concat((l.terms || []).map(t => t.id)));
   assert.equal(new Set(exprIds).size, exprIds.length);
 });
 
@@ -59,6 +59,12 @@ for (const lesson of LESSONS) {
     for (const ln of d.lines) {
       assert.ok(d.roles[ln.s], `알 수 없는 화자 ${ln.s}`);
       assert.ok(ln.en && ln.ko, '대사 누락');
+    }
+
+    if (lesson.terms) {
+      assert.ok(lesson.terms.length >= 4, '용어는 4개 이상');
+      assert.equal(new Set(lesson.terms.map(t => t.en)).size, lesson.terms.length, '용어 중복');
+      for (const t of lesson.terms) assert.ok(t.id && t.en && t.ko && t.ex, `${lesson.id} 용어 형식`);
     }
 
     for (const s of lesson.situations) {

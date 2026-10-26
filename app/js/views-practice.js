@@ -203,13 +203,22 @@
 
   // ---------- 스피드 챌린지 ----------
 
+  // 레슨 표현 + 기술 용어 id 목록 (트랙 지정 시 해당 트랙만)
+  function lessonItemIds(track) {
+    return Object.keys(App.EXPRS).concat(Object.keys(App.TERMS)).filter(function (id) {
+      const item = App.EXPRS[id] || App.TERMS[id];
+      return !track || item.lesson.track === track;
+    });
+  }
+
   function speedPool(source) {
     let ids;
-    if (source === 'learned') ids = Object.keys(App.state.srs).filter(function (id) { return App.EXPRS[id]; });
-    else if (source === 'favorites') ids = App.state.favorites.filter(function (id) { return App.EXPRS[id]; });
-    else if (source && source !== 'all') ids = Object.keys(App.EXPRS).filter(function (id) { return App.EXPRS[id].lesson.track === source; });
-    else ids = Object.keys(App.EXPRS);
-    return ids.map(function (id) { return App.EXPRS[id].expr; });
+    if (source === 'learned') ids = Object.keys(App.state.srs);
+    else if (source === 'favorites') ids = App.state.favorites.slice();
+    else if (source === 'terms') ids = Object.keys(App.TERMS);
+    else if (source && source !== 'all') ids = lessonItemIds(source);
+    else ids = lessonItemIds();
+    return ids.map(App.phrase).filter(Boolean);
   }
 
   App.views.speed = {
@@ -223,7 +232,7 @@
 
       if (sp.phase === 'intro') {
         const sources = [['all', '전체 표현']].concat(App.TRACKS.map(function (t) { return [t.id, t.icon + ' ' + t.title]; }))
-          .concat([['learned', '복습 카드'], ['favorites', '⭐ 즐겨찾기']]);
+          .concat([['terms', '🧩 기술 용어'], ['learned', '복습 카드'], ['favorites', '⭐ 즐겨찾기']]);
         const chips = sources.map(function (src) {
           const n = speedPool(src[0]).length;
           const ok = n >= 4;
@@ -239,7 +248,7 @@
 
       if (sp.phase === 'done') {
         const missed = sp.missed.map(function (id) {
-          const e = App.EXPRS[id].expr;
+          const e = App.phrase(id);
           return '<li><span class="muted small">' + esc(e.ko) + '</span><div class="wrong-row"><b>' + esc(e.en) + '</b>' +
             '<button class="btn icon-only" data-action="speak" data-text="' + esc(e.en) + '">' + icon('speaker') + '</button></div></li>';
         }).join('');
@@ -321,10 +330,7 @@
   function audioItems(source) {
     if (source === 'favorites') return App.state.favorites.filter(function (id) { return App.phrase(id); });
     if (source === 'review') return Object.keys(App.state.srs).filter(function (id) { return App.phrase(id); });
-    if (source && source !== 'all') {
-      return Object.keys(App.EXPRS).filter(function (id) { return App.EXPRS[id].lesson.track === source; });
-    }
-    return Object.keys(App.EXPRS);
+    return lessonItemIds(source && source !== 'all' ? source : null);
   }
 
   App.views.audio = {

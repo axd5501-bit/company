@@ -191,3 +191,27 @@ test('earnedBadges: 학습 기록에서 배지 판정', () => {
     assert.ok(ids.includes(id), id);
   }
 });
+
+test('buildQuiz: 기술 용어가 있는 레슨은 용어 문제 2개를 포함한다', () => {
+  const { LESSONS } = require('../app/js/data.js');
+  const lesson = LESSONS.find(l => l.terms);
+  let seed = 3;
+  const rng = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  const qs = C.buildQuiz(lesson, rng);
+  assert.equal(qs.length, 10);
+  const termQs = qs.filter(q => /기술 용어/.test(q.prompt));
+  assert.equal(termQs.length, 2);
+  for (const q of termQs) {
+    const term = lesson.terms.find(t => t.ko === q.sub || t.en === q.sub);
+    assert.ok(term);
+    assert.equal(q.options[q.answer], term.ko === q.sub ? term.en : term.ko);
+  }
+});
+
+test('searchExpressions: 기술 용어도 검색되고 termsOnly 로 용어만 고를 수 있다', () => {
+  const lessons = [{ id: 'x', track: 't', expressions: [{ id: 'x-1', en: 'Find the root cause.', ko: '원인을 찾아요' }],
+    terms: [{ id: 'x-t1', en: 'root cause', ko: '근본 원인', ex: 'It was the root cause.', term: true }] }];
+  assert.deepEqual(C.searchExpressions(lessons, 'root').map(r => r.expr.id), ['x-1', 'x-t1']);
+  assert.deepEqual(C.searchExpressions(lessons, '', { termsOnly: true }).map(r => r.expr.id), ['x-t1']);
+  assert.deepEqual(C.searchExpressions(lessons, '근본').map(r => r.expr.id), ['x-t1']);
+});
