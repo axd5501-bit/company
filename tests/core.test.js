@@ -114,3 +114,80 @@ test('lessonProgress: 네 단계 각 25%, 퀴즈는 80점 이상만 인정', () 
   assert.equal(C.lessonProgress({ expressions: true, dialogue: false, roleplayBest: null, quizBest: 70 }), 25);
   assert.equal(C.lessonProgress({ expressions: true, dialogue: true, roleplayBest: 0, quizBest: 80 }), 100);
 });
+
+test('levelInfo: 누적 XP 로 레벨과 진행률 계산', () => {
+  assert.equal(C.levelInfo(0).level, 1);
+  assert.equal(C.levelInfo(99).level, 1);
+  assert.equal(C.levelInfo(100).level, 2);
+  assert.equal(C.levelInfo(300).level, 3);
+  const mid = C.levelInfo(200);
+  assert.equal(mid.level, 2);
+  assert.equal(mid.pct, 50);
+  assert.equal(C.levelInfo(1e9).title, 'Global CEO');
+});
+
+test('heatmap: 12주 격자, 미래 날짜는 -1, XP 구간별 단계', () => {
+  const today = new Date(2026, 9, 28); // 수요일
+  const xp = { [C.dateKey(today)]: 70, '2026-10-27': 10, '2026-10-26': 30 };
+  const grid = C.heatmap(xp, today, 12);
+  assert.equal(grid.length, 12);
+  assert.ok(grid.every(col => col.length === 7));
+  const last = grid[11];
+  assert.equal(last[0].key, '2026-10-25'); // 일요일 시작
+  assert.equal(last[1].lv, 2);  // 30xp
+  assert.equal(last[2].lv, 1);  // 10xp
+  assert.equal(last[3].lv, 3);  // 70xp
+  assert.equal(last[4].lv, -1); // 내일
+});
+
+test('simResult: 등급 합으로 점수·S~C 등급·역량별 점수', () => {
+  const steps = [{ skill: 'polite' }, { skill: 'clear' }, { skill: 'lead' }, { skill: 'lead' }];
+  const best = C.simResult(steps, [2, 2, 2, 2]);
+  assert.deepEqual([best.pct, best.letter], [100, 'S']);
+  const mixed = C.simResult(steps, [2, 1, 2, 0]);
+  assert.equal(mixed.pct, 63);
+  assert.equal(mixed.letter, 'B');
+  assert.deepEqual(mixed.skills, { polite: 100, clear: 50, lead: 50 });
+  assert.equal(C.simResult(steps, [null, null, null, null]).letter, 'C');
+});
+
+test('speedQuestion: 정답이 보기에 한 번만 있다', () => {
+  const pool = [1, 2, 3, 4, 5, 6].map(i => ({ id: 'e' + i, en: 'sentence ' + i, ko: '문장 ' + i }));
+  let seed = 7;
+  const rng = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  for (let i = 0; i < 30; i++) {
+    const q = C.speedQuestion(pool, rng, 'e1');
+    assert.notEqual(q.id, 'e1');
+    assert.equal(q.options.length, 4);
+    assert.equal(new Set(q.options).size, 4);
+    assert.equal(q.options[q.answer], pool.find(e => e.id === q.id).en);
+  }
+});
+
+test('searchExpressions: 영어·한국어·팁 검색, 트랙·즐겨찾기 필터', () => {
+  const lessons = [
+    { id: 'a', track: 't1', expressions: [{ id: 'a-1', en: 'Shall we get started?', ko: '시작할까요?' }, { id: 'a-2', en: 'Let us wrap up', ko: '마무리하죠', tip: 'wrap up = 마무리' }] },
+    { id: 'b', track: 't2', expressions: [{ id: 'b-1', en: 'You are on mute', ko: '음소거 상태예요' }] }
+  ];
+  assert.equal(C.searchExpressions(lessons, '').length, 3);
+  assert.deepEqual(C.searchExpressions(lessons, 'START').map(r => r.expr.id), ['a-1']);
+  assert.deepEqual(C.searchExpressions(lessons, '음소거').map(r => r.expr.id), ['b-1']);
+  assert.deepEqual(C.searchExpressions(lessons, '마무리').map(r => r.expr.id), ['a-2']);
+  assert.deepEqual(C.searchExpressions(lessons, '', { track: 't2' }).map(r => r.expr.id), ['b-1']);
+  assert.deepEqual(C.searchExpressions(lessons, '', { favorites: ['a-2'] }).map(r => r.expr.id), ['a-2']);
+});
+
+test('earnedBadges: 학습 기록에서 배지 판정', () => {
+  const tracks = [{ id: 't', lessons: ['x', 'y'] }];
+  const done = { expressions: true, dialogue: true, roleplayBest: 95, quizBest: 100 };
+  assert.deepEqual(C.earnedBadges({ xp: {}, lessons: {} }, tracks), []);
+  const ids = C.earnedBadges({
+    xp: { [C.dateKey(new Date())]: 30 },
+    lessons: { x: done, y: done },
+    sim: { s1: 92 },
+    stats: { speedBest: 16, reviews: 50, aiTurns: 1, bestStreak: 7 }
+  }, tracks);
+  for (const id of ['first-step', 'streak-3', 'streak-7', 'lesson-1', 'track-1', 'all-lessons', 'quiz-perfect', 'roleplay-90', 'sim-s', 'speed-15', 'reviews-50', 'ai-chat']) {
+    assert.ok(ids.includes(id), id);
+  }
+});

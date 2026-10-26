@@ -330,16 +330,155 @@
         { q: "'다음 주에 다시 연락해서 이야기하자'는 뜻의 표현은?", options: ["Let's touch base next week.", "Let's touch the base next week.", "Let's hit the bottom next week.", "Let's basic contact next week."], answer: 0, explain: "touch base는 관사 없이 씁니다." },
         { q: "업무 담당자를 정할 때 자연스러운 질문은?", options: ["Who's going to take care of this?", "Who takes this care?", "Who is careful for this?", "This is whose?"], answer: 0, explain: "'Who can take the lead on this?'도 자주 씁니다." }
       ]
+    },
+    {
+      id: 'brainstorming',
+      icon: '💡',
+      title: '브레인스토밍',
+      titleEn: 'Brainstorming Ideas',
+      goal: '자유롭게 아이디어를 끌어내고, 발전시키고, 좁혀 나가는 회의를 이끌 수 있다.',
+      expressions: [
+        { en: "Let's throw some ideas around.", ko: "아이디어를 자유롭게 던져 봅시다.", tip: "throw ideas around = 부담 없이 아이디어를 내다", blank: "ideas" },
+        { en: "There are no bad ideas at this stage.", ko: "지금 단계에서는 나쁜 아이디어란 없습니다.", blank: "stage" },
+        { en: "What if we tried a subscription model?", ko: "구독 모델을 시도해 보면 어떨까요?", blank: "tried" },
+        { en: "Building on what Sarah said, we could also offer a free trial.", ko: "사라 씨 말씀에 덧붙여, 무료 체험도 제공할 수 있겠어요.", tip: "Building on ~ = ~의 아이디어를 발전시켜서", blank: "Building" },
+        { en: "That's an interesting idea. Can you tell us more?", ko: "흥미로운 아이디어네요. 좀 더 말씀해 주시겠어요?", blank: "interesting" },
+        { en: "Let's narrow it down to the top three ideas.", ko: "상위 세 개 아이디어로 좁혀 봅시다.", tip: "narrow down = 범위를 좁히다", blank: "narrow" },
+        { en: "Let's park that idea for now and come back to it later.", ko: "그 아이디어는 일단 보류하고 나중에 다시 이야기하죠.", tip: "park = (논의를) 잠시 보류하다. put ~ on hold 와 같은 뜻", blank: "park" }
+      ],
+      dialogue: {
+        setting: '신규 고객 유치 방안을 찾는 브레인스토밍 회의를 내가 진행합니다.',
+        you: 'A',
+        roles: { A: '나 (진행자)', B: 'Sarah', C: 'Leo' },
+        lines: [
+          { s: 'A', en: "Okay, let's throw some ideas around. There are no bad ideas at this stage.", ko: "자, 아이디어를 자유롭게 던져 봅시다. 지금 단계에서는 나쁜 아이디어란 없어요." },
+          { s: 'B', en: "What if we tried a subscription model?", ko: "구독 모델을 시도해 보면 어떨까요?" },
+          { s: 'A', en: "That's an interesting idea. Can you tell us more?", ko: "흥미로운 아이디어네요. 좀 더 말씀해 주시겠어요?" },
+          { s: 'B', en: "Customers could pay monthly instead of buying the full package upfront.", ko: "고객들이 전체 패키지를 한 번에 사는 대신 매달 결제하는 거예요." },
+          { s: 'A', en: "Building on what Sarah said, we could also offer a free trial for the first month.", ko: "사라 씨 말씀에 덧붙여, 첫 달 무료 체험도 제공할 수 있겠어요." },
+          { s: 'C', en: "I love that. We could also partner with influencers.", ko: "좋네요. 인플루언서와 협업할 수도 있고요." },
+          { s: 'A', en: "Good thought, but let's park that idea for now and come back to it later.", ko: "좋은 생각이지만, 그 아이디어는 일단 보류하고 나중에 다시 이야기하죠." },
+          { s: 'A', en: "We have a lot of options. Let's narrow it down to the top three ideas.", ko: "선택지가 많네요. 상위 세 개 아이디어로 좁혀 봅시다." }
+        ]
+      },
+      situations: [
+        { q: "브레인스토밍을 시작하며 참가자들이 부담 없이 말하도록 하려면?", options: ["There are no bad ideas at this stage.", "Only good ideas, please.", "Don't say stupid things.", "Your ideas must be perfect."], answer: 0, explain: "참가자들의 심리적 부담을 낮춰 주는 표현입니다." },
+        { q: "논의가 길어지는 아이디어를 '일단 보류'하자고 할 때?", options: ["Let's park that idea for now.", "Let's stop that idea forever.", "Let's parking the idea.", "Let's put that idea in the garage."], answer: 0, explain: "'Let's put that on hold.'도 같은 뜻입니다." },
+        { q: "다른 사람의 아이디어를 발전시켜 말할 때 자연스러운 시작은?", options: ["Building on what Sarah said, ...", "Sarah is wrong, so ...", "Different from Sarah, ...", "Sarah said, and I said ..."], answer: 0, explain: "Building on ~ / To add to ~ 는 협력적인 분위기를 만들어 줍니다." }
+      ]
+    },
+    {
+      id: 'presentation-qa',
+      icon: '🎤',
+      title: '발표 & 질의응답',
+      titleEn: 'Presentations & Q&A',
+      goal: '발표를 구조 있게 진행하고, 예상치 못한 질문에도 침착하게 답할 수 있다.',
+      expressions: [
+        { en: "Today, I'm going to walk you through our new marketing strategy.", ko: "오늘은 새로운 마케팅 전략을 차근차근 설명드리겠습니다.", tip: "walk ~ through = ~에게 단계별로 설명하다", blank: "walk" },
+        { en: "I'll be happy to take questions at the end.", ko: "질문은 마지막에 기꺼이 받겠습니다.", blank: "questions" },
+        { en: "Let's move on to the next slide.", ko: "다음 슬라이드로 넘어가겠습니다.", blank: "slide" },
+        { en: "That's a great question.", ko: "좋은 질문입니다.", tip: "답을 생각할 시간을 벌어 주는 표현이기도 합니다.", blank: "question" },
+        { en: "I don't have that information right now, but I'll get back to you.", ko: "지금은 그 정보가 없지만, 확인해서 다시 알려 드리겠습니다.", tip: "get back to ~ = 나중에 다시 연락하다", blank: "information" },
+        { en: "If I understand your question correctly, you're asking about the budget.", ko: "질문을 제대로 이해했다면, 예산에 대해 물으시는 거죠?", blank: "correctly" },
+        { en: "Does that answer your question?", ko: "답변이 되었을까요?", blank: "answer" }
+      ],
+      dialogue: {
+        setting: '신규 마케팅 전략을 발표한 뒤 질의응답 시간입니다.',
+        you: 'A',
+        roles: { A: '나 (발표자)', B: 'Michael (임원)', C: 'Anna' },
+        lines: [
+          { s: 'A', en: "Today, I'm going to walk you through our new marketing strategy. I'll be happy to take questions at the end.", ko: "오늘은 새로운 마케팅 전략을 차근차근 설명드리겠습니다. 질문은 마지막에 기꺼이 받겠습니다." },
+          { s: 'A', en: "So, that's the overview. Now, I'd be happy to take any questions.", ko: "이상으로 개요를 마치겠습니다. 이제 질문 받겠습니다." },
+          { s: 'B', en: "How much will this campaign cost compared to last year?", ko: "이번 캠페인은 작년 대비 비용이 얼마나 드나요?" },
+          { s: 'A', en: "That's a great question. If I understand your question correctly, you're asking about the total budget?", ko: "좋은 질문입니다. 제가 제대로 이해했다면, 전체 예산에 대해 물으시는 거죠?" },
+          { s: 'B', en: "Yes, the total budget.", ko: "네, 전체 예산이요." },
+          { s: 'A', en: "It's about ten percent higher, mainly due to digital advertising. Does that answer your question?", ko: "약 10% 더 높은데, 주로 디지털 광고 때문입니다. 답변이 되었을까요?" },
+          { s: 'C', en: "What's the expected return on investment?", ko: "예상 투자 수익률은 어떻게 되나요?" },
+          { s: 'A', en: "I don't have that information right now, but I'll get back to you by tomorrow.", ko: "지금은 그 정보가 없지만, 내일까지 확인해서 알려 드리겠습니다." }
+        ]
+      },
+      situations: [
+        { q: "발표 중 답을 모르는 질문을 받았을 때 가장 프로다운 답변은?", options: ["I don't have that information right now, but I'll get back to you.", "I don't know. Next question.", "That's not my job.", "Why do you ask that?"], answer: 0, explain: "모른다고 끝내지 말고 '확인 후 다시 알려 드리겠다'고 약속하세요." },
+        { q: "답변을 마친 뒤 질문자가 만족했는지 확인하려면?", options: ["Does that answer your question?", "Do you understand me?", "Is it clear for you or not?", "You got it, right?"], answer: 0, explain: "'Do you understand?'는 상대를 가르치는 듯한 뉘앙스가 있어 피하는 게 좋습니다." },
+        { q: "'단계별로 설명드리겠습니다'를 영어로?", options: ["I'm going to walk you through it.", "I'm going to run you about it.", "I will step you it.", "I explain you step."], answer: 0, explain: "walk ~ through는 발표에서 정말 자주 쓰는 표현입니다." }
+      ]
+    },
+    {
+      id: 'scheduling',
+      icon: '📅',
+      title: '일정 조율',
+      titleEn: 'Scheduling & Rescheduling',
+      goal: '회의 일정을 잡고, 변경이 필요할 때 정중하게 조율할 수 있다.',
+      expressions: [
+        { en: "Are you available next Tuesday afternoon?", ko: "다음 주 화요일 오후에 시간 괜찮으세요?", blank: "available" },
+        { en: "Does 10 a.m. work for you?", ko: "오전 10시 괜찮으세요?", tip: "work for ~ = ~에게 (일정이) 괜찮다", blank: "work" },
+        { en: "I'm afraid I'm tied up on Monday.", ko: "죄송하지만 월요일은 일정이 꽉 차 있습니다.", tip: "be tied up = 바빠서 시간이 없다", blank: "tied" },
+        { en: "Could we push the meeting back to Thursday?", ko: "회의를 목요일로 미룰 수 있을까요?", tip: "push back = 미루다 / move up = 앞당기다", blank: "push" },
+        { en: "Something urgent has come up, so I need to reschedule.", ko: "급한 일이 생겨서 일정을 변경해야 합니다.", blank: "reschedule" },
+        { en: "I'll send you a calendar invite.", ko: "캘린더 초대를 보내 드릴게요.", blank: "invite" },
+        { en: "Just a reminder that our meeting is tomorrow at 2.", ko: "내일 2시에 회의가 있다는 점 다시 알려 드립니다.", blank: "reminder" }
+      ],
+      dialogue: {
+        setting: '외부 파트너와 다음 회의 일정을 잡고, 며칠 뒤 일정을 변경합니다.',
+        you: 'A',
+        roles: { A: '나', B: 'Chris (파트너사)' },
+        lines: [
+          { s: 'B', en: "Hi, I'd like to set up a meeting to discuss the contract.", ko: "안녕하세요, 계약 논의를 위해 회의를 잡고 싶습니다." },
+          { s: 'A', en: "Sure. Are you available next Tuesday afternoon?", ko: "좋습니다. 다음 주 화요일 오후에 시간 괜찮으세요?" },
+          { s: 'B', en: "I'm afraid I'm tied up on Tuesday. How about Wednesday?", ko: "죄송하지만 화요일은 일정이 꽉 차 있어요. 수요일은 어떠세요?" },
+          { s: 'A', en: "Wednesday is fine. Does 10 a.m. work for you?", ko: "수요일 좋습니다. 오전 10시 괜찮으세요?" },
+          { s: 'B', en: "Ten works perfectly.", ko: "10시 아주 좋습니다." },
+          { s: 'A', en: "Great. I'll send you a calendar invite.", ko: "좋아요. 캘린더 초대를 보내 드릴게요." },
+          { s: 'A', en: "Hi Chris, something urgent has come up, so I need to reschedule. Could we push the meeting back to Thursday?", ko: "크리스 씨, 급한 일이 생겨서 일정을 변경해야 합니다. 회의를 목요일로 미룰 수 있을까요?" },
+          { s: 'B', en: "No problem. Thursday at the same time?", ko: "문제없어요. 목요일 같은 시간에요?" },
+          { s: 'A', en: "Yes, thank you for understanding.", ko: "네, 이해해 주셔서 감사합니다." }
+        ]
+      },
+      situations: [
+        { q: "회의를 '뒤로 미루자'고 할 때 맞는 표현은?", options: ["push the meeting back", "push the meeting up", "pull the meeting front", "move the meeting behind"], answer: 0, explain: "push back = 미루다, move up / bring forward = 앞당기다." },
+        { q: "상대에게 그 시간이 괜찮은지 물을 때 가장 자연스러운 것은?", options: ["Does 10 a.m. work for you?", "Is 10 a.m. possible to you?", "Can you possible at 10?", "10 a.m. is okay to you?"], answer: 0, explain: "work for ~ 는 일정이 맞는지 물을 때 가장 많이 씁니다." },
+        { q: "'그날은 일정이 꽉 차 있다'를 정중하게 말하려면?", options: ["I'm afraid I'm tied up that day.", "I'm busy. No.", "That day is impossible for me forever.", "I have no time for you."], answer: 0, explain: "be tied up = 바쁘다. I'm afraid 로 부드럽게 시작하세요." }
+      ]
     }
   ];
 
-  // 표현마다 고유 id 부여 (복습 카드 키로 사용)
+  // 학습 트랙: 레슨을 업무 상황별로 묶는다
+  const TRACKS = [
+    { id: 'meeting', icon: '🧭', title: '회의 진행', titleEn: 'Running Meetings', color: 'blue',
+      desc: '회의를 열고, 이끌고, 깔끔하게 마무리하기', lessons: ['small-talk', 'opening', 'closing'] },
+    { id: 'discussion', icon: '💬', title: '토론 & 아이디어', titleEn: 'Discussion', color: 'violet',
+      desc: '의견을 말하고, 반대하고, 아이디어를 모으기', lessons: ['opinions', 'agree-disagree', 'brainstorming'] },
+    { id: 'communication', icon: '🌐', title: '소통 & 원격 협업', titleEn: 'Communication', color: 'teal',
+      desc: '되묻고 확인하고, 화상회의와 일정 조율하기', lessons: ['clarifying', 'online', 'scheduling'] },
+    { id: 'results', icon: '📈', title: '보고 & 협상', titleEn: 'Reporting & Negotiation', color: 'amber',
+      desc: '숫자로 보고하고, 발표하고, 조건을 협상하기', lessons: ['reporting', 'presentation-qa', 'negotiation'] }
+  ];
+
+  const LEVELS = {
+    'small-talk': '기초', opening: '기초', closing: '기초',
+    opinions: '기초', 'agree-disagree': '중급', brainstorming: '중급',
+    clarifying: '기초', online: '기초', scheduling: '기초',
+    reporting: '중급', 'presentation-qa': '중급', negotiation: '고급'
+  };
+
   LESSONS.forEach(function (lesson) {
+    lesson.track = TRACKS.find(function (t) { return t.lessons.indexOf(lesson.id) !== -1; }).id;
+    lesson.level = LEVELS[lesson.id];
+    // 표현마다 고유 id 부여 (복습 카드 키로 사용)
     lesson.expressions.forEach(function (expr, i) {
       expr.id = lesson.id + '-' + (i + 1);
     });
   });
 
-  if (typeof module === 'object' && module.exports) module.exports = LESSONS;
-  else root.LESSONS = LESSONS;
+  // 트랙 순서대로 정렬 (화면의 레슨 번호 기준)
+  LESSONS.sort(function (a, b) {
+    const ta = TRACKS.findIndex(function (t) { return t.id === a.track; });
+    const tb = TRACKS.findIndex(function (t) { return t.id === b.track; });
+    if (ta !== tb) return ta - tb;
+    return TRACKS[ta].lessons.indexOf(a.id) - TRACKS[tb].lessons.indexOf(b.id);
+  });
+
+  const DATA = { TRACKS: TRACKS, LESSONS: LESSONS };
+  if (typeof module === 'object' && module.exports) module.exports = DATA;
+  else { root.TRACKS = TRACKS; root.LESSONS = LESSONS; }
 })(this);

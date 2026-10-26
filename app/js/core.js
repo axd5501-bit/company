@@ -246,7 +246,184 @@
     return p;
   }
 
+  // ---------- 경험치 · 레벨 ----------
+
+  const XP = {
+    practice: 5,       // 표현 따라 말하기
+    dialogue: 20,      // 대화 듣기 완료
+    expressions: 20,   // 표현 학습 완료
+    roleplayTurn: 10,  // 롤플레이 한 턴
+    quizCorrect: 5,    // 퀴즈 정답
+    quizPass: 30,      // 퀴즈 통과 보너스
+    review: 3,         // 복습 카드 한 장
+    simStep: 5,        // 시뮬레이션 선택 (등급 × 5)
+    simDone: 30,       // 시뮬레이션 완료
+    speedCorrect: 2,   // 스피드 챌린지 정답
+    aiTurn: 10         // AI 회의 파트너와 한 턴
+  };
+  const DAILY_GOAL = 60;
+
+  const LEVEL_TITLES = [
+    ['Intern', '인턴'], ['Junior Associate', '주니어'], ['Associate', '어소시에이트'],
+    ['Senior Associate', '시니어'], ['Team Lead', '팀 리드'], ['Manager', '매니저'],
+    ['Senior Manager', '시니어 매니저'], ['Director', '디렉터'], ['Vice President', 'VP'], ['Global CEO', '글로벌 CEO']
+  ];
+
+  /** 레벨 n 에 도달하는 데 필요한 누적 XP (1레벨 0, 2레벨 100, 3레벨 300, ...) */
+  function xpForLevel(n) { return 50 * (n - 1) * n; }
+
+  function levelInfo(totalXp) {
+    let level = 1;
+    while (totalXp >= xpForLevel(level + 1)) level++;
+    const base = xpForLevel(level), next = xpForLevel(level + 1);
+    const t = LEVEL_TITLES[Math.min(level, LEVEL_TITLES.length) - 1];
+    return {
+      level: level, title: t[0], titleKo: t[1], xp: totalXp, base: base, next: next,
+      pct: Math.round(((totalXp - base) / (next - base)) * 100)
+    };
+  }
+
+  function sumValues(obj) {
+    return Object.keys(obj || {}).reduce(function (s, k) { return s + (obj[k] || 0); }, 0);
+  }
+
+  /** 최근 weeks 주의 일별 XP 를 주(열) × 요일(행) 격자로. 각 칸 lv 0~4 */
+  function heatmap(xpByDay, today, weeks) {
+    weeks = weeks || 12;
+    const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const start = new Date(end);
+    start.setDate(end.getDate() - end.getDay() - (weeks - 1) * 7); // 일요일부터
+    const cols = [];
+    const d = new Date(start);
+    for (let w = 0; w < weeks; w++) {
+      const col = [];
+      for (let i = 0; i < 7; i++) {
+        const key = dateKey(d);
+        const xp = (xpByDay && xpByDay[key]) || 0;
+        const lv = d > end ? -1 : xp === 0 ? 0 : xp < 20 ? 1 : xp < DAILY_GOAL ? 2 : xp < DAILY_GOAL * 2 ? 3 : 4;
+        col.push({ key: key, xp: xp, lv: lv });
+        d.setDate(d.getDate() + 1);
+      }
+      cols.push(col);
+    }
+    return cols;
+  }
+
+  // ---------- 회의 시뮬레이션 ----------
+
+  const SKILLS = { polite: '정중함', clear: '명확성', lead: '주도성' };
+
+  /** grades: 단계별 선택 등급(0~2, 시간 초과는 0) */
+  function simResult(steps, grades) {
+    const per = {};
+    Object.keys(SKILLS).forEach(function (k) { per[k] = { got: 0, max: 0 }; });
+    let got = 0;
+    steps.forEach(function (st, i) {
+      const g = grades[i] || 0;
+      got += g;
+      per[st.skill].got += g;
+      per[st.skill].max += 2;
+    });
+    const pct = steps.length ? Math.round((got / (steps.length * 2)) * 100) : 0;
+    const skills = {};
+    Object.keys(per).forEach(function (k) {
+      if (per[k].max) skills[k] = Math.round((per[k].got / per[k].max) * 100);
+    });
+    const letter = pct >= 90 ? 'S' : pct >= 75 ? 'A' : pct >= 55 ? 'B' : 'C';
+    return { pct: pct, letter: letter, skills: skills };
+  }
+
+  // ---------- 스피드 챌린지 ----------
+
+  /** 표현 풀에서 한국어 → 영어 4지선다 한 문제 */
+  function speedQuestion(pool, rng, avoidId) {
+    const candidates = pool.filter(function (e) { return e.id !== avoidId; });
+    const target = candidates[Math.floor(rng() * candidates.length)];
+    const others = shuffle(pool.filter(function (e) { return e.id !== target.id && e.en !== target.en; }), rng).slice(0, 3);
+    const options = shuffle([target].concat(others), rng);
+    return { id: target.id, ko: target.ko, options: options.map(function (o) { return o.en; }), answer: options.indexOf(target) };
+  }
+
+  // ---------- 표현 사전 ----------
+
+  function searchExpressions(lessons, query, opts) {
+    opts = opts || {};
+    const q = String(query || '').trim().toLowerCase();
+    const out = [];
+    lessons.forEach(function (l) {
+      if (opts.track && l.track !== opts.track) return;
+      l.expressions.forEach(function (e) {
+        if (opts.favorites && opts.favorites.indexOf(e.id) === -1) return;
+        if (q && (e.en + ' ' + e.ko + ' ' + (e.tip || '')).toLowerCase().indexOf(q) === -1) return;
+        out.push({ expr: e, lesson: l });
+      });
+    });
+    return out;
+  }
+
+  // ---------- 배지 ----------
+
+  const BADGES = [
+    { id: 'first-step', icon: '🌱', title: '첫 걸음', desc: '처음으로 학습을 시작했어요', test: function (s) { return s.totalXp > 0; } },
+    { id: 'streak-3', icon: '🔥', title: '3일 연속', desc: '3일 연속 학습', test: function (s) { return s.bestStreak >= 3; } },
+    { id: 'streak-7', icon: '🏅', title: '일주일 개근', desc: '7일 연속 학습', test: function (s) { return s.bestStreak >= 7; } },
+    { id: 'lesson-1', icon: '📘', title: '첫 레슨 완료', desc: '레슨 하나의 4단계를 모두 마쳤어요', test: function (s) { return s.lessonsDone >= 1; } },
+    { id: 'track-1', icon: '🧭', title: '트랙 완주', desc: '한 트랙의 레슨 3개를 모두 완료', test: function (s) { return s.tracksDone >= 1; } },
+    { id: 'all-lessons', icon: '🏆', title: '전 과정 수료', desc: '모든 레슨 완료', test: function (s) { return s.lessonsDone >= s.lessonsTotal; } },
+    { id: 'quiz-perfect', icon: '💯', title: '퀴즈 만점', desc: '퀴즈에서 100점', test: function (s) { return s.quizPerfect; } },
+    { id: 'roleplay-90', icon: '🎭', title: '롤플레이 에이스', desc: '롤플레이 평균 90점 이상', test: function (s) { return s.roleplayBest >= 90; } },
+    { id: 'sim-s', icon: '🎬', title: '회의의 신', desc: '회의 시뮬레이션 S등급', test: function (s) { return s.simBest >= 90; } },
+    { id: 'speed-15', icon: '⚡', title: '순발력 왕', desc: '스피드 챌린지 15점 이상', test: function (s) { return s.speedBest >= 15; } },
+    { id: 'reviews-50', icon: '🧠', title: '기억의 달인', desc: '복습 카드 50장', test: function (s) { return s.reviews >= 50; } },
+    { id: 'ai-chat', icon: '🤖', title: 'AI와 첫 회의', desc: 'AI 회의 파트너와 대화', test: function (s) { return s.aiTurns >= 1; } }
+  ];
+
+  function maxValue(obj) {
+    return Object.keys(obj || {}).reduce(function (m, k) { return Math.max(m, obj[k] || 0); }, 0);
+  }
+
+  /** 저장된 학습 상태에서 배지 판정에 필요한 수치 */
+  function learnerStats(state, tracks) {
+    const lessons = state.lessons || {};
+    const done = Object.keys(lessons).filter(function (id) { return lessonProgress(lessons[id]) === 100; });
+    const tracksDone = tracks.filter(function (t) {
+      return t.lessons.every(function (id) { return done.indexOf(id) !== -1; });
+    }).length;
+    const st = state.stats || {};
+    return {
+      totalXp: sumValues(state.xp),
+      bestStreak: Math.max(st.bestStreak || 0, streak(state.xp || {}, new Date())),
+      lessonsDone: done.length,
+      lessonsTotal: tracks.reduce(function (n, t) { return n + t.lessons.length; }, 0),
+      tracksDone: tracksDone,
+      quizPerfect: Object.keys(lessons).some(function (id) { return lessons[id].quizBest === 100; }),
+      roleplayBest: Object.keys(lessons).reduce(function (m, id) { return Math.max(m, lessons[id].roleplayBest || 0); }, 0),
+      simBest: maxValue(state.sim),
+      speedBest: st.speedBest || 0,
+      reviews: st.reviews || 0,
+      aiTurns: st.aiTurns || 0
+    };
+  }
+
+  function earnedBadges(state, tracks) {
+    const s = learnerStats(state, tracks);
+    return BADGES.filter(function (b) { return b.test(s); }).map(function (b) { return b.id; });
+  }
+
   return {
+    XP: XP,
+    DAILY_GOAL: DAILY_GOAL,
+    xpForLevel: xpForLevel,
+    levelInfo: levelInfo,
+    sumValues: sumValues,
+    heatmap: heatmap,
+    SKILLS: SKILLS,
+    simResult: simResult,
+    speedQuestion: speedQuestion,
+    searchExpressions: searchExpressions,
+    BADGES: BADGES,
+    learnerStats: learnerStats,
+    earnedBadges: earnedBadges,
     tokenize: tokenize,
     compareSentence: compareSentence,
     scoreLabel: scoreLabel,

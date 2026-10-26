@@ -1,7 +1,39 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../app/js/core.js');
-const LESSONS = require('../app/js/data.js');
+const { TRACKS, LESSONS } = require('../app/js/data.js');
+const SCENARIOS = require('../app/js/scenarios.js');
+
+test('모든 레슨이 정확히 한 트랙에 속하고 레벨이 있다', () => {
+  const inTracks = TRACKS.flatMap(t => t.lessons);
+  assert.equal(new Set(inTracks).size, inTracks.length, '트랙 간 레슨 중복');
+  assert.deepEqual(inTracks.slice().sort(), LESSONS.map(l => l.id).sort());
+  for (const l of LESSONS) {
+    assert.ok(TRACKS.some(t => t.id === l.track));
+    assert.ok(['기초', '중급', '고급'].includes(l.level), `${l.id} 레벨`);
+  }
+  // 화면 번호 순서 = 트랙 순서
+  assert.deepEqual(LESSONS.map(l => l.id), inTracks);
+});
+
+test('시뮬레이션 시나리오 형식이 올바르다', () => {
+  assert.ok(SCENARIOS.length >= 3);
+  assert.equal(new Set(SCENARIOS.map(s => s.id)).size, SCENARIOS.length);
+  for (const sc of SCENARIOS) {
+    assert.ok(TRACKS.some(t => t.id === sc.track), sc.id);
+    assert.ok(sc.steps.length >= 3);
+    for (const st of sc.steps) {
+      assert.ok(sc.roles[st.s], `${sc.id}: 알 수 없는 화자 ${st.s}`);
+      assert.ok(['polite', 'clear', 'lead'].includes(st.skill));
+      assert.ok(st.en && st.ko);
+      assert.deepEqual(st.choices.map(c => c.grade).sort(), [0, 1, 2], `${sc.id}: 등급 0/1/2 가 하나씩`);
+      for (const c of st.choices) {
+        assert.ok(c.en && c.feedback && c.reply.en && c.reply.ko);
+        if (c.reply.s) assert.ok(sc.roles[c.reply.s], `${sc.id}: 알 수 없는 응답 화자 ${c.reply.s}`);
+      }
+    }
+  }
+});
 
 test('레슨 id 와 표현 id 가 고유하다', () => {
   const lessonIds = LESSONS.map(l => l.id);
