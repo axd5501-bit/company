@@ -221,7 +221,13 @@
         return '<button class="chip-btn' + (focus === f[0] ? ' picked' : '') + '" data-action="focus-track" data-id="' + f[0] + '">' + esc(f[1]) + '</button>';
       }).join('');
 
+      const theme = st.settings.theme || 'light';
+      const themeChips = [['light', '☀️ 밝게 (화이트 & 연두)'], ['dark', '🌙 어둡게'], ['system', '기기 설정 따르기']].map(function (t) {
+        return '<button class="chip-btn' + (theme === t[0] ? ' picked' : '') + '" data-action="set-theme" data-theme="' + t[0] + '">' + t[1] + '</button>';
+      }).join('');
+
       return '<header class="page-head"><h1>설정</h1></header>' +
+        '<section class="card"><h3>화면 테마</h3><div class="chip-row">' + themeChips + '</div></section>' +
         '<section class="card"><h3>내 분야</h3><p class="muted small">고른 트랙이 홈·코스·실전 연습 맨 앞에 오고, 오늘의 안건도 그 분야부터 추천합니다.</p>' +
         '<div class="chip-row">' + focusChips + '</div></section>' +
         '<section class="card"><h3>학습자</h3><div class="composer narrow"><input id="name-input" type="text" value="' + esc(st.name) + '" placeholder="이름 (홈 화면 인사말에 표시)">' +
@@ -233,8 +239,8 @@
         '<section class="card"><h3>발음기호</h3>' +
         '<label class="switch"><input type="checkbox" data-change="show-ipa"' + (st.settings.showIpa !== false ? ' checked' : '') + '><span class="track-sw"></span>영어 표현 아래에 발음기호 표시</label>' +
         '<div class="ipa-guide">' + App.sentenceHtml('Shall we get started?', 'ʃæl wiː ɡet ˈstɑːrtɪd', 'en') +
-        '<ul class="muted small"><li>미국식 발음 · 표기는 네이버·YBM 사전 방식</li><li><b>ˈ</b> 바로 뒤 음절을 가장 세게, <b>ˌ</b> 은 조금 세게</li>' +
-        '<li><b>ː</b> 앞 모음은 길게 · <b>ə</b> 는 힘을 뺀 약한 ‘어’</li><li>문장 속 a · the · to · of · for 등은 실제 말할 때처럼 약하게 표기 (tə, əv, fər)</li></ul></div></section>' +
+        '<ul class="muted small"><li>미국식 발음 · 표기는 네이버·YBM 사전 방식</li><li><b class="ipa-sym">ˈ</b> 바로 뒤 음절을 가장 세게, <b class="ipa-sym">ˌ</b> 은 조금 세게</li>' +
+        '<li><b class="ipa-sym">ː</b> 앞 모음은 길게 · <b class="ipa-sym">ə</b> 는 힘을 뺀 약한 ‘어’</li><li>문장 속 a · the · to · of · for 등은 실제 말할 때처럼 약하게 표기 (tə, əv, fər)</li></ul></div></section>' +
         '<section class="card"><h3>' + icon('key') + ' AI 회의 파트너</h3>' + keyHtml + '</section>' +
         '<section class="card"><h3>학습 데이터</h3>' +
         '<p class="muted small">학습 기록은 이 기기에만 저장됩니다. PC와 휴대폰을 함께 쓰거나 기기를 바꿀 때는 내보내기 → 가져오기를 이용하세요. (API 키는 내보내지 않습니다)</p>' +
@@ -266,6 +272,12 @@
     'pb-filter': function (el) { App.session.pb.filter = el.dataset.f; App.render(); },
     print: function () { window.print(); },
 
+    'set-theme': function (el) {
+      App.state.settings.theme = el.dataset.theme;
+      App.save();
+      App.applyTheme();
+      App.render();
+    },
     'focus-track': function (el) {
       App.state.settings.focusTrack = el.dataset.id;
       App.save();

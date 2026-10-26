@@ -40,7 +40,7 @@
     return {
       version: 2,
       name: '',
-      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '', focusTrack: '', showIpa: true },
+      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '', focusTrack: '', showIpa: true, theme: 'light' },
       lessons: {}, srs: {}, xp: {},
       stats: { reviews: 0, aiTurns: 0, speedBest: 0, bestStreak: 0 },
       sim: {}, favorites: [], custom: {}, badges: []
@@ -72,6 +72,16 @@
   }
 
   App.state = loadState();
+
+  /** 화면 테마: light(기본, 화이트 & 연두) · dark · system(기기 설정 따르기) */
+  App.applyTheme = function () {
+    const t = App.state.settings.theme || 'light';
+    document.documentElement.dataset.theme = t;
+    const dark = t === 'dark' || (t === 'system' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#111a0c' : '#ffffff');
+  };
+  App.applyTheme();
   App.defaultState = defaultState;
   App.normalizeState = normalizeState;
 

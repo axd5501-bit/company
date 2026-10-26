@@ -1014,21 +1014,21 @@
 
   // 학습 트랙: 레슨을 업무 상황별로 묶는다
   const TRACKS = [
-    { id: 'meeting', icon: '🧭', title: '회의 진행', titleEn: 'Running Meetings', color: 'blue',
+    { id: 'meeting', icon: '🧭', title: '회의 진행', titleEn: 'Running Meetings', color: 'lime',
       desc: '회의를 열고, 이끌고, 깔끔하게 마무리하기', lessons: ['small-talk', 'opening', 'closing'] },
-    { id: 'discussion', icon: '💬', title: '토론 & 아이디어', titleEn: 'Discussion', color: 'violet',
+    { id: 'discussion', icon: '💬', title: '토론 & 아이디어', titleEn: 'Discussion', color: 'green',
       desc: '의견을 말하고, 반대하고, 아이디어를 모으기', lessons: ['opinions', 'agree-disagree', 'brainstorming'] },
     { id: 'communication', icon: '🌐', title: '소통 & 원격 협업', titleEn: 'Communication', color: 'teal',
       desc: '되묻고 확인하고, 화상회의와 일정 조율하기', lessons: ['clarifying', 'online', 'scheduling'] },
-    { id: 'results', icon: '📈', title: '보고 & 협상', titleEn: 'Reporting & Negotiation', color: 'amber',
+    { id: 'results', icon: '📈', title: '보고 & 협상', titleEn: 'Reporting & Negotiation', color: 'yellow',
       desc: '숫자로 보고하고, 발표하고, 조건을 협상하기', lessons: ['reporting', 'presentation-qa', 'negotiation'] },
-    { id: 'engineering', icon: '🔧', title: '엔지니어링 미팅', titleEn: 'Engineering Meetings', color: 'rose',
+    { id: 'engineering', icon: '🔧', title: '엔지니어링 미팅', titleEn: 'Engineering Meetings', color: 'orange',
       desc: '설계 검토, 장애 분석, 테스트 결과를 기술 용어로 말하기', lessons: ['design-review', 'troubleshooting', 'testing-quality'] },
     { id: 'eng-deep', icon: '⚙️', title: '엔지니어링 심화', titleEn: 'Engineering Deep Dive', color: 'cyan',
       desc: '수치·단위, 리스크·안전, 성능 데이터를 공학 개념과 함께 말하기', lessons: ['specs-units', 'risk-safety', 'performance-data'] },
-    { id: 'hvac-design', icon: '🌬️', title: 'HVAC 설계', titleEn: 'HVAC Design', color: 'indigo',
+    { id: 'hvac-design', icon: '🌬️', title: 'HVAC 설계', titleEn: 'HVAC Design', color: 'emerald',
       desc: '부하 계산, 풍량·덕트, 냉동 사이클을 영어로 설명하기', lessons: ['hvac-load', 'hvac-airflow', 'hvac-refrigeration'] },
-    { id: 'hvac-field', icon: '🏢', title: 'HVAC 현장 & 운영', titleEn: 'HVAC Field & Operations', color: 'green',
+    { id: 'hvac-field', icon: '🏢', title: 'HVAC 현장 & 운영', titleEn: 'HVAC Field & Operations', color: 'olive',
       desc: '시운전·TAB, 에너지 제어, 실내 공기질 민원을 영어로 협의하기', lessons: ['hvac-commissioning', 'hvac-controls', 'hvac-iaq'] }
   ];
 

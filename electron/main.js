@@ -14,7 +14,7 @@ function createWindow() {
     minWidth: 400,
     minHeight: 600,
     title: 'BizTalk English',
-    backgroundColor: '#f3f5f9',
+    backgroundColor: '#f7faf2',
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,

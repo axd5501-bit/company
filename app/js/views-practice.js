@@ -35,10 +35,10 @@
       }).join('');
 
       const modes = [
-        { href: '#/drill', icon: 'mic', cls: 'm-rose', title: '스피킹 드릴', desc: '듣고 따라 말하기 → 한국어만 보고 영어로 말하기. 말하면 바로 단어별로 채점해요.', meta: App.SR ? '말하기 채점' : '녹음 · 입력 연습' },
+        { href: '#/drill', icon: 'mic', cls: 'm-lime', title: '스피킹 드릴', desc: '듣고 따라 말하기 → 한국어만 보고 영어로 말하기. 말하면 바로 단어별로 채점해요.', meta: App.SR ? '말하기 채점' : '녹음 · 입력 연습' },
         { href: '#/speed', icon: 'bolt', cls: 'm-amber', title: '스피드 챌린지', desc: '60초 동안 한국어 뜻에 맞는 영어 표현을 최대한 많이 맞혀 보세요.', meta: '최고 기록 ' + (st.stats.speedBest || 0) + '점' },
         { href: '#/audio', icon: 'headphones', cls: 'm-teal', title: '오디오 학습', desc: '출퇴근길에 듣기만 하세요. 영어 → 한국어 뜻 → 천천히 영어 순서로 자동 재생합니다.', meta: '핸즈프리' },
-        { href: '#/ai', icon: 'ai', cls: 'm-violet', title: 'AI 회의 파트너', desc: App.SR ? 'AI와 음성으로 회의해요. 말하면 바로 교정해 주고, 더 자연스러운 표현을 따라 말하게 해 줘요.' : 'AI가 상대역을 맡아 자유롭게 대화하고, 내 문장을 바로 교정해 줍니다.', meta: st.settings.apiKey ? '바로 시작' : 'API 키 필요' }
+        { href: '#/ai', icon: 'ai', cls: 'm-emerald', title: 'AI 회의 파트너', desc: App.SR ? 'AI와 음성으로 회의해요. 말하면 바로 교정해 주고, 더 자연스러운 표현을 따라 말하게 해 줘요.' : 'AI가 상대역을 맡아 자유롭게 대화하고, 내 문장을 바로 교정해 줍니다.', meta: st.settings.apiKey ? '바로 시작' : 'API 키 필요' }
       ].map(function (m) {
         return '<a class="mode-card card ' + m.cls + '" href="' + m.href + '"><span class="mode-icon">' + icon(m.icon) + '</span>' +
           '<h3>' + m.title + '</h3><p class="muted small">' + m.desc + '</p><span class="mode-meta">' + m.meta + icon('arrow') + '</span></a>';

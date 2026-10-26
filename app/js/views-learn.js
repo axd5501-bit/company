@@ -290,7 +290,7 @@
     let howto = '표현을 듣고 소리 내어 따라 해 보세요.';
     if (App.CAN_RECORD) howto += ' <b>따라 말하기</b>로 내 발음을 녹음해 원어민 발음과 비교할 수 있어요.';
     if (App.SR) howto += ' <b>말하고 채점</b>을 누르면 발화를 인식해 점수를 매깁니다.';
-    if (App.state.settings.showIpa !== false) howto += ' 단어 아래 발음기호는 미국식이며 <b>ˈ</b> 바로 뒤 음절을 세게, <b>ː</b> 앞 모음을 길게 읽습니다.';
+    if (App.state.settings.showIpa !== false) howto += ' 단어 아래 발음기호는 미국식이며 <b class="ipa-sym">ˈ</b> 바로 뒤 음절을 세게, <b class="ipa-sym">ː</b> 앞 모음을 길게 읽습니다.';
 
     const list = l.expressions.map(function (e, i) {
       return '<article class="expr card">' +
