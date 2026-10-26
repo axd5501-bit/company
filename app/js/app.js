@@ -589,6 +589,8 @@
       tts.speak(el.dataset.text, { slow: !!el.dataset.slow, slot: Number(el.dataset.slot || 0), lang: el.dataset.lang });
     },
     stop: function () { App.stopAll(); },
+    'apply-update': function () { location.reload(); },
+    'dismiss-update': function () { const el = document.querySelector('.update-banner'); if (el) el.remove(); },
 
     record: function (el) {
       const key = el.dataset.key;
@@ -695,7 +697,27 @@
     route();
     // 휴대폰에서 홈 화면에 추가해 오프라인으로 쓸 수 있도록 (웹으로 열었을 때만)
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* 오프라인 캐시 없이 동작 */ });
+      const hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        // 앱을 켜 둔 채로 있어도 새 버전을 확인 (1시간마다, 다시 화면에 돌아올 때)
+        const check = function () { reg.update().catch(function () { /* 오프라인 */ }); };
+        setInterval(check, 60 * 60 * 1000);
+        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') check(); });
+      }).catch(function () { /* 오프라인 캐시 없이 동작 */ });
+      // 새 버전 파일이 준비되면 알려 주고, 누르면 새로고침해서 적용 (처음 설치할 때는 제외)
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (hadController) App.showUpdateBanner();
+      });
     }
+  };
+
+  App.showUpdateBanner = function () {
+    if (document.querySelector('.update-banner')) return;
+    const el = document.createElement('div');
+    el.className = 'update-banner';
+    el.setAttribute('role', 'status');
+    el.innerHTML = '<span>🌱 새 버전이 준비됐어요</span><button class="btn primary small" data-action="apply-update">지금 적용</button>' +
+      '<button class="btn ghost small" data-action="dismiss-update">나중에</button>';
+    document.body.appendChild(el);
   };
 })();

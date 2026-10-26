@@ -1,7 +1,7 @@
 {
   "name": "biztalk-english",
   "productName": "BizTalk English",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "비즈니스 미팅 중심 사내 영어 학습 프로그램",
   "author": "사내 교육팀",
   "private": true,
@@ -70,6 +70,17 @@
       "extendInfo": {
         "NSMicrophoneUsageDescription": "발음 연습 녹음을 위해 마이크를 사용합니다."
       }
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "axd5501-bit",
+        "repo": "company",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "6.8.10"
   }
 }

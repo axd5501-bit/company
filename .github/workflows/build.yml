@@ -27,7 +27,11 @@ jobs:
         include:
           - os: windows-latest
             script: dist:win
-            files: dist/*.exe
+            # latest.yml · blockmap 은 설치판 자동 업데이트에 필요
+            files: |
+              dist/*.exe
+              dist/*.exe.blockmap
+              dist/latest.yml
             name: BizTalk-English-Windows
           - os: macos-latest
             script: dist:mac
@@ -88,6 +92,8 @@ jobs:
           name: BizTalk English ${{ steps.ver.outputs.tag }}
           files: |
             dist/*.exe
+            dist/*.exe.blockmap
+            dist/latest.yml
             dist/*.dmg
           fail_on_unmatched_files: true
           body: |

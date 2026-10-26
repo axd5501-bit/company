@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, session, shell } = require('electron');
 const path = require('path');
+const setupUpdates = require('./updater');
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -56,6 +57,7 @@ app.whenReady().then(() => {
     : null);
 
   createWindow();
+  setupUpdates(() => mainWindow);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
