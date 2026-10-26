@@ -39,8 +39,9 @@
   // ---------- 홈 ----------
 
   function nextLesson() {
-    for (let i = 0; i < App.LESSONS.length; i++) {
-      const l = App.LESSONS[i];
+    const lessons = App.orderedLessons();
+    for (let i = 0; i < lessons.length; i++) {
+      const l = lessons[i];
       const ls = App.state.lessons[l.id];
       const step = STEPS.find(function (s) { return !stepDone(ls, s.id); });
       if (step) return { lesson: l, step: step };
@@ -71,7 +72,7 @@
     if (!learned) items.push({ href: next ? '#/lesson/' + next.lesson.id : '#/review', title: '🗂️ 복습 카드 만들기', sub: '핵심 표현 학습을 마치면 카드가 생겨요', mins: 2 });
     else if (due) items.push({ href: '#/review', title: '🔁 복습 카드 ' + due + '장', sub: '잊어버리기 직전에 다시 보기', mins: Math.max(2, Math.ceil(due / 4)) });
     else items.push({ href: '#/review', title: '🔁 오늘 복습 완료', sub: '다음 카드는 일정에 맞춰 돌아와요', mins: 0, done: true });
-    const sim = App.SCENARIOS.find(function (s) { return !(st.sim[s.id] >= 90); });
+    const sim = App.orderedScenarios().find(function (s) { return !(st.sim[s.id] >= 90); });
     items.push(sim
       ? { href: '#/sim/' + sim.id, title: sim.icon + ' ' + sim.title, sub: '회의 시뮬레이션 · ' + (st.sim[sim.id] != null ? '최고 ' + st.sim[sim.id] + '점' : '첫 도전'), mins: 5 }
       : { href: '#/speed', title: '⚡ 스피드 챌린지', sub: '최고 기록 ' + (st.stats.speedBest || 0) + '점 깨기', mins: 1 });
@@ -132,12 +133,12 @@
         return '<a class="tool" href="' + q.href + '"><span class="tool-icon">' + icon(q.icon) + '</span><span><b>' + q.title + '</b><small>' + q.sub + '</small></span></a>';
       }).join('');
 
-      const tracks = App.TRACKS.map(function (t) {
+      const tracks = App.orderedTracks().map(function (t) {
         const pct = trackProgress(t);
         return '<a class="track-tile t-' + t.color + '" href="#/courses/' + t.id + '">' +
           '<div class="track-tile-top"><span class="track-emoji">' + t.icon + '</span>' + App.ring(pct, 46) + '</div>' +
           '<b>' + esc(t.title) + '</b><span class="track-en">' + esc(t.titleEn) + '</span>' +
-          '<span class="muted small">' + t.lessons.length + '개 레슨</span></a>';
+          '<span class="track-meta"><span class="muted small">' + t.lessons.length + '개 레슨</span>' + App.focusTag(t.id) + '</span></a>';
       }).join('');
 
       return '<section class="hero">' +
@@ -171,7 +172,8 @@
   App.views.courses = {
     nav: 'courses',
     render: function () {
-      const sections = App.TRACKS.map(function (t, ti) {
+      const sections = App.orderedTracks().map(function (t) {
+        const ti = App.TRACKS.indexOf(t);
         const cards = t.lessons.map(function (id) {
           const l = App.findLesson(id);
           const ls = App.state.lessons[id];
@@ -190,13 +192,15 @@
         }).join('');
         return '<section class="track-section t-' + t.color + '" id="track-' + t.id + '">' +
           '<header class="track-head"><span class="track-index mono">T' + (ti + 1) + '</span><span class="track-emoji big">' + t.icon + '</span><div class="grow">' +
-          '<div class="eyebrow">' + esc(t.titleEn) + '</div><h2>' + esc(t.title) + '</h2><p class="muted">' + esc(t.desc) + '</p></div>' +
+          '<div class="eyebrow">' + esc(t.titleEn) + ' ' + App.focusTag(t.id) + '</div><h2>' + esc(t.title) + '</h2><p class="muted">' + esc(t.desc) + '</p></div>' +
           App.ring(trackProgress(t), 64) + '</header><div class="lesson-grid">' + cards + '</div></section>';
       }).join('');
       const totalExpr = App.LESSONS.reduce(function (n, l) { return n + l.expressions.length; }, 0);
       const totalTerms = Object.keys(App.TERMS).length;
       return '<header class="page-head"><h1>코스</h1><p class="muted">업무 상황별 ' + App.TRACKS.length + '개 트랙 · ' + App.LESSONS.length + '개 레슨 · 표현 ' + totalExpr +
-        '개 · 기술 용어 ' + totalTerms + '개. 레슨마다 표현 → 대화 → 롤플레이 → 퀴즈 4단계로 진행합니다.</p></header>' + sections;
+        '개 · 기술 용어 ' + totalTerms + '개. 레슨마다 표현 → 대화 → 롤플레이 → 퀴즈 4단계로 진행합니다.</p>' +
+        (App.state.settings.focusTrack ? '' : '<p class="hint small">설정 → <a href="#/settings">내 분야</a>에서 업무 분야(예: HVAC)를 고르면 그 트랙이 맨 앞에 오고, 홈의 오늘의 안건도 그 분야부터 추천합니다.</p>') +
+        '</header>' + sections;
     },
     after: function (args) {
       // #/courses/<트랙 id> 로 들어오면 해당 트랙으로 스크롤

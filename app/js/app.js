@@ -40,7 +40,7 @@
     return {
       version: 2,
       name: '',
-      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '' },
+      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '', focusTrack: '' },
       lessons: {}, srs: {}, xp: {},
       stats: { reviews: 0, aiTurns: 0, speedBest: 0, bestStreak: 0 },
       sim: {}, favorites: [], custom: {}, badges: []
@@ -86,6 +86,24 @@
   };
 
   App.findLesson = function (id) { return LESSONS.find(function (l) { return l.id === id; }); };
+
+  /** '내 분야'로 고른 트랙을 맨 앞으로 */
+  App.orderedTracks = function () {
+    const f = App.state.settings.focusTrack;
+    return TRACKS.filter(function (t) { return t.id === f; }).concat(TRACKS.filter(function (t) { return t.id !== f; }));
+  };
+  App.orderedLessons = function () {
+    return App.orderedTracks().reduce(function (all, t) {
+      return all.concat(t.lessons.map(App.findLesson));
+    }, []);
+  };
+  App.orderedScenarios = function () {
+    const f = App.state.settings.focusTrack;
+    return App.SCENARIOS.filter(function (s) { return s.track === f; }).concat(App.SCENARIOS.filter(function (s) { return s.track !== f; }));
+  };
+  App.focusTag = function (trackId) {
+    return trackId && trackId === App.state.settings.focusTrack ? '<span class="focus-tag">★ 내 분야</span>' : '';
+  };
   App.findTrack = function (id) { return TRACKS.find(function (t) { return t.id === id; }); };
 
   /** 복습 카드·사전에서 쓰는 표현 조회 (레슨 표현 + 기술 용어 + AI 회의에서 저장한 표현) */

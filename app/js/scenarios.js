@@ -466,6 +466,98 @@
           ]
         }
       ]
+    },
+    {
+      id: 'hvac-hot-complaint',
+      icon: '🥵',
+      title: '준공 후 "너무 덥다" 건축주 민원 대응',
+      track: 'hvac-field',
+      level: '중급',
+      brief: '입주 한 달 뒤, 서쪽 사무실이 매일 오후 너무 덥다는 민원이 들어왔습니다. 시설 책임자에게 데이터로 원인을 설명하고 비용이 적은 해결책과 검증 방법을 제시하세요.',
+      you: 'HVAC 엔지니어 (시공·유지보수 측)',
+      roles: { G: 'Ms. Grant (건물주 시설 책임자)' },
+      steps: [
+        {
+          s: 'G', skill: 'polite',
+          en: "Since we moved in, the west-side offices are way too hot every afternoon. This is unacceptable.",
+          ko: "입주한 뒤로 서쪽 사무실이 매일 오후 너무 더워요. 받아들일 수 없어요.",
+          choices: [
+            { en: "I'm sorry for the discomfort. Let's find the cause together. Which rooms are affected, and when does it usually start?", grade: 2,
+              feedback: "불편에 공감하고, 원인 파악에 필요한 정보(위치·시간대)를 구체적으로 물었습니다.",
+              reply: { en: "Mostly rooms 410 to 415, from around 2 p.m.", ko: "주로 410호부터 415호까지, 오후 2시쯤부터요." } },
+            { en: "Okay, we'll check the system.", grade: 1,
+              feedback: "무난하지만 불편을 인정하는 말과 구체적인 질문이 빠졌습니다.",
+              reply: { en: "You said that last week, too.", ko: "지난주에도 그렇게 말했잖아요." } },
+            { en: "The system was designed correctly, so it shouldn't be hot.", grade: 0,
+              feedback: "데이터를 확인하기 전에 설계만 근거로 반박하면 고객은 무시당한다고 느낍니다.",
+              reply: { en: "Then come up and feel it yourself.", ko: "그럼 직접 올라와서 느껴 보세요." } }
+          ]
+        },
+        {
+          s: 'G', skill: 'clear',
+          en: "So, what's causing it?",
+          ko: "그래서 원인이 뭔가요?",
+          choices: [
+            { en: "The BMS trend data shows the west-side VAV boxes are already at maximum airflow, but they still can't keep up with the afternoon solar heat gain.", grade: 2,
+              feedback: "트렌드 데이터와 공학적 원인(오후 일사 부하)을 연결해 명확하게 설명했습니다.",
+              reply: { en: "So the system isn't big enough?", ko: "그럼 시스템 용량이 작다는 건가요?" } },
+            { en: "It's probably the sun, I think.", grade: 1,
+              feedback: "방향은 맞지만 근거 없는 추측처럼 들립니다. 데이터를 함께 말하세요.",
+              reply: { en: "Probably? Don't you know?", ko: "아마요? 모르시는 거예요?" } },
+            { en: "Your staff keep opening the windows.", grade: 0,
+              feedback: "근거 없이 사용자 탓을 하면 갈등만 커집니다.",
+              reply: { en: "That's simply not true.", ko: "전혀 사실이 아니에요." } }
+          ]
+        },
+        {
+          s: 'G', skill: 'clear',
+          en: "Do we need to replace the units, then?",
+          ko: "그럼 장비를 교체해야 하나요?",
+          choices: [
+            { en: "Not necessarily. The total capacity is fine, but the air isn't balanced. The east side gets more air than it needs, so rebalancing should fix most of it.", grade: 2,
+              feedback: "전체 용량 문제와 분배(밸런싱) 문제를 구분해 비용이 적은 해결책을 제시했습니다.",
+              reply: { en: "That sounds a lot cheaper. How long will it take?", ko: "훨씬 저렴하겠네요. 얼마나 걸리나요?" } },
+            { en: "Maybe. We need to think about it.", grade: 1,
+              feedback: "결정을 미루는 답은 불안을 키웁니다. 확인된 사실부터 말하세요.",
+              reply: { en: "We can't wait forever.", ko: "마냥 기다릴 수는 없어요." } },
+            { en: "Yes, you'll need bigger units.", grade: 0,
+              feedback: "원인 분석 없이 장비 교체를 말하면 과도한 비용과 불신을 부릅니다.",
+              reply: { en: "That's a huge cost. Are you sure?", ko: "엄청난 비용인데요. 확실해요?" } }
+          ]
+        },
+        {
+          s: 'G', skill: 'lead',
+          en: "How long will it take?",
+          ko: "얼마나 걸리나요?",
+          choices: [
+            { en: "We'll rebalance the west zones this Saturday, keep solar film as a backup option, and monitor the temperatures for two weeks.", grade: 2,
+              feedback: "일정, 대안, 검증 방법까지 포함한 실행 계획을 제시했습니다.",
+              reply: { en: "Good. Please keep me updated.", ko: "좋아요. 진행 상황을 계속 알려 주세요." } },
+            { en: "As soon as possible.", grade: 1,
+              feedback: "구체적인 날짜가 없으면 민원이 다시 들어옵니다.",
+              reply: { en: "I need an actual date.", ko: "정확한 날짜가 필요해요." } },
+            { en: "It depends on our other projects.", grade: 0,
+              feedback: "고객 문제보다 내부 사정을 앞세우는 인상을 줍니다.",
+              reply: { en: "This should be your priority.", ko: "이게 우선순위여야죠." } }
+          ]
+        },
+        {
+          s: 'G', skill: 'lead',
+          en: "And how will we know it's actually fixed?",
+          ko: "실제로 해결됐는지는 어떻게 알 수 있죠?",
+          choices: [
+            { en: "We'll share the BMS trend data every week. If any room stays above 26 degrees during occupied hours, we'll come back and adjust it.", grade: 2,
+              feedback: "측정 가능한 합격 기준(재실 시간 26 °C)과 데이터 공유로 신뢰를 회복했습니다.",
+              reply: { en: "That's fair. Thank you.", ko: "합리적이네요. 감사합니다." } },
+            { en: "Your staff will feel the difference.", grade: 1,
+              feedback: "체감만으로는 기준이 모호합니다. 측정 가능한 기준을 제시하세요.",
+              reply: { en: "Feelings aren't data.", ko: "느낌은 데이터가 아니에요." } },
+            { en: "If nobody complains, it's fixed.", grade: 0,
+              feedback: "민원이 없을 때까지 기다리는 것은 수동적인 대응입니다.",
+              reply: { en: "That's not how it works.", ko: "그런 식으로는 안 되죠." } }
+          ]
+        }
+      ]
     }
   ];
 

@@ -721,6 +721,294 @@
         { q: "'상관관계가 인과관계를 증명하지는 않는다'를 영어로?", options: ["Correlation doesn't prove causation.", "Relation doesn't make a reason.", "Together is not because.", "Connection isn't cause meaning."], answer: 0, explain: "데이터 분석 회의에서 정말 자주 나오는 문장입니다." },
         { q: "'그 차이는 통계적으로 유의미하다'를 영어로?", options: ["The difference is statistically significant.", "The difference is statistic important.", "The difference is numerically meaningful.", "The difference is data significant."], answer: 0, explain: "보통 p-value가 0.05 미만일 때 이렇게 말합니다." }
       ]
+    },
+    {
+      id: 'hvac-load',
+      icon: '🌡️',
+      title: '부하 계산 & 장비 선정',
+      titleEn: 'Load Calculation & Equipment Sizing',
+      goal: '냉방 부하와 장비 용량을 현열·잠열, 냉동톤·kW 단위로 설명하고 과대 선정의 문제를 설득할 수 있다.',
+      expressions: [
+        { en: "The peak cooling load for this floor is about 120 kilowatts.", ko: "이 층의 최대 냉방 부하는 약 120kW입니다.", blank: "load" },
+        { en: "We need to account for both sensible and latent heat.", ko: "현열과 잠열을 모두 고려해야 합니다.", tip: "sensible heat = 현열(온도) / latent heat = 잠열(습기)", blank: "latent" },
+        { en: "The unit is rated at 10 tons, which is about 35 kilowatts.", ko: "이 장비는 10톤급으로, 약 35kW입니다.", tip: "1 ton(냉동톤) = 12,000 BTU/h ≈ 3.52 kW", blank: "tons" },
+        { en: "If we oversize the unit, it will short-cycle and won't dehumidify properly.", ko: "장비를 과대 선정하면 단속 운전(쇼트 사이클)이 생기고 제습이 제대로 안 됩니다.", blank: "oversize" },
+        { en: "What outdoor design conditions did you use?", ko: "어떤 외기 설계 조건을 사용하셨나요?", blank: "design" },
+        { en: "Internal heat gains from people and equipment are higher than we assumed.", ko: "인원과 기기에서 나오는 내부 발열이 가정보다 높습니다.", tip: "heat gain = 실내로 들어오는(발생하는) 열", blank: "gains" },
+        { en: "Let's add a 10% safety margin, but no more than that.", ko: "여유율은 10%로 두되, 그 이상은 두지 맙시다.", blank: "margin" }
+      ],
+      terms: [
+        { en: "cooling load", ko: "냉방 부하", def: "실내를 설계 온·습도로 유지하려고 제거해야 하는 열량. 일사, 외피 전도, 인원, 조명, 기기, 침기, 외기 도입에서 생기며, 시간대별로 계산한 최대값(peak)으로 장비를 고른다.", ex: "The west-facing offices have the highest cooling load in the afternoon." },
+        { en: "sensible heat", ko: "현열", def: "온도를 바꾸는 열. 건구온도계로 측정된다. 전체 냉방 부하 중 현열이 차지하는 비율을 SHR(현열비, sensible heat ratio)이라 한다.", ex: "Lighting and computers add mostly sensible heat." },
+        { en: "latent heat", ko: "잠열", def: "온도 변화 없이 수분(습도)을 바꾸는 열. 사람의 호흡·땀, 조리, 습한 외기가 원인이다. 회의실처럼 사람이 많은 공간은 잠열 비율이 높아 제습 능력이 중요하다.", ex: "A crowded meeting room has a large latent load." },
+        { en: "ton of refrigeration", ko: "냉동톤 (RT)", def: "냉방 능력 단위. 1 ton = 12,000 BTU/h ≈ 3.52 kW. 얼음 1톤(2,000 lb)을 24시간 동안 녹이는 열량에서 유래했다.", ex: "We need about 35 tons of cooling for this floor." },
+        { en: "BTU/h", ko: "시간당 BTU (열량 단위)", def: "미국식 열량 단위로 1 kW ≈ 3,412 BTU/h. 미국 장비 카탈로그는 냉방 능력을 대부분 BTU/h나 ton으로 표기하므로 kW로 환산해 비교한다.", ex: "The catalog lists the capacity as 120,000 BTU per hour." },
+        { en: "design conditions", ko: "설계 조건", def: "부하 계산의 기준이 되는 실내·외 온습도. 외기는 ASHRAE 기상 데이터의 0.4%·1% 값(1년 중 그 시간 비율만큼만 초과되는 온도)을 주로 쓴다.", ex: "We used the 0.4% cooling design conditions for Seoul." },
+        { en: "short cycling", ko: "단속 운전 (쇼트 사이클)", def: "용량이 너무 큰 장비가 금방 설정 온도에 도달해 짧게 켜졌다 꺼지기를 반복하는 현상. 코일이 충분히 차가워지기 전에 멈춰 제습이 안 되고, 효율과 압축기 수명이 떨어진다.", ex: "Short cycling is a classic sign of an oversized unit." },
+        { en: "diversity factor", ko: "동시 사용률 (부하 다양성 계수)", def: "모든 공간의 최대 부하가 동시에 생기지 않는다는 점을 반영하는 계수. 동쪽은 오전, 서쪽은 오후에 최대이므로 개별 최대 부하를 단순 합산하면 중앙 장비가 과대 선정된다.", ex: "With a diversity factor of 0.85, the central plant can be smaller." }
+      ],
+      dialogue: {
+        setting: '사무동 신축 프로젝트에서 3층 공조 장비 용량을 정하는 설계 협의입니다.',
+        you: 'A',
+        roles: { A: '나 (HVAC 설계 엔지니어)', B: 'Mark (프로젝트 매니저)', C: 'Lisa (건축주 담당)' },
+        lines: [
+          { s: 'B', en: "What size of rooftop units are we looking at for the third floor?", ko: "3층 옥상형 공조기(RTU)는 어느 용량으로 보고 있나요?" },
+          { s: 'A', en: "The peak cooling load for this floor is about 120 kilowatts, so we're looking at three 12.5-ton units.", ko: "이 층의 최대 냉방 부하가 약 120kW라서 12.5톤급 3대를 검토하고 있습니다." },
+          { s: 'B', en: "Can't we just go bigger to be safe?", ko: "안전하게 그냥 더 큰 걸로 가면 안 되나요?" },
+          { s: 'A', en: "If we oversize the unit, it will short-cycle and won't dehumidify properly.", ko: "장비를 과대 선정하면 단속 운전이 생기고 제습이 제대로 안 됩니다." },
+          { s: 'C', en: "In our current building, the meeting rooms get really stuffy in summer.", ko: "지금 건물은 여름에 회의실이 정말 답답해요." },
+          { s: 'A', en: "That's usually a latent load issue. We need to account for both sensible and latent heat.", ko: "보통 잠열 부하 문제입니다. 현열과 잠열을 모두 고려해야 합니다." },
+          { s: 'B', en: "How did you calculate the load?", ko: "부하는 어떻게 계산하셨어요?" },
+          { s: 'A', en: "We used the 0.4% outdoor design conditions for Seoul, plus internal heat gains from people, lighting, and equipment.", ko: "서울의 0.4% 외기 설계 조건에 인원·조명·기기의 내부 발열을 더했습니다." },
+          { s: 'B', en: "Do we need a safety margin on top of that?", ko: "거기에 여유율도 둬야 하나요?" },
+          { s: 'A', en: "Let's add a 10% safety margin, but no more than that.", ko: "여유율은 10%로 두되, 그 이상은 두지 맙시다." }
+        ]
+      },
+      situations: [
+        { q: "1 냉동톤(ton)을 kW로 바르게 말한 것은?", options: ["One ton is about 3.5 kilowatts.", "One ton is about 12 kilowatts.", "One ton is about 1,000 kilowatts.", "One ton is about 35 kilowatts."], answer: 0, explain: "1 ton = 12,000 BTU/h ≈ 3.52 kW 입니다." },
+        { q: "온도 변화 없이 습도(수분)를 바꾸는 열을 뜻하는 단어는?", options: ["latent heat", "sensible heat", "hidden temperature", "wet heat"], answer: 0, explain: "온도를 바꾸는 열은 sensible heat(현열)입니다." },
+        { q: "장비를 과대 선정했을 때의 문제를 정확히 설명한 문장은?", options: ["An oversized unit will short-cycle and dehumidify poorly.", "An oversized unit always saves energy.", "An oversized unit cools the room too slowly.", "An oversized unit never turns off."], answer: 0, explain: "짧게 켜졌다 꺼지기를 반복해 제습이 안 되고 효율·수명이 떨어집니다." }
+      ]
+    },
+    {
+      id: 'hvac-airflow',
+      icon: '🌀',
+      title: '풍량 & 덕트 설계',
+      titleEn: 'Airflow & Duct Design',
+      goal: '풍량·정압·압력 손실·환기 횟수를 영어로 설명하고 현장 간섭(clash)과 덕트 변경을 협의할 수 있다.',
+      expressions: [
+        { en: "The design airflow for this zone is 2,000 CFM.", ko: "이 존의 설계 풍량은 2,000 CFM입니다.", tip: "CFM = cubic feet per minute. 1 CFM ≈ 1.7 m³/h(CMH)", blank: "airflow" },
+        { en: "The external static pressure is higher than the fan can handle.", ko: "외부 정압이 팬이 감당할 수 있는 수준보다 높습니다.", blank: "static" },
+        { en: "We need to upsize this duct to reduce the pressure drop.", ko: "압력 손실을 줄이려면 이 덕트 사이즈를 키워야 합니다.", blank: "upsize" },
+        { en: "The lab needs at least 10 air changes per hour.", ko: "실험실은 시간당 최소 10회의 환기가 필요합니다.", tip: "ACH = air changes per hour (환기 횟수)", blank: "changes" },
+        { en: "Each VAV box will control the airflow to its zone.", ko: "각 VAV 박스가 해당 존의 풍량을 제어합니다.", blank: "control" },
+        { en: "Can we reroute the duct to avoid the beam?", ko: "보를 피하도록 덕트 경로를 바꿀 수 있을까요?", tip: "덕트가 구조물·배관과 부딪치는 것을 clash(간섭)라고 합니다", blank: "reroute" },
+        { en: "The supply diffusers are causing drafts near the windows.", ko: "급기 디퓨저 때문에 창가에 드래프트(찬 기류)가 생깁니다.", blank: "drafts" }
+      ],
+      terms: [
+        { en: "CFM / CMH", ko: "풍량 단위", def: "CFM = 분당 입방피트, CMH = 시간당 입방미터(m³/h). 1 CFM ≈ 1.7 CMH. 한국 도면은 CMH, 미국 장비 자료는 CFM을 쓰므로 환산해서 비교한다.", ex: "Please convert the airflow from CFM to cubic meters per hour." },
+        { en: "static pressure", ko: "정압", def: "덕트 벽면을 미는 압력으로, 공기 흐름에 대한 저항을 나타낸다. 단위는 Pa 또는 in. w.c.(인치 수주, 1 in. w.c. ≈ 249 Pa).", ex: "The duct static pressure setpoint is 250 pascals." },
+        { en: "external static pressure (ESP)", ko: "외부 정압", def: "공조기 밖의 덕트·필터·댐퍼·디퓨저에서 생기는 총 저항. 팬 선정의 기준이며, 과소 산정하면 현장에서 풍량이 부족해진다.", ex: "The fan was selected for an ESP of 1.5 inches of water." },
+        { en: "pressure drop", ko: "압력 손실", def: "공기가 덕트·엘보·댐퍼·필터를 지나며 잃는 압력. 풍속의 제곱에 비례해 커지므로, 덕트를 키워 풍속을 낮추면 크게 줄어든다.", ex: "Each extra elbow adds pressure drop." },
+        { en: "air changes per hour (ACH)", ko: "환기 횟수", def: "시간당 실 체적만큼의 공기가 몇 번 교체되는지 나타내는 값. ACH = 시간당 풍량 ÷ 실 체적. 실험실·병원처럼 오염 제어가 중요한 곳은 기준이 높다.", ex: "Operating rooms typically require at least 20 air changes per hour." },
+        { en: "VAV (variable air volume)", ko: "변풍량 방식", def: "존별 부하에 따라 VAV 박스 댐퍼로 풍량을 조절하는 방식. 일정 풍량(CAV) 방식보다 팬 에너지가 적게 들어 사무용 건물에 널리 쓰인다.", ex: "The VAV boxes reduce airflow when the rooms are empty." },
+        { en: "fan curve", ko: "팬 곡선", def: "팬이 낼 수 있는 풍량과 정압의 관계를 나타낸 그래프. 덕트 시스템의 저항 곡선과 만나는 점이 실제 운전점(operating point)이다.", ex: "Let's plot the system curve on the fan curve." },
+        { en: "diffuser", ko: "디퓨저 (취출구)", def: "실내로 공기를 고르게 퍼뜨리는 급기구. 배치·풍속·도달 거리(throw)가 맞지 않으면 드래프트와 소음이 생긴다.", ex: "Linear slot diffusers work well along the windows." }
+      ],
+      dialogue: {
+        setting: '시공 단계에서 기계 시공사 현장 소장과 덕트 간섭 문제를 협의하는 현장 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (HVAC 엔지니어)', B: 'Daniel (기계 시공사 현장 소장)' },
+        lines: [
+          { s: 'B', en: "We have a clash on level two. The main duct runs into a concrete beam.", ko: "2층에 간섭이 있어요. 메인 덕트가 콘크리트 보에 부딪힙니다." },
+          { s: 'A', en: "Can we reroute the duct to avoid the beam?", ko: "보를 피하도록 덕트 경로를 바꿀 수 있을까요?" },
+          { s: 'B', en: "We can, but it adds four elbows.", ko: "가능하지만 엘보가 4개 늘어나요." },
+          { s: 'A', en: "Then the external static pressure will be higher than the fan can handle.", ko: "그러면 외부 정압이 팬이 감당할 수 있는 수준보다 높아집니다." },
+          { s: 'B', en: "So what do you suggest?", ko: "그럼 어떻게 하자는 거죠?" },
+          { s: 'A', en: "We need to upsize this duct to reduce the pressure drop. I'll send the revised duct sizes tomorrow.", ko: "압력 손실을 줄이려면 이 덕트 사이즈를 키워야 합니다. 수정한 덕트 사이즈를 내일 보내 드릴게요." },
+          { s: 'B', en: "Okay. And how much air does the lab on level three need?", ko: "알겠어요. 그리고 3층 실험실은 공기가 얼마나 필요하죠?" },
+          { s: 'A', en: "The lab needs at least 10 air changes per hour. The design airflow for that zone is 2,000 CFM.", ko: "실험실은 시간당 최소 10회 환기가 필요합니다. 그 존의 설계 풍량은 2,000 CFM입니다." },
+          { s: 'B', en: "Got it. Each zone gets its own VAV box, right?", ko: "알겠습니다. 존마다 VAV 박스가 따로 있는 거죠?" },
+          { s: 'A', en: "Yes. Each VAV box will control the airflow to its zone.", ko: "네. 각 VAV 박스가 해당 존의 풍량을 제어합니다." }
+        ]
+      },
+      situations: [
+        { q: "덕트 시스템 전체의 저항으로, 팬 선정의 기준이 되는 값은?", options: ["external static pressure", "outside pressure", "static air", "duct strength"], answer: 0, explain: "ESP를 과소 산정하면 현장에서 풍량이 부족해집니다." },
+        { q: "1 CFM을 시간당 입방미터로 바르게 말한 것은?", options: ["about 1.7 cubic meters per hour", "about 17 cubic meters per hour", "about 0.17 cubic meters per hour", "about 60 cubic meters per hour"], answer: 0, explain: "1 ft³ ≈ 0.0283 m³ 이고 × 60분 ≈ 1.7 m³/h 입니다." },
+        { q: "덕트가 구조물과 부딪칠 때 경로 변경을 제안하는 표현은?", options: ["Can we reroute the duct?", "Can we rebreak the duct?", "Can we move out the beam?", "Can we redirect the beam?"], answer: 0, explain: "구조물(beam)은 보통 옮길 수 없으니 덕트 경로를 바꿉니다." }
+      ]
+    },
+    {
+      id: 'hvac-refrigeration',
+      icon: '❄️',
+      title: '냉동 사이클 & 장비',
+      titleEn: 'Refrigeration Cycle & Equipment',
+      goal: '냉동 사이클과 칠러·압축기 문제를 과열도·과냉각도·COP·GWP 같은 개념으로 진단하고 설명할 수 있다.',
+      expressions: [
+        { en: "The chiller is running at only 40% load most of the time.", ko: "칠러가 대부분의 시간 동안 40% 부하로만 운전됩니다.", blank: "chiller" },
+        { en: "The compressor keeps tripping on high head pressure.", ko: "압축기가 고압(응축 압력) 이상으로 계속 트립됩니다.", tip: "trip = 보호 장치가 작동해 정지하다 / head pressure = 응축(고압) 측 압력", blank: "tripping" },
+        { en: "Can you check the superheat and subcooling?", ko: "과열도와 과냉각도를 확인해 주시겠어요?", blank: "superheat" },
+        { en: "The condenser coil is dirty, so heat rejection is poor.", ko: "응축기 코일이 오염돼서 방열이 잘 안 됩니다.", tip: "heat rejection = 응축기에서 열을 외부로 버리는 것", blank: "rejection" },
+        { en: "This unit has a COP of 4.5 at full load.", ko: "이 장비는 정격 부하에서 COP가 4.5입니다.", blank: "COP" },
+        { en: "We're switching to a low-GWP refrigerant like R-32.", ko: "R-32 같은 저GWP 냉매로 전환하고 있습니다.", tip: "GWP = global warming potential (지구온난화지수)", blank: "refrigerant" },
+        { en: "The cooling tower approach is 4 degrees, which is normal.", ko: "냉각탑 어프로치가 4도로 정상입니다.", tip: "approach = 냉각탑 출구 수온 − 외기 습구온도. 작을수록 성능이 좋다", blank: "approach" }
+      ],
+      terms: [
+        { en: "refrigeration cycle", ko: "냉동 사이클", def: "압축 → 응축 → 팽창 → 증발을 반복하며 열을 옮기는 사이클. 증발기에서 실내(또는 냉수)의 열을 흡수하고, 응축기에서 그 열과 압축 일을 바깥으로 버린다.", ex: "Let's walk through the refrigeration cycle step by step." },
+        { en: "compressor", ko: "압축기", def: "저압 냉매 가스를 고온·고압으로 압축하는 장비로 사이클 전력의 대부분을 쓴다. 용량에 따라 스크롤·스크류·원심식(터보)을 쓴다.", ex: "The centrifugal compressor is the heart of this chiller." },
+        { en: "condenser / evaporator", ko: "응축기 / 증발기", def: "응축기는 냉매의 열을 외부로 버리며(heat rejection) 가스를 액체로 만드는 열교환기, 증발기는 냉매가 증발하며 공기·물에서 열을 흡수하는 열교환기다.", ex: "Frost on the evaporator coil usually means low airflow." },
+        { en: "superheat", ko: "과열도", def: "증발기 출구 냉매 가스 온도가 포화(증발) 온도보다 얼마나 높은지. 너무 낮으면 액체가 압축기로 들어가는 액백 위험, 너무 높으면 냉매 부족을 의심한다.", ex: "The superheat is 15 degrees, so the system may be undercharged." },
+        { en: "subcooling", ko: "과냉각도", def: "응축기 출구 액냉매 온도가 포화(응축) 온도보다 얼마나 낮은지. 팽창밸브 방식(TXV) 장비의 냉매 충전량을 진단하는 핵심 지표다.", ex: "High subcooling can mean the system is overcharged." },
+        { en: "COP / EER", ko: "성적계수 / 에너지효율비", def: "COP = 냉방(또는 난방) 능력 ÷ 소비 전력(같은 단위). EER = BTU/h ÷ W ≈ COP × 3.412. 높을수록 효율적이며, 칠러는 kW/ton(낮을수록 좋음)으로도 표시한다.", ex: "A COP of 5 means five kilowatts of cooling for every kilowatt of power." },
+        { en: "part-load efficiency (IPLV)", ko: "부분 부하 효율", def: "장비는 1년의 대부분을 부분 부하로 운전하므로, 정격 효율보다 IPLV·IEER 같은 부분 부하 지표가 실제 에너지 사용량을 더 잘 보여 준다.", ex: "Compare the chillers by IPLV, not just full-load efficiency." },
+        { en: "GWP (global warming potential)", ko: "지구온난화지수", def: "냉매가 같은 양의 CO2 대비 온난화에 얼마나 영향을 주는지 나타내는 값. R-410A(약 2,088)에서 R-32(약 675)·R-454B 같은 저GWP 냉매로 전환 중이다(키갈리 개정의정서).", ex: "The new units use a refrigerant with a much lower GWP." }
+      ],
+      dialogue: {
+        setting: '한여름 칠러 정지와 에너지 비용 문제로 설비 관리자와 점검 회의를 합니다.',
+        you: 'A',
+        roles: { A: '나 (HVAC 엔지니어)', B: 'Tom (설비 관리자)' },
+        lines: [
+          { s: 'B', en: "Chiller number two shut down again yesterday afternoon.", ko: "어제 오후에 2번 칠러가 또 멈췄어요." },
+          { s: 'A', en: "I checked the log. The compressor keeps tripping on high head pressure.", ko: "로그를 확인했습니다. 압축기가 고압 이상으로 계속 트립되고 있습니다." },
+          { s: 'B', en: "What could cause that?", ko: "원인이 뭘까요?" },
+          { s: 'A', en: "The condenser coil is dirty, so heat rejection is poor. We should clean it this week.", ko: "응축기 코일이 오염돼서 방열이 잘 안 됩니다. 이번 주에 청소해야 합니다." },
+          { s: 'B', en: "Should we also check the refrigerant charge?", ko: "냉매 충전량도 확인해야 할까요?" },
+          { s: 'A', en: "Yes. After the cleaning, can you check the superheat and subcooling?", ko: "네. 청소한 뒤에 과열도와 과냉각도를 확인해 주시겠어요?" },
+          { s: 'B', en: "Sure. Our energy bills are also very high this summer.", ko: "그럴게요. 올여름 전기 요금도 엄청 많이 나왔어요." },
+          { s: 'A', en: "The chiller is running at only 40% load most of the time, so part-load efficiency matters more than the full-load rating.", ko: "칠러가 대부분 40% 부하로만 운전돼서, 정격 효율보다 부분 부하 효율이 더 중요합니다." },
+          { s: 'B', en: "Should we just replace it, then?", ko: "그럼 그냥 교체해야 할까요?" },
+          { s: 'A', en: "Let's compare options first. The new model has better part-load efficiency, and we're switching to a low-GWP refrigerant like R-32.", ko: "먼저 대안을 비교해 봅시다. 신형 모델은 부분 부하 효율이 더 좋고, R-32 같은 저GWP 냉매로 전환하고 있습니다." }
+        ]
+      },
+      situations: [
+        { q: "냉매 충전 상태를 진단할 때 확인하는 두 값은?", options: ["superheat and subcooling", "overheat and undercool", "hot point and cold point", "high heat and low heat"], answer: 0, explain: "증발기 출구 과열도와 응축기 출구 과냉각도를 함께 봅니다." },
+        { q: "COP 4.5의 의미를 바르게 설명한 영어 문장은?", options: ["It delivers 4.5 kW of cooling per 1 kW of power.", "It uses 4.5 kW of power per 1 kW of cooling.", "It cools the room by 4.5 degrees per hour.", "It runs 4.5 hours per day."], answer: 0, explain: "COP = 냉방 능력 ÷ 소비 전력. 클수록 효율적입니다." },
+        { q: "'보호 장치가 작동해 압축기가 멈췄다'를 영어로?", options: ["The compressor tripped.", "The compressor fell.", "The compressor slipped.", "The compressor dropped out."], answer: 0, explain: "trip on high pressure = 고압으로 트립되다" }
+      ]
+    },
+    {
+      id: 'hvac-commissioning',
+      icon: '🧰',
+      title: '시운전 & TAB',
+      titleEn: 'Commissioning & TAB',
+      goal: '시운전·TAB 결과를 설계값 대비 수치로 보고하고, 잔여 하자와 일정을 건축주와 협의할 수 있다.',
+      expressions: [
+        { en: "We're in the middle of testing, adjusting, and balancing.", ko: "지금 TAB(시험·조정·균형) 작업을 진행하고 있습니다.", blank: "balancing" },
+        { en: "The measured airflow is within 10% of the design value.", ko: "측정 풍량이 설계값의 ±10% 이내입니다.", blank: "measured" },
+        { en: "This room is short of air by about 15%.", ko: "이 실은 풍량이 약 15% 부족합니다.", tip: "be short of ~ = ~이 부족하다", blank: "short" },
+        { en: "We'll add this item to the punch list.", ko: "이 항목을 펀치 리스트(잔여 하자 목록)에 추가하겠습니다.", blank: "punch" },
+        { en: "Has the functional performance test been completed?", ko: "기능 성능 시험은 완료됐나요?", blank: "functional" },
+        { en: "The damper was stuck closed, so we've adjusted it.", ko: "댐퍼가 닫힌 채로 고착돼 있어서 조정했습니다.", blank: "damper" },
+        { en: "Can we schedule a walkthrough with the owner next week?", ko: "다음 주에 건축주와 현장 점검 일정을 잡을 수 있을까요?", tip: "walkthrough = 현장을 함께 돌며 점검하는 것", blank: "walkthrough" }
+      ],
+      terms: [
+        { en: "commissioning (Cx)", ko: "커미셔닝", def: "설계부터 운영까지 시스템이 건축주 요구사항(OPR, owner's project requirements)대로 설치·작동하는지 검증하는 품질 관리 과정. 장비를 처음 돌려 보는 시운전(start-up)보다 넓은 개념이다.", ex: "The commissioning agent will review the test reports." },
+        { en: "TAB (testing, adjusting, and balancing)", ko: "시험·조정·균형", def: "풍량·수량을 측정하고 댐퍼·밸브를 조정해 각 실과 장비가 설계값을 받도록 맞추는 작업. 보통 설계값의 ±10% 이내를 합격 기준으로 한다.", ex: "The TAB report shows three zones below design airflow." },
+        { en: "design intent", ko: "설계 의도", def: "시스템이 무엇을 위해 어떻게 동작하도록 설계됐는지에 대한 설명. 현장에서 변경이 생기면 설계 의도를 해치지 않는지가 판단 기준이 된다.", ex: "This change doesn't meet the design intent for the lab." },
+        { en: "punch list", ko: "펀치 리스트", def: "준공 전에 남은 미시공·하자 항목 목록. 항목마다 담당자와 기한을 정해 모두 해결(close out)해야 건축주가 인수한다.", ex: "We have twelve items left on the punch list." },
+        { en: "functional performance test (FPT)", ko: "기능 성능 시험", def: "장비와 자동제어가 실제 운전 모드(정상·야간·화재·정전 복구 등)에서 제어 시퀀스대로 동작하는지 확인하는 시험.", ex: "The functional performance test for the AHU passed." },
+        { en: "damper", ko: "댐퍼", def: "덕트 안에서 풍량을 조절하거나 차단하는 판. 풍량 조절용 밸런싱 댐퍼, 화재 시 닫히는 방화 댐퍼(fire damper), 모터로 움직이는 전동 댐퍼 등이 있다.", ex: "Check that the fire damper is accessible for inspection." },
+        { en: "setpoint", ko: "설정값", def: "자동제어가 유지하려는 목표값. 예: 실온 24 °C, 급기 온도 13 °C, 덕트 정압 250 Pa. 측정값과 설정값의 차이를 보고 제어가 동작한다.", ex: "The room setpoint is 24 degrees Celsius." },
+        { en: "as-built drawings", ko: "준공 도면", def: "실제로 시공된 상태를 반영한 최종 도면. 설계 도면과 다른 현장 변경을 모두 반영해야 하며, 유지보수와 향후 개보수의 기준이 된다.", ex: "Please update the as-built drawings with the new duct route." }
+      ],
+      dialogue: {
+        setting: '준공 2주 전, 건축주 대리인과 공조 시운전 결과를 점검하는 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (TAB 엔지니어)', B: 'Ms. Park (건축주 대리인)', C: 'Ken (시공사)' },
+        lines: [
+          { s: 'B', en: "How is the commissioning going?", ko: "커미셔닝은 어떻게 진행되고 있나요?" },
+          { s: 'A', en: "We're in the middle of testing, adjusting, and balancing. Most zones are fine.", ko: "지금 TAB 작업을 진행하고 있습니다. 대부분의 존은 문제없습니다." },
+          { s: 'B', en: "What exactly do you mean by fine?", ko: "문제없다는 게 정확히 무슨 뜻이죠?" },
+          { s: 'A', en: "The measured airflow is within 10% of the design value.", ko: "측정 풍량이 설계값의 ±10% 이내라는 뜻입니다." },
+          { s: 'B', en: "And the zones that aren't?", ko: "그렇지 않은 존은요?" },
+          { s: 'A', en: "Meeting room 302 is short of air by about 15%. The damper was stuck closed, so we've adjusted it.", ko: "302호 회의실이 풍량이 약 15% 부족합니다. 댐퍼가 닫힌 채로 고착돼 있어서 조정했습니다." },
+          { s: 'C', en: "Do we need to retest it?", ko: "재측정해야 하나요?" },
+          { s: 'A', en: "Yes. We'll add this item to the punch list until the retest confirms it.", ko: "네. 재측정으로 확인될 때까지 이 항목을 펀치 리스트에 올려 두겠습니다." },
+          { s: 'B', en: "Has the functional performance test been completed?", ko: "기능 성능 시험은 완료됐나요?" },
+          { s: 'A', en: "Not yet, it's scheduled for Thursday. Can we schedule a walkthrough with the owner next week?", ko: "아직이요, 목요일에 예정돼 있습니다. 다음 주에 건축주와 현장 점검 일정을 잡을 수 있을까요?" }
+        ]
+      },
+      situations: [
+        { q: "준공 전에 남은 하자·미시공 항목 목록을 뭐라고 하나요?", options: ["punch list", "punching paper", "defect bag", "finish sheet"], answer: 0, explain: "항목을 모두 해결하는 것을 close out 이라고 합니다." },
+        { q: "'이 실은 풍량이 15% 부족하다'를 영어로?", options: ["This room is short of air by 15%.", "This room is lack air 15%.", "This room is less air of 15%.", "This room is minus air 15 percent."], answer: 0, explain: "be short of ~ by 수치 = ~만큼 부족하다" },
+        { q: "TAB 의 T, A, B 는?", options: ["testing, adjusting, and balancing", "test, approve, and build", "temperature, air, and balance", "tune, adjust, and blow"], answer: 0, explain: "측정(testing)·조정(adjusting)·균형 맞추기(balancing)입니다." }
+      ]
+    },
+    {
+      id: 'hvac-controls',
+      icon: '🎛️',
+      title: '에너지 절감 & 자동제어',
+      titleEn: 'Energy Savings & Controls',
+      goal: 'BMS 트렌드 데이터로 문제를 찾고 VFD·이코노마이저·DCV 같은 절감 방안을 근거와 함께 제안할 수 있다.',
+      expressions: [
+        { en: "Let's check the trend data in the BMS.", ko: "BMS의 트렌드 데이터를 확인해 봅시다.", tip: "BMS = building management system (건물 자동제어 시스템)", blank: "trend" },
+        { en: "Adding a VFD to the supply fan will save a lot of energy.", ko: "급기팬에 VFD(인버터)를 달면 에너지를 많이 절약할 수 있습니다.", blank: "save" },
+        { en: "The economizer lets us use outdoor air for free cooling.", ko: "이코노마이저로 외기를 이용한 프리쿨링을 할 수 있습니다.", blank: "economizer" },
+        { en: "We can reset the supply air temperature setpoint based on demand.", ko: "부하에 따라 급기 온도 설정값을 리셋할 수 있습니다.", blank: "setpoint" },
+        { en: "Demand-controlled ventilation adjusts outdoor air based on CO2 levels.", ko: "수요 제어 환기는 CO2 농도에 따라 외기량을 조절합니다.", blank: "ventilation" },
+        { en: "Can you send me the sequence of operations?", ko: "제어 시퀀스 문서를 보내 주시겠어요?", blank: "sequence" },
+        { en: "The heating and cooling valves are fighting each other.", ko: "난방 밸브와 냉방 밸브가 동시에 열려 서로 싸우고 있습니다.", tip: "동시 냉난방(simultaneous heating and cooling)은 대표적인 에너지 낭비입니다", blank: "fighting" }
+      ],
+      terms: [
+        { en: "BMS / BAS", ko: "건물 자동제어 시스템", def: "공조·조명·설비를 감시하고 제어하는 시스템(building management/automation system). 트렌드(trend) 기록으로 운전 이상을 찾는 것이 에너지 진단의 출발점이다.", ex: "The BMS shows the fan running all night." },
+        { en: "VFD (variable frequency drive)", ko: "인버터 (가변속 드라이브)", def: "모터 회전수를 바꿔 풍량·유량을 조절하는 장치. 팬·펌프 상사 법칙상 동력은 회전수의 세제곱에 비례해, 속도를 20% 줄이면 동력이 약 절반(0.8³ ≈ 0.51)으로 줄어든다.", ex: "With a VFD, the pump runs at 70% speed most of the day." },
+        { en: "economizer", ko: "이코노마이저", def: "외기가 실내보다 시원하고 건조할 때 외기를 많이 들여 기계 냉방 없이 냉방(free cooling)하는 제어. 댐퍼·센서 고장이 잦아 주기적인 점검이 필요하다.", ex: "The economizer damper was stuck at minimum position." },
+        { en: "setpoint reset", ko: "설정값 리셋", def: "부하에 따라 급기 온도·덕트 정압·냉수 온도 등의 설정값을 자동으로 조정하는 전략. 고정 설정값보다 팬과 냉동기 에너지를 줄인다.", ex: "Static pressure reset cut our fan energy by 30%." },
+        { en: "demand-controlled ventilation (DCV)", ko: "수요 제어 환기", def: "CO2 센서나 재실 인원에 따라 외기 도입량을 조절하는 방식. 사람이 없을 때 외기를 덜 들여 외기를 냉난방하는 에너지를 줄인다.", ex: "DCV is ideal for meeting rooms and auditoriums." },
+        { en: "energy recovery ventilator (ERV)", ko: "전열교환기", def: "배기와 급기 사이에서 열과 습기를 교환해 외기 부하를 줄이는 환기 장치. 열(현열)만 교환하면 HRV(heat recovery ventilator)라고 한다.", ex: "The ERV preheats the incoming air in winter." },
+        { en: "sequence of operations", ko: "제어 시퀀스", def: "장비가 언제, 어떤 조건에서, 어떻게 동작해야 하는지 적은 제어 논리 문서. 시운전·기능 시험·고장 진단의 기준이 된다.", ex: "The sequence of operations doesn't mention night setback." },
+        { en: "simultaneous heating and cooling", ko: "동시 냉난방", def: "같은 공기를 냉각한 뒤 다시 가열하는 등 냉·난방이 서로 상쇄되는 운전. 제어 설정 오류나 밸브 누설로 흔히 생기는 큰 에너지 낭비다.", ex: "Our analysis found simultaneous heating and cooling in six zones." }
+      ],
+      dialogue: {
+        setting: '사옥의 에너지 비용을 줄이기 위한 공조 제어 개선 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (에너지·제어 엔지니어)', B: 'Rachel (시설 총괄)' },
+        lines: [
+          { s: 'B', en: "Our energy costs went up 18% this year. Where should we start?", ko: "올해 에너지 비용이 18% 올랐어요. 어디서부터 시작해야 할까요?" },
+          { s: 'A', en: "Let's check the trend data in the BMS first. I've already found one problem.", ko: "먼저 BMS의 트렌드 데이터를 확인해 봅시다. 이미 문제 하나를 찾았습니다." },
+          { s: 'B', en: "What is it?", ko: "뭔데요?" },
+          { s: 'A', en: "In several zones, the heating and cooling valves are fighting each other.", ko: "몇몇 존에서 난방 밸브와 냉방 밸브가 동시에 열려 서로 싸우고 있습니다." },
+          { s: 'B', en: "That sounds expensive.", ko: "돈이 많이 새고 있겠네요." },
+          { s: 'A', en: "It is. Can you send me the sequence of operations? I'll correct the control logic.", ko: "맞습니다. 제어 시퀀스 문서를 보내 주시겠어요? 제어 로직을 고치겠습니다." },
+          { s: 'B', en: "Sure. What else can we do?", ko: "물론이죠. 또 뭘 할 수 있을까요?" },
+          { s: 'A', en: "Adding a VFD to the supply fan will save a lot of energy. Also, the economizer lets us use outdoor air for free cooling in spring and fall.", ko: "급기팬에 VFD를 달면 에너지를 많이 절약할 수 있습니다. 또 봄·가을에는 이코노마이저로 외기를 이용한 프리쿨링을 할 수 있습니다." },
+          { s: 'B', en: "What about the meeting rooms? They're empty half the time.", ko: "회의실은요? 절반은 비어 있거든요." },
+          { s: 'A', en: "Demand-controlled ventilation adjusts outdoor air based on CO2 levels, so it's perfect for those rooms.", ko: "수요 제어 환기는 CO2 농도에 따라 외기량을 조절하기 때문에 그런 방에 딱 맞습니다." }
+        ]
+      },
+      situations: [
+        { q: "팬 회전수를 20% 줄이면 소비 동력은 대략 어떻게 되나요?", options: ["It drops by about half.", "It drops by 20%.", "It stays the same.", "It goes up slightly."], answer: 0, explain: "상사 법칙: 동력 ∝ 회전수³ → 0.8³ ≈ 0.51" },
+        { q: "외기를 이용해 기계 냉방 없이 냉방하는 것을 뭐라고 하나요?", options: ["free cooling", "open cooling", "natural AC", "wind cooling"], answer: 0, explain: "이코노마이저가 free cooling 을 담당합니다." },
+        { q: "'제어 시퀀스 문서를 보내 주세요'를 영어로?", options: ["Can you send me the sequence of operations?", "Can you send me the control order paper?", "Can you send me the operating line?", "Can you send me the step program?"], answer: 0, explain: "줄여서 SOO 라고도 합니다." }
+      ]
+    },
+    {
+      id: 'hvac-iaq',
+      icon: '🍃',
+      title: '실내 공기질 & 민원 대응',
+      titleEn: 'Indoor Air Quality & Comfort',
+      goal: '덥다·춥다·답답하다는 민원을 CO2·습도·외기량 데이터로 설명하고 개선 계획을 제시할 수 있다.',
+      expressions: [
+        { en: "We've been getting a lot of hot and cold complaints on the fifth floor.", ko: "5층에서 덥다, 춥다는 민원이 많이 들어오고 있습니다.", tip: "hot and cold calls = 냉난방 민원", blank: "complaints" },
+        { en: "The CO2 levels in the meeting room exceed 1,500 ppm in the afternoon.", ko: "오후에 회의실 CO2 농도가 1,500ppm을 넘습니다.", tip: "실내 CO2 는 보통 1,000ppm 이하로 관리합니다", blank: "exceed" },
+        { en: "We should increase the outdoor air rate to meet ASHRAE 62.1.", ko: "ASHRAE 62.1 기준을 충족하려면 외기 도입량을 늘려야 합니다.", blank: "outdoor" },
+        { en: "Relative humidity should stay between 40 and 60 percent.", ko: "상대습도는 40~60%로 유지해야 합니다.", blank: "humidity" },
+        { en: "Let's upgrade the filters to MERV 13.", ko: "필터를 MERV 13 등급으로 올립시다.", blank: "filters" },
+        { en: "There's condensation on the ductwork because it isn't insulated.", ko: "덕트가 보온되지 않아서 표면에 결로가 생겼습니다.", blank: "condensation" },
+        { en: "We'll replace the filters on a quarterly maintenance schedule.", ko: "분기별 유지보수 일정에 맞춰 필터를 교체하겠습니다.", blank: "quarterly" }
+      ],
+      terms: [
+        { en: "indoor air quality (IAQ)", ko: "실내 공기질", def: "CO2, 미세먼지(PM2.5), 휘발성 유기화합물(VOC), 온습도 등으로 평가하는 실내 공기 상태. 업무 집중도와 건강에 직접 영향을 준다.", ex: "Poor IAQ can cause headaches and fatigue." },
+        { en: "CO2 concentration (ppm)", ko: "이산화탄소 농도", def: "환기가 충분한지 보여 주는 대표 지표. 외기는 약 420 ppm이고 실내는 보통 1,000 ppm 이하로 관리한다. 사람이 많은데 환기가 부족하면 빠르게 올라간다.", ex: "CO2 rose to 1,800 ppm during the all-hands meeting." },
+        { en: "outdoor air (OA)", ko: "외기", def: "환기를 위해 들이는 바깥 공기. 필요량은 ASHRAE 62.1에서 재실 인원과 바닥 면적으로 계산한다. 많을수록 공기질은 좋아지지만 냉난방 부하가 커진다.", ex: "The outdoor air damper should be at least 20% open." },
+        { en: "relative humidity (RH)", ko: "상대습도", def: "그 온도에서 공기가 머금을 수 있는 최대 수증기량 대비 현재 수증기량의 비율. 보통 40~60%가 쾌적하며, 너무 높으면 곰팡이, 너무 낮으면 건조함과 정전기가 생긴다.", ex: "The relative humidity reached 70% after the rain." },
+        { en: "dew point", ko: "이슬점", def: "공기를 냉각할 때 결로가 시작되는 온도. 덕트·배관 표면 온도가 주변 공기의 이슬점보다 낮으면 결로가 생기므로 보온재로 막는다.", ex: "The chilled water pipe is below the dew point, so it needs insulation." },
+        { en: "MERV rating", ko: "MERV 등급", def: "필터의 미세입자 포집 성능 등급(1~16). 높을수록 고성능이지만 압력 손실도 커지므로 팬 용량을 함께 확인해야 한다. 상업 건물은 MERV 13 이상을 권장한다.", ex: "Switching to MERV 13 increased the filter pressure drop." },
+        { en: "thermal comfort", ko: "열쾌적", def: "온도·습도·기류·복사 온도·착의량·활동량이 함께 결정하는 쾌적감. ASHRAE 55가 기준이며, 같은 온도라도 기류(드래프트)가 있거나 창가 복사 냉기가 있으면 춥게 느낀다.", ex: "Thermal comfort depends on more than air temperature." },
+        { en: "preventive maintenance (PM)", ko: "예방 정비", def: "고장 전에 정해진 주기로 필터 교체·코일 청소·벨트 점검 등을 하는 정비. 고장 후에 고치는 사후 정비(reactive maintenance)보다 비용과 민원이 적다.", ex: "Coil cleaning is part of our preventive maintenance plan." }
+      ],
+      dialogue: {
+        setting: '입주사 사무 관리자와 냉난방·공기질 민원을 협의하는 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (HVAC 서비스 엔지니어)', B: 'Jenny (입주사 사무 관리자)' },
+        lines: [
+          { s: 'B', en: "We've been getting a lot of hot and cold complaints on the fifth floor.", ko: "5층에서 덥다, 춥다는 민원이 많이 들어오고 있어요." },
+          { s: 'A', en: "I understand. We installed sensors last week, and the CO2 levels in the meeting room exceed 1,500 ppm in the afternoon.", ko: "알겠습니다. 지난주에 센서를 설치했는데, 오후에 회의실 CO2 농도가 1,500ppm을 넘습니다." },
+          { s: 'B', en: "Is that bad?", ko: "그게 나쁜 건가요?" },
+          { s: 'A', en: "Yes, it means the room isn't getting enough fresh air. We should increase the outdoor air rate to meet ASHRAE 62.1.", ko: "네, 신선한 공기가 충분히 들어오지 않는다는 뜻입니다. ASHRAE 62.1 기준을 충족하려면 외기 도입량을 늘려야 합니다." },
+          { s: 'B', en: "People also say the air feels damp.", ko: "공기가 눅눅하다는 말도 있어요." },
+          { s: 'A', en: "Relative humidity should stay between 40 and 60 percent. We measured 68%, so we'll adjust the dehumidification.", ko: "상대습도는 40~60%로 유지해야 합니다. 68%가 측정돼서 제습 운전을 조정하겠습니다." },
+          { s: 'B', en: "And what about the water stains on the ceiling?", ko: "천장의 물 얼룩은요?" },
+          { s: 'A', en: "There's condensation on the ductwork because it isn't insulated. We'll insulate it next week.", ko: "덕트가 보온되지 않아서 표면에 결로가 생겼습니다. 다음 주에 보온 작업을 하겠습니다." },
+          { s: 'B', en: "Is there anything else we can do?", ko: "그 밖에 할 수 있는 게 있을까요?" },
+          { s: 'A', en: "Let's upgrade the filters to MERV 13, and we'll replace them on a quarterly maintenance schedule.", ko: "필터를 MERV 13 등급으로 올리고, 분기별 유지보수 일정에 맞춰 교체하겠습니다." }
+        ]
+      },
+      situations: [
+        { q: "덕트 표면에 물방울이 맺히는 현상을 뭐라고 하나요?", options: ["condensation", "evaporation", "conduction", "precipitation"], answer: 0, explain: "표면 온도가 이슬점(dew point)보다 낮을 때 생깁니다." },
+        { q: "환기가 부족한지 판단하는 대표 지표는?", options: ["CO2 concentration", "lighting level", "noise level", "floor area"], answer: 0, explain: "외기 약 420ppm, 실내는 보통 1,000ppm 이하로 관리합니다." },
+        { q: "'필터를 MERV 13으로 올리자'를 영어로?", options: ["Let's upgrade the filters to MERV 13.", "Let's raise up filter MERV 13.", "Let's filter more to 13.", "Let's change MERV filter level up 13."], answer: 0, explain: "필터 등급을 올리면 압력 손실도 커지니 팬 용량을 확인하세요." }
+      ]
     }
   ];
 
@@ -737,7 +1025,11 @@
     { id: 'engineering', icon: '🔧', title: '엔지니어링 미팅', titleEn: 'Engineering Meetings', color: 'rose',
       desc: '설계 검토, 장애 분석, 테스트 결과를 기술 용어로 말하기', lessons: ['design-review', 'troubleshooting', 'testing-quality'] },
     { id: 'eng-deep', icon: '⚙️', title: '엔지니어링 심화', titleEn: 'Engineering Deep Dive', color: 'cyan',
-      desc: '수치·단위, 리스크·안전, 성능 데이터를 공학 개념과 함께 말하기', lessons: ['specs-units', 'risk-safety', 'performance-data'] }
+      desc: '수치·단위, 리스크·안전, 성능 데이터를 공학 개념과 함께 말하기', lessons: ['specs-units', 'risk-safety', 'performance-data'] },
+    { id: 'hvac-design', icon: '🌬️', title: 'HVAC 설계', titleEn: 'HVAC Design', color: 'indigo',
+      desc: '부하 계산, 풍량·덕트, 냉동 사이클을 영어로 설명하기', lessons: ['hvac-load', 'hvac-airflow', 'hvac-refrigeration'] },
+    { id: 'hvac-field', icon: '🏢', title: 'HVAC 현장 & 운영', titleEn: 'HVAC Field & Operations', color: 'green',
+      desc: '시운전·TAB, 에너지 제어, 실내 공기질 민원을 영어로 협의하기', lessons: ['hvac-commissioning', 'hvac-controls', 'hvac-iaq'] }
   ];
 
   const LEVELS = {
@@ -746,7 +1038,9 @@
     clarifying: '기초', online: '기초', scheduling: '기초',
     reporting: '중급', 'presentation-qa': '중급', negotiation: '고급',
     'design-review': '중급', troubleshooting: '중급', 'testing-quality': '중급',
-    'specs-units': '중급', 'risk-safety': '고급', 'performance-data': '고급'
+    'specs-units': '중급', 'risk-safety': '고급', 'performance-data': '고급',
+    'hvac-load': '중급', 'hvac-airflow': '중급', 'hvac-refrigeration': '고급',
+    'hvac-commissioning': '중급', 'hvac-controls': '고급', 'hvac-iaq': '중급'
   };
 
   LESSONS.forEach(function (lesson) {

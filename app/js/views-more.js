@@ -216,7 +216,14 @@
           ? '<div class="key-row"><span class="chip done">' + icon('check') + '키 저장됨 · …' + esc(st.settings.apiKey.slice(-4)) + '</span><button class="btn danger" data-action="key-clear">키 삭제</button></div>'
           : '<div class="composer"><input type="password" id="key-input" autocomplete="off" placeholder="sk-ant-..."><button class="btn primary" data-action="key-save">저장</button></div>');
 
+      const focus = st.settings.focusTrack;
+      const focusChips = [['', '설정 안 함']].concat(App.TRACKS.map(function (t) { return [t.id, t.icon + ' ' + t.title]; })).map(function (f) {
+        return '<button class="chip-btn' + (focus === f[0] ? ' picked' : '') + '" data-action="focus-track" data-id="' + f[0] + '">' + esc(f[1]) + '</button>';
+      }).join('');
+
       return '<header class="page-head"><h1>설정</h1></header>' +
+        '<section class="card"><h3>내 분야</h3><p class="muted small">고른 트랙이 홈·코스·실전 연습 맨 앞에 오고, 오늘의 안건도 그 분야부터 추천합니다.</p>' +
+        '<div class="chip-row">' + focusChips + '</div></section>' +
         '<section class="card"><h3>학습자</h3><div class="composer narrow"><input id="name-input" type="text" value="' + esc(st.name) + '" placeholder="이름 (홈 화면 인사말에 표시)">' +
         '<button class="btn" data-action="save-name">저장</button></div></section>' +
         '<section class="card"><h3>음성</h3>' + voiceHtml +
@@ -254,6 +261,13 @@
     'pb-filter': function (el) { App.session.pb.filter = el.dataset.f; App.render(); },
     print: function () { window.print(); },
 
+    'focus-track': function (el) {
+      App.state.settings.focusTrack = el.dataset.id;
+      App.save();
+      const t = App.findTrack(el.dataset.id);
+      App.toast(t ? t.icon + ' ' + t.title + ' 트랙을 내 분야로 설정했어요' : '내 분야 설정을 해제했어요');
+      App.render();
+    },
     'save-name': function () {
       App.state.name = document.getElementById('name-input').value.trim();
       App.save();

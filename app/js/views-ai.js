@@ -37,6 +37,12 @@
     { id: 'spec-meeting', icon: '📏', title: '고객사와 사양·공차 협의', you: '공급사 설계 엔지니어',
       partner: 'Kenji Tanaka, Quality Manager at an overseas customer',
       situation: 'A technical meeting to agree on the specification of a new machined part: tolerances, materials, operating temperature range, units (metric vs. imperial), test methods and acceptance criteria. Ask for exact numbers and push back on vague answers.' },
+    { id: 'hvac-design-review', icon: '🌬️', title: 'HVAC 설계 검토 (MEP 컨설턴트)', you: 'HVAC 설계 엔지니어',
+      partner: 'Michael Reed, Senior MEP Consultant reviewing the HVAC design',
+      situation: 'A design review of the HVAC system for a new office building. The consultant asks about the cooling load calculation, sensible and latent loads, equipment sizing, airflow and duct design, ventilation rates under ASHRAE 62.1, energy efficiency and refrigerant choice. Use realistic HVAC terms and units (tons, kW, BTU/h, CFM, static pressure).' },
+    { id: 'hvac-owner', icon: '🏢', title: 'HVAC 냉난방 민원 협의', you: 'HVAC 엔지니어 (시공·유지보수)',
+      partner: "Linda Grant, Facility Director for the building owner",
+      situation: 'After handover, occupants complain about hot and cold spots, stuffy meeting rooms and high humidity. The facility director wants the cause, the fix, the schedule and how success will be measured. Bring up BMS trend data, TAB, CO2 levels, outdoor air, humidity and maintenance.' },
     { id: 'custom', icon: '✏️', title: '직접 상황 만들기', custom: true }
   ];
 

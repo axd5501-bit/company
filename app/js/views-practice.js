@@ -22,11 +22,11 @@
     nav: 'practice',
     render: function () {
       const st = App.state;
-      const sims = App.SCENARIOS.map(function (sc) {
+      const sims = App.orderedScenarios().map(function (sc) {
         const best = st.sim[sc.id];
         const t = App.findTrack(sc.track);
         return '<a class="sim-card card t-' + t.color + '" href="#/sim/' + sc.id + '">' +
-          '<div class="sim-top"><span class="sim-icon">' + sc.icon + '</span>' +
+          '<div class="sim-top"><span class="sim-icon">' + sc.icon + '</span>' + App.focusTag(sc.track) +
           (best != null ? '<span class="grade-badge g-' + gradeLetter(best) + '">' + gradeLetter(best) + '</span>' : '<span class="chip">NEW</span>') + '</div>' +
           '<h3>' + esc(sc.title) + '</h3><p class="muted small">' + esc(sc.brief) + '</p>' +
           '<div class="sim-meta"><span class="chip">' + sc.level + '</span><span class="chip">' + sc.steps.length + '번의 결정</span>' +
