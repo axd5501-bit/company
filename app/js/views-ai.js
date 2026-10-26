@@ -55,10 +55,19 @@
   const TURN_SCHEMA = {
     type: 'object',
     additionalProperties: false,
-    required: ['reply_en', 'reply_ko', 'feedback', 'meeting_over'],
+    required: ['reply_en', 'reply_ko', 'feedback', 'hints', 'meeting_over'],
     properties: {
       reply_en: { type: 'string' },
       reply_ko: { type: 'string' },
+      hints: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['en', 'ko'],
+          properties: { en: { type: 'string' }, ko: { type: 'string' } }
+        }
+      },
       feedback: {
         type: 'object',
         additionalProperties: false,
@@ -88,8 +97,8 @@
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['en', 'ko'],
-          properties: { en: { type: 'string' }, ko: { type: 'string' } }
+          required: ['en', 'ko', 'ipa'],
+          properties: { en: { type: 'string' }, ko: { type: 'string' }, ipa: { type: 'string' } }
         }
       }
     }
@@ -98,7 +107,9 @@
   const OPENING = '[The meeting starts now. Open the meeting with your first line.]';
   const CLOSING = '[The meeting has ended. Step out of the role-play and evaluate the learner\'s English across the whole meeting. ' +
     'score is 0-100. Write summary_ko, strengths_ko and improvements_ko in Korean (2-3 items each), and give 3-5 key_phrases: ' +
-    'useful English expressions for this situation that the learner should memorize, with Korean translations.]';
+    'useful English expressions for this situation that the learner should memorize, with Korean translations ' +
+    'and ipa: General American IPA in dictionary style without slashes, stress marks ˈ ˌ and length mark ː, ' +
+    'weak forms for a/the/to/of/for in sentences (e.g. "ʃæl wiː ɡet ˈstɑːrtɪd").]';
 
   function systemPrompt(setup) {
     const p = setup.preset;
@@ -122,6 +133,7 @@
       '  - tip_ko: one short sentence in Korean with the most useful improvement, or what they did well.',
       '  - score: 0-100 for how clear, correct and appropriate the message was for this business situation.',
       '  On the opening turn, before the learner has spoken, use empty strings and a score of 0.',
+      '- hints: two different example replies the learner could say next in answer to your reply_en, one sentence each, at the learner\'s level, each with a Korean translation. They are shown only when the learner asks for help, so make them natural things to say out loud.',
       '- meeting_over: true only when the meeting has reached a natural close, usually after 8 to 10 learner turns or when the learner wraps it up; otherwise false.',
       '',
       'If the learner writes in Korean or mixes languages, stay in character and reply in English, and use feedback.natural to show how to say their message in English.'
@@ -132,6 +144,8 @@
   let ai = null;
   let autoSpeak = true;
   let showKo = false;
+  // 음성 대화: 마이크로 말하면 자동으로 보내고, 상대 답변은 소리로 들려준다 (음성 인식이 되는 환경에서 기본)
+  let voiceMode = !!App.SR;
 
   let sdkPromise = null;
   function loadSdk() {
@@ -235,27 +249,44 @@
       '<div class="actions"><button class="btn primary large" data-action="ai-start">' + icon('play') + '회의 시작</button></div>';
   }
 
-  function feedbackCard(fb) {
+  function feedbackCard(fb, idx) {
     if (!fb) return '';
     if (fb.pending) return '<div class="ai-feedback muted small">교정 중...</div>';
     const same = fb.corrected && fb.corrected.trim() === (fb.said || '').trim();
+    const key = 'ai-say-' + idx;
     return '<div class="ai-feedback">' + App.scoreBadge(fb.score) +
       (fb.corrected && !same ? '<p><span class="fb-label">교정</span>' + esc(fb.corrected) + '</p>' : '<p><span class="fb-label ok">문법</span>정확해요!</p>') +
       (fb.natural ? '<p><span class="fb-label alt">더 자연스럽게</span>' + esc(fb.natural) +
-        ' <button class="btn icon-only small" data-action="speak" data-text="' + esc(fb.natural) + '">' + icon('speaker') + '</button></p>' : '') +
+        ' <button class="btn icon-only small" data-action="speak" data-text="' + esc(fb.natural) + '">' + icon('speaker') + '</button></p>' +
+        (App.SR ? '<div class="actions"><button class="btn soft small" data-action="say-target" data-key="' + key + '" data-text="' + esc(fb.natural) + '">' +
+          icon('mic') + '<span>이렇게 따라 말하기</span></button></div>' + App.practiceResultHtml(key, fb.natural) : '') : '') +
       (fb.tip_ko ? '<p class="muted small">💡 ' + esc(fb.tip_ko) + '</p>' : '') + '</div>';
+  }
+
+  function hintsHtml() {
+    if (!ai.hintsOpen || !ai.hints || !ai.hints.length) return '';
+    return '<div class="ai-hints"><div class="eyebrow">이렇게 말해 보세요</div>' + ai.hints.map(function (h, i) {
+      return '<div class="ai-hint"><div class="grow"><p class="en">' + esc(h.en) + '</p><p class="muted small">' + esc(h.ko) + '</p></div>' +
+        '<button class="btn icon-only small" data-action="speak" data-text="' + esc(h.en) + '">' + icon('speaker') + '</button>' +
+        (voiceMode && App.SR ? '' : '<button class="btn soft small" data-action="ai-use-hint" data-i="' + i + '">쓰기</button>') + '</div>';
+    }).join('') + '</div>';
+  }
+
+  function hintButton() {
+    return ai.hints && ai.hints.length
+      ? '<button class="btn ghost small" data-action="ai-hints">💡 ' + (ai.hintsOpen ? '힌트 닫기' : '뭐라고 말하지?') + '</button>' : '';
   }
 
   function renderChat() {
     const p = ai.setup.preset;
-    const turns = ai.turns.map(function (t) {
+    const turns = ai.turns.map(function (t, i) {
       if (t.role === 'ai') {
         return '<div class="line"><span class="avatar a1">AI</span><div class="bubble-wrap"><div class="who">' + esc(ai.partnerName) + '</div>' +
           '<div class="bubble"><p class="en">' + esc(t.en) + '</p><p class="ko' + (showKo ? '' : ' hidden') + '">' + esc(t.ko) + '</p></div></div>' +
           '<button class="btn icon-only" data-action="speak" data-text="' + esc(t.en) + '" data-slot="1">' + icon('speaker') + '</button></div>';
       }
       return '<div class="line me"><span class="avatar a0">나</span><div class="bubble-wrap"><div class="who">나</div>' +
-        '<div class="bubble"><p class="en">' + esc(t.text) + '</p></div>' + feedbackCard(t.feedback) + '</div></div>';
+        '<div class="bubble"><p class="en">' + esc(t.text) + '</p></div>' + feedbackCard(t.feedback, i) + '</div></div>';
     }).join('');
 
     let footer;
@@ -267,8 +298,14 @@
     } else if (ai.over) {
       footer = '<div class="turn center"><p><b>회의가 마무리되었어요.</b> 전체 대화에 대한 리포트를 받아 보세요.</p>' +
         '<button class="btn primary" data-action="ai-report">' + icon('stats') + '리포트 받기</button></div>';
+    } else if (voiceMode && App.SR) {
+      footer = '<div class="turn voice-turn">' + hintsHtml() +
+        '<div class="drill-mic"><button class="mic-big' + (ai.listening ? ' on' : '') + '" data-action="ai-voice" aria-label="' + (ai.listening ? '그만 듣기' : '말하기') + '">' + icon('mic') + '</button>' +
+        '<p class="mic-status" id="ai-interim">' + (ai.listening ? esc(ai.interim || '듣고 있어요… 영어로 말해 보세요') : '마이크를 누르고 말하세요 · 말이 끝나면 자동으로 보내요') + '</p></div>' +
+        '<div class="actions centered">' + hintButton() + '<button class="btn ghost small" data-action="ai-keyboard">⌨️ 입력해서 보내기</button></div></div>';
     } else {
-      footer = '<div class="composer"><textarea id="ai-input" rows="2" data-input="ai-input" placeholder="영어로 답해 보세요 (Enter 전송 · 한국어로 써도 영어 표현을 알려 드려요)">' + esc(ai.input || '') + '</textarea>' +
+      footer = hintsHtml() + (ai.hints && ai.hints.length ? '<div class="actions">' + hintButton() + '</div>' : '') +
+        '<div class="composer"><textarea id="ai-input" rows="2" data-input="ai-input" placeholder="영어로 답해 보세요 (Enter 전송 · 한국어로 써도 영어 표현을 알려 드려요)">' + esc(ai.input || '') + '</textarea>' +
         (App.SR ? '<button class="btn icon-only mic" data-action="ai-listen" title="말해서 입력">' + icon('mic') + '</button>' : '') +
         '<button class="btn primary icon-only" data-action="ai-send" title="전송">' + icon('send') + '</button></div>';
     }
@@ -276,7 +313,8 @@
     return '<div class="ai-head"><div><div class="eyebrow">' + p.icon + ' ' + esc(p.title) + ' · ' + LEVELS[ai.setup.level].label + '</div>' +
       '<h2>' + esc(ai.partnerName) + '</h2></div><div class="actions">' +
       '<label class="switch"><input type="checkbox" data-action="ai-ko"' + (showKo ? ' checked' : '') + '><span class="track-sw"></span>해석</label>' +
-      '<label class="switch"><input type="checkbox" data-action="ai-autospeak"' + (autoSpeak ? ' checked' : '') + '><span class="track-sw"></span>자동 음성</label>' +
+      (App.SR ? '<label class="switch"><input type="checkbox" data-action="ai-voicemode"' + (voiceMode ? ' checked' : '') + '><span class="track-sw"></span>음성 대화</label>' : '') +
+      (voiceMode && App.SR ? '' : '<label class="switch"><input type="checkbox" data-action="ai-autospeak"' + (autoSpeak ? ' checked' : '') + '><span class="track-sw"></span>자동 음성</label>') +
       (ai.turns.some(function (t) { return t.role === 'me'; }) && !ai.busy ? '<button class="btn soft" data-action="ai-report">회의 종료 · 리포트</button>' : '') +
       '<button class="btn ghost" data-action="ai-new">새 회의</button></div></div>' +
       '<div class="chat card ai-chat" id="ai-chat">' + (turns || '<p class="muted center">회의를 준비하고 있어요...</p>') + '</div>' + footer;
@@ -290,7 +328,7 @@
     }
     const list = function (arr) { return '<ul>' + arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; };
     const phrases = r.key_phrases.map(function (k) {
-      return '<li class="pb-row"><div class="grow"><p class="en">' + esc(k.en) + '</p><p class="muted">' + esc(k.ko) + '</p></div>' +
+      return '<li class="pb-row"><div class="grow"><p class="en">' + esc(k.en) + '</p>' + App.ipaHtml(k.ipa) + '<p class="muted">' + esc(k.ko) + '</p></div>' +
         '<button class="btn icon-only" data-action="speak" data-text="' + esc(k.en) + '">' + icon('speaker') + '</button></li>';
     }).join('');
     return head() + '<div class="card result-panel ai-report"><div class="result-big">' + App.ring(r.score, 112, r.score + '<small>점</small>') + '</div>' +
@@ -321,10 +359,12 @@
         App.award(C.XP.aiTurn);
       }
       ai.turns.push({ role: 'ai', en: d.reply_en, ko: d.reply_ko });
+      ai.hints = d.hints || [];
+      ai.hintsOpen = false;
       ai.over = !!d.meeting_over;
       ai.busy = false;
       App.render();
-      if (autoSpeak) App.tts.speak(d.reply_en, { slot: 1 });
+      if (autoSpeak || (voiceMode && App.SR)) App.tts.speak(d.reply_en, { slot: 1 });
     } catch (err) {
       if (ai !== session) return;
       ai.busy = false;
@@ -400,6 +440,37 @@
         App.render();
       });
     },
+    'ai-voice': function () {
+      if (!ai || ai.busy || ai.over) return;
+      if (ai.listening) { App.stopListening(); return; }
+      const session = ai;
+      App.tts.stop();
+      ai.listening = true;
+      ai.interim = '';
+      App.render();
+      App.listen(function (text) {
+        if (ai !== session || !ai.listening) return;
+        ai.interim = text;
+        const el = document.getElementById('ai-interim');
+        if (el) el.textContent = text || '듣고 있어요… 영어로 말해 보세요';
+      }).then(function (text) {
+        if (ai !== session || !ai.listening) return;
+        ai.listening = false;
+        if (App.route.name !== 'ai') return;
+        if (!text) { App.toast('잘 안 들렸어요. 마이크를 누르고 다시 말해 보세요.'); App.render(); return; }
+        ai.input = text;
+        App.actions['ai-send']();
+      }).catch(function (err) {
+        if (ai !== session) return;
+        ai.listening = false;
+        App.toast(err === 'not-allowed' || err === 'service-not-allowed' ? '마이크 권한이 필요해요. 브라우저 주소창의 권한 설정을 확인하세요.' : '음성 인식에 실패했어요. 다시 시도하세요.');
+        App.render();
+      });
+    },
+    'ai-voicemode': function (el) { voiceMode = el.checked; App.stopListening(); if (ai) ai.listening = false; App.render(); },
+    'ai-keyboard': function () { voiceMode = false; App.stopListening(); ai.listening = false; App.render(); },
+    'ai-hints': function () { ai.hintsOpen = !ai.hintsOpen; App.render(); },
+    'ai-use-hint': function (el) { ai.input = ai.hints[Number(el.dataset.i)].en; ai.hintsOpen = false; App.render(); },
     'ai-report': function () { App.tts.stop(); requestReport(); },
     'ai-back-chat': function () { ai.phase = 'chat'; App.render(); },
     'ai-new': function () {
@@ -417,7 +488,7 @@
       const now = Date.now();
       ai.report.key_phrases.forEach(function (k, i) {
         const id = 'ai-' + now + '-' + i;
-        App.state.custom[id] = { en: k.en, ko: k.ko };
+        App.state.custom[id] = { en: k.en, ko: k.ko, ipa: k.ipa || '' };
         App.state.srs[id] = C.newCard(now);
       });
       ai.saved = true;

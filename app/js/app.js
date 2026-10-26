@@ -40,7 +40,7 @@
     return {
       version: 2,
       name: '',
-      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '', focusTrack: '' },
+      settings: { voice: '', rate: 0.95, readKorean: true, apiKey: '', focusTrack: '', showIpa: true },
       lessons: {}, srs: {}, xp: {},
       stats: { reviews: 0, aiTurns: 0, speedBest: 0, bestStreak: 0 },
       sim: {}, favorites: [], custom: {}, badges: []
@@ -109,11 +109,11 @@
   /** 복습 카드·사전에서 쓰는 표현 조회 (레슨 표현 + 기술 용어 + AI 회의에서 저장한 표현) */
   App.phrase = function (id) {
     const item = EXPRS[id];
-    if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, tip: item.expr.tip, swaps: item.expr.swaps, source: item.lesson.icon + ' ' + item.lesson.title };
+    if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, ipa: item.expr.ipa, tip: item.expr.tip, swaps: item.expr.swaps, source: item.lesson.icon + ' ' + item.lesson.title };
     const t = TERMS[id];
-    if (t) return { id: id, en: t.term.en, ko: t.term.ko, tip: (t.term.def ? t.term.def + '\n' : '') + '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
+    if (t) return { id: id, en: t.term.en, ko: t.term.ko, ipa: t.term.ipa, tip: (t.term.def ? t.term.def + '\n' : '') + '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
     const c = App.state.custom[id];
-    if (c) return { id: id, en: c.en, ko: c.ko, tip: c.tip, source: '🤖 AI 회의에서 저장' };
+    if (c) return { id: id, en: c.en, ko: c.ko, ipa: c.ipa, tip: c.tip, source: '🤖 AI 회의에서 저장' };
     return null;
   };
 
@@ -224,6 +224,12 @@
     return result.words.map(function (w) {
       return '<span class="' + (w.ok ? 'w-ok' : 'w-miss') + '">' + esc(w.text) + '</span>';
     }).join(' ');
+  };
+
+  /** 발음기호 한 줄 (설정에서 끌 수 있음). ˈ 다음 음절에 강세 */
+  App.ipaHtml = function (ipa, extra) {
+    if (!ipa || App.state.settings.showIpa === false) return '';
+    return '<p class="ipa' + (extra ? ' ' + extra : '') + '" lang="en-fonipa">/' + esc(ipa) + '/</p>';
   };
 
   /** text 에서 base 와 다른 단어에 밑줄 (비슷한 보기끼리 어디가 다른지 보여 줄 때) */
@@ -366,19 +372,46 @@
   };
   App.recorder = recorder;
 
-  App.listenOnce = function () {
+  /**
+   * 한 번 말한 문장을 인식한다. onInterim 을 주면 말하는 동안 중간 결과(실시간 자막)를 넘겨준다.
+   * 아무 말도 없으면 '' 로 끝나고, 마이크 권한 등 오류는 reject(오류 코드).
+   */
+  let recognition = null;
+  App.listen = function (onInterim) {
     return new Promise(function (resolve, reject) {
+      if (recognition) { try { recognition.abort(); } catch (e) { /* 이미 끝남 */ } }
       const r = new SR();
       r.lang = 'en-US';
-      r.interimResults = false;
+      r.interimResults = !!onInterim;
       r.maxAlternatives = 1;
-      let finished = false;
-      r.onresult = function (e) { finished = true; resolve(e.results[0][0].transcript); };
-      r.onerror = function (e) { finished = true; reject(e.error); };
-      r.onend = function () { if (!finished) resolve(''); };
+      let finalText = '';
+      let settled = false;
+      r.onresult = function (e) {
+        let interim = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
+          else interim += e.results[i][0].transcript;
+        }
+        if (onInterim) onInterim((finalText + interim).trim());
+      };
+      r.onerror = function (e) {
+        if (settled) return;
+        settled = true;
+        if (e.error === 'no-speech' || e.error === 'aborted') resolve(finalText.trim());
+        else reject(e.error);
+      };
+      r.onend = function () {
+        if (recognition === r) recognition = null;
+        if (!settled) { settled = true; resolve(finalText.trim()); }
+      };
+      recognition = r;
       r.start();
     });
   };
+  App.listenOnce = function () { return App.listen(); };
+  App.isListening = function () { return !!recognition; };
+  /** 지금까지 들은 데까지로 끝내기 (인식 결과는 그대로 전달됨) */
+  App.stopListening = function () { if (recognition) { try { recognition.stop(); } catch (e) { /* 이미 끝남 */ } } };
 
   // 표현/롤플레이 연습 결과 (화면을 다시 그려도 유지)
   App.practice = {};
@@ -392,6 +425,7 @@
   App.stopAll = function () {
     App.playSeq++;
     tts.stop();
+    if (recognition) { try { recognition.abort(); } catch (e) { /* 이미 끝남 */ } recognition = null; }
     if (recorder.active) recorder.stop().then(function (url) { if (url) URL.revokeObjectURL(url); });
   };
 
@@ -424,7 +458,7 @@
     if (p.result) {
       html += '<div class="said"><span class="muted small">인식된 문장</span> ' + esc(p.said || '(인식 실패)') + '</div>' +
         '<div class="diff">' + App.scoreBadge(p.result.score) + ' <b>' + C.scoreLabel(p.result.score) + '</b>' +
-        '<span class="muted small"> 빨간 단어를 다시 연습해 보세요</span><div class="diff-words">' + App.diffHtml(p.result) + '</div></div>';
+        (p.result.score < 90 ? '<span class="muted small"> 빨간 단어를 다시 연습해 보세요</span>' : '') + '<div class="diff-words">' + App.diffHtml(p.result) + '</div></div>';
     }
     return html;
   };
@@ -550,6 +584,25 @@
       };
       if (recorder.active) recorder.stop().then(function (url) { if (url) URL.revokeObjectURL(url); startNew(); });
       else startNew();
+    },
+
+    // 정해진 문장(data-text)을 따라 말하고 채점 — AI 대화의 '더 자연스럽게' 문장 등
+    'say-target': function (el) {
+      const key = el.dataset.key;
+      const target = el.dataset.text;
+      el.innerHTML = icon('mic') + '<span>듣는 중...</span>';
+      el.classList.add('recording');
+      el.disabled = true;
+      App.listen().then(function (text) {
+        const p = App.practice[key] || (App.practice[key] = {});
+        p.said = text;
+        p.result = C.compareSentence(target, text);
+        if (text) App.award(C.XP.practice);
+        App.render();
+      }).catch(function (err) {
+        App.toast(err === 'not-allowed' ? '마이크 권한이 필요합니다.' : '음성 인식에 실패했습니다. 다시 시도하세요.');
+        App.render();
+      });
     },
 
     'listen-expr': function (el) {

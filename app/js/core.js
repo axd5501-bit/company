@@ -43,6 +43,7 @@
     const cleaned = String(text || '')
       .toLowerCase()
       .replace(/[‘’]/g, "'")
+      .replace(/(\d),(?=\d{3}\b)/g, '$1')   // 2,000 = 2000 (음성 인식은 쉼표 없이 적는다)
       .replace(/%/g, ' percent ')
       .replace(/[^a-z0-9'\s]/g, ' ');
     const out = [];
@@ -390,6 +391,7 @@
       const others = shuffle(terms.filter(function (x) { return x !== picked[1]; }), rng).slice(0, 3);
       const q1 = choiceQuestion('다음 뜻의 기술 용어는?', picked[0].en, distractorsFor(picked[0], terms, rng), rng, picked[0].ex);
       q1.sub = picked[0].ko;
+      q1.ipa = picked[0].ipa;
       const q2 = choiceQuestion('다음 기술 용어의 뜻은?', picked[1].ko, others.map(function (x) { return x.ko; }), rng, picked[1].ex);
       q2.sub = picked[1].en;
       qs.push(q1, q2);
@@ -403,16 +405,17 @@
       if (type === 'ko2en') {
         const q = choiceQuestion('다음 뜻에 맞는 영어 표현은?', e.en, distractorsFor(e, lesson.expressions, rng), rng, e.tip);
         q.sub = e.ko;
+        q.ipa = e.ipa;
         qs.push(q);
       } else if (type === 'blank') {
         qs.push({ type: 'blank', prompt: '빈칸에 들어갈 단어를 입력하세요.', sub: e.ko,
-          sentence: makeBlank(e.en, e.blank), answer: e.blank, full: e.en, explain: e.tip || '' });
+          sentence: makeBlank(e.en, e.blank), answer: e.blank, full: e.en, ipa: e.ipa, explain: e.tip || '' });
       } else {
         const words = e.en.split(/\s+/);
         let shuffled = shuffle(words, rng);
         for (let k = 0; k < 5 && shuffled.join(' ') === words.join(' '); k++) shuffled = shuffle(words, rng);
         qs.push({ type: 'order', prompt: '단어를 순서대로 눌러 문장을 완성하세요.', sub: e.ko,
-          words: shuffled, answer: words, full: e.en, explain: e.tip || '' });
+          words: shuffled, answer: words, full: e.en, ipa: e.ipa, explain: e.tip || '' });
       }
     }
     return shuffle(qs, rng);
@@ -507,7 +510,8 @@
     simStep: 5,        // 시뮬레이션 선택 (등급 × 5)
     simDone: 30,       // 시뮬레이션 완료
     speedCorrect: 2,   // 스피드 챌린지 정답
-    aiTurn: 10         // AI 회의 파트너와 한 턴
+    aiTurn: 10,        // AI 회의 파트너와 한 턴
+    drillDone: 20      // 스피킹 드릴 한 세트 완료
   };
   const DAILY_GOAL = 60;
 

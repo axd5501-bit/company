@@ -51,7 +51,7 @@
         '<div class="card flash' + (rv.flipped ? ' flipped' : '') + '"><div class="eyebrow">' + esc(p.source) + '</div>' +
         '<p class="flash-ko">' + esc(p.ko) + '</p>' +
         (rv.flipped
-          ? '<div class="flash-answer"><p class="en flash-en">' + esc(p.en) + '</p>' + (p.tip ? '<p class="tip">💡 ' + esc(p.tip) + '</p>' : '') +
+          ? '<div class="flash-answer"><p class="en flash-en">' + esc(p.en) + '</p>' + App.ipaHtml(p.ipa) + (p.tip ? '<p class="tip">💡 ' + esc(p.tip) + '</p>' : '') +
             '<div class="actions centered">' + App.speakButtons(p.en) + App.favButton(id) + '</div></div>' +
             '<p class="muted small">얼마나 잘 떠올렸나요?</p><div class="grades">' + grades + '</div>'
           : '<p class="muted">영어로 어떻게 말할까요? 소리 내어 말해 본 뒤 정답을 확인하세요.</p>' +
@@ -99,13 +99,13 @@
       });
     }
     const rows = results.map(function (r) {
-      return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, tip: r.expr.term ? (r.expr.def ? r.expr.def + '\n' : '') + '예문 · ' + r.expr.ex : r.expr.tip, term: r.expr.term,
+      return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, ipa: r.expr.ipa, tip: r.expr.term ? (r.expr.def ? r.expr.def + '\n' : '') + '예문 · ' + r.expr.ex : r.expr.tip, term: r.expr.term,
         source: r.lesson.icon + ' ' + r.lesson.title, href: '#/lesson/' + r.lesson.id };
     })
-      .concat(customs.map(function (id) { const p = App.phrase(id); return { id: id, en: p.en, ko: p.ko, tip: p.tip, source: p.source }; }));
+      .concat(customs.map(function (id) { const p = App.phrase(id); return { id: id, en: p.en, ko: p.ko, ipa: p.ipa, tip: p.tip, source: p.source }; }));
     if (!rows.length) return '<div class="card center muted">' + (pb.filter === 'favorites' ? '아직 즐겨찾기한 표현이 없어요. ☆ 를 눌러 추가해 보세요.' : '검색 결과가 없어요.') + '</div>';
     return '<p class="muted small result-count">' + rows.length + '개 표현</p>' + rows.map(function (r) {
-      return '<article class="pb-row card' + (r.term ? ' is-term' : '') + '"><div class="grow"><p class="en">' + (r.term ? '<span class="term-tag">TERM</span>' : '') + esc(r.en) + '</p><p class="muted">' + esc(r.ko) + '</p>' +
+      return '<article class="pb-row card' + (r.term ? ' is-term' : '') + '"><div class="grow"><p class="en">' + (r.term ? '<span class="term-tag">TERM</span>' : '') + esc(r.en) + '</p>' + App.ipaHtml(r.ipa) + '<p class="muted">' + esc(r.ko) + '</p>' +
         (r.tip ? '<p class="tip small">💡 ' + esc(r.tip) + '</p>' : '') +
         (r.href ? '<a class="pb-source" href="' + r.href + '">' + esc(r.source) + '</a>' : '<span class="pb-source">' + esc(r.source) + '</span>') + '</div>' +
         '<div class="pb-actions"><button class="btn icon-only" data-action="speak" data-text="' + esc(r.en) + '" title="듣기">' + icon('speaker') + '</button>' +
@@ -230,6 +230,11 @@
         '<label class="field"><span>말하기 속도 <b id="rate-val">' + st.settings.rate.toFixed(2) + '×</b></span>' +
         '<input type="range" min="0.6" max="1.3" step="0.05" value="' + st.settings.rate + '" data-input="rate"></label>' +
         '<button class="btn soft" data-action="speak" data-text="Good morning, everyone. Shall we get started?">' + icon('speaker') + '음성 테스트</button></section>' +
+        '<section class="card"><h3>발음기호</h3>' +
+        '<label class="switch"><input type="checkbox" data-change="show-ipa"' + (st.settings.showIpa !== false ? ' checked' : '') + '><span class="track-sw"></span>영어 표현 아래에 발음기호 표시</label>' +
+        '<div class="ipa-guide"><p class="ipa">/ʃæl wiː ɡet ˈstɑːrtɪd/</p>' +
+        '<ul class="muted small"><li>미국식 발음 (CMU 발음 사전 기준)</li><li><b>ˈ</b> 바로 뒤 음절을 가장 세게, <b>ˌ</b> 은 조금 세게</li>' +
+        '<li><b>ː</b> 앞 모음은 길게 · <b>ə</b> 는 힘을 뺀 약한 ‘어’</li><li>문장 속 a · the · to · of · for 등은 실제 말할 때처럼 약하게 표기 (tə, əv, fər)</li></ul></div></section>' +
         '<section class="card"><h3>' + icon('key') + ' AI 회의 파트너</h3>' + keyHtml + '</section>' +
         '<section class="card"><h3>학습 데이터</h3>' +
         '<p class="muted small">학습 기록은 이 기기에만 저장됩니다. PC와 휴대폰을 함께 쓰거나 기기를 바꿀 때는 내보내기 → 가져오기를 이용하세요. (API 키는 내보내지 않습니다)</p>' +
@@ -316,6 +321,7 @@
       document.getElementById('pb-results').innerHTML = phrasebookResults(App.session.pb);
     },
     voice: function (el) { App.state.settings.voice = el.value; App.save(); },
+    'show-ipa': function (el) { App.state.settings.showIpa = el.checked; App.save(); },
     rate: function (el) {
       App.state.settings.rate = Number(el.value);
       document.getElementById('rate-val').textContent = App.state.settings.rate.toFixed(2) + '×';

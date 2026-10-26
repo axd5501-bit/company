@@ -127,7 +127,7 @@
       const tools = [
         { href: '#/practice', icon: 'film', title: '회의 시뮬레이션', sub: App.SCENARIOS.length + '개 시나리오' },
         { href: '#/speed', icon: 'bolt', title: '스피드 챌린지', sub: '최고 ' + (st.stats.speedBest || 0) + '점' },
-        { href: '#/audio', icon: 'headphones', title: '오디오 학습', sub: '듣기만 해도 OK' },
+        { href: '#/drill', icon: 'mic', title: '스피킹 드릴', sub: '따라 말하고 채점받기' },
         { href: '#/ai', icon: 'ai', title: 'AI 회의 파트너', sub: st.settings.apiKey ? '대화 시작' : 'API 키 필요' }
       ].map(function (q) {
         return '<a class="tool" href="' + q.href + '"><span class="tool-icon">' + icon(q.icon) + '</span><span><b>' + q.title + '</b><small>' + q.sub + '</small></span></a>';
@@ -156,7 +156,7 @@
         '</section>' +
         '<div class="home-grid">' +
         '<section class="card today"><div class="eyebrow">오늘의 표현 · ' + esc(tod.lesson.title) + '</div>' +
-        '<p class="display-en">' + esc(tod.expr.en) + '</p><p class="muted">' + esc(tod.expr.ko) + '</p>' +
+        '<p class="display-en">' + esc(tod.expr.en) + '</p>' + App.ipaHtml(tod.expr.ipa) + '<p class="muted">' + esc(tod.expr.ko) + '</p>' +
         (tod.expr.tip ? '<p class="tip">💡 ' + esc(tod.expr.tip) + '</p>' : '') +
         '<div class="actions">' + App.speakButtons(tod.expr.en) + App.favButton(tod.expr.id) + '</div></section>' +
         '<section class="card week"><div class="card-head"><div class="eyebrow">최근 7일 학습량</div><span class="legend-goal">하루 목표 ' + C.DAILY_GOAL + ' XP</span></div>' + weekChart() + '</section>' +
@@ -280,7 +280,7 @@
         return '<article class="term"><div class="term-top"><span class="term-no mono">' + ('0' + (i + 1)).slice(-2) + '</span>' +
           '<span class="term-en">' + esc(t.en) + '</span>' +
           '<button class="btn icon-only small" data-action="speak" data-text="' + esc(t.en + '. ' + t.ex) + '" title="용어와 예문 듣기">' + icon('speaker') + '</button>' +
-          App.favButton(t.id) + '</div><p class="term-ko">' + esc(t.ko) + '</p>' +
+          App.favButton(t.id) + '</div>' + App.ipaHtml(t.ipa) + '<p class="term-ko">' + esc(t.ko) + '</p>' +
           (t.def ? '<p class="term-def"><b>개념</b> ' + esc(t.def) + '</p>' : '') +
           '<p class="term-ex">예문 · “' + esc(t.ex) + '”</p></article>';
       }).join('') + '</div></section>';
@@ -290,12 +290,13 @@
     let howto = '표현을 듣고 소리 내어 따라 해 보세요.';
     if (App.CAN_RECORD) howto += ' <b>따라 말하기</b>로 내 발음을 녹음해 원어민 발음과 비교할 수 있어요.';
     if (App.SR) howto += ' <b>말하고 채점</b>을 누르면 발화를 인식해 점수를 매깁니다.';
+    if (App.state.settings.showIpa !== false) howto += ' 발음기호는 미국식이며 <b>ˈ</b> 바로 뒤 음절을 세게, <b>ː</b> 앞 모음을 길게 읽습니다.';
 
     const list = l.expressions.map(function (e, i) {
       return '<article class="expr card">' +
         '<div class="expr-num mono">' + ('0' + (i + 1)).slice(-2) + '</div><div class="grow">' +
         '<div class="expr-top"><p class="en">' + esc(e.en) + '</p>' + App.favButton(e.id) + '</div>' +
-        '<p class="ko">' + esc(e.ko) + '</p>' +
+        App.ipaHtml(e.ipa) + '<p class="ko">' + esc(e.ko) + '</p>' +
         (e.tip ? '<p class="tip">💡 ' + esc(e.tip) + '</p>' : '') +
         '<div class="actions">' + App.speakButtons(e.en) + App.practiceButtons(e.id) + '</div>' +
         '<div class="practice-result">' + App.practiceResultHtml(e.id, e.en) + '</div></div></article>';
@@ -306,8 +307,10 @@
       ? '<div class="done-box">' + icon('check') + '<span class="grow">표현 학습 완료 — 복습 카드에 추가되었습니다.</span>' + nextStepLink(l, 'dialogue', '대화 듣기') + '</div>'
       : '<div class="done-box"><span class="grow">모두 따라 해 봤다면 복습 카드 ' + count + '장으로 저장하세요.</span><button class="btn primary" data-action="expr-done">학습 완료 · 복습 카드에 추가</button></div>';
 
+    const drill = '<a class="drill-cta card" href="#/drill/' + l.id + '"><span class="mode-icon">' + icon('mic') + '</span>' +
+      '<span class="grow"><b>스피킹 드릴로 입에 붙이기</b><small>이 레슨 표현 ' + l.expressions.length + '개를 따라 말하고, 한국어만 보고 영어로 말해 보세요.</small></span>' + icon('arrow') + '</a>';
     return '<p class="hint">' + howto + '</p>' + renderTerms(l) +
-      (l.terms ? '<div class="section-head"><h2>' + icon('speaker') + ' 핵심 표현</h2></div>' : '') + list + footer;
+      (l.terms ? '<div class="section-head"><h2>' + icon('speaker') + ' 핵심 표현</h2></div>' : '') + list + drill + footer;
   }
 
   function slotOf(d, s) { return Object.keys(d.roles).indexOf(s); }
@@ -562,6 +565,7 @@
       feedback = '<div class="feedback ' + (a.correct ? 'ok' : 'no') + '">' +
         '<b>' + (a.correct ? '✅ 정답입니다!' : '❌ 아쉬워요') + '</b>' +
         (q.type !== 'choice' || !a.correct ? '<p class="en">' + esc(full) + ' <button class="btn icon-only small" data-action="speak" data-text="' + esc(full) + '">' + icon('speaker') + '</button></p>' : '') +
+        App.ipaHtml(q.ipa) +
         (q.explain ? '<p class="muted">💡 ' + esc(q.explain) + '</p>' : '') +
         '<button class="btn primary" data-action="quiz-next">' + (quiz.i + 1 < quiz.qs.length ? '다음 문제' : '결과 보기') + icon('arrow') + '</button></div>';
     }

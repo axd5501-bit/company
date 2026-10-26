@@ -33,6 +33,11 @@ test('compareSentence: 빠진 단어를 원문 단어 단위로 표시한다', (
   assert.equal(r.words[0].text, "I'm");
 });
 
+test('compareSentence: 음성 인식이 숫자를 쉼표 없이 적어도 같은 문장으로 본다', () => {
+  assert.equal(C.compareSentence('The design airflow for this zone is 2,000 CFM.', 'the design airflow for this zone is 2000 CFM').score, 100);
+  assert.equal(C.compareSentence('The CO2 levels exceed 1,500 ppm.', 'the CO2 levels exceed 1500 ppm').score, 100);
+});
+
 test('compareSentence: 추가로 덧붙인 단어도 감점된다', () => {
   const exact = C.compareSentence('Let me share my screen.', 'Let me share my screen').score;
   const padded = C.compareSentence('Let me share my screen.', 'okay so let me share my screen now please').score;
