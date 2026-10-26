@@ -115,6 +115,18 @@ function arpabetToIpa(arpa) {
   return out.replace(/ər([ˈˌ])(?=[aeiouæɑɔəɜɪʊʌ])/g, 'ə$1r');
 }
 
+/**
+ * 한국에서 많이 보는 사전(네이버·YBM) 표기에 맞춘다. CMU 사전은 약한 모음을 모두 ə 로 적어서 어색해 보인다.
+ * sensible ˈsensəbəl → ˈsensəbl, person ˈpɜːrsən → ˈpɜːrsn, unit ˈjuːnət → ˈjuːnɪt, received rəˈsiːvd → rɪˈsiːvd
+ */
+function dictStyle(w) {
+  return w
+    .replace(/([^aeiouæɑɔəɜɪʊʌːˈˌ])əl(?=$|[zd])/g, '$1l')
+    .replace(/([tdszʃʒ])ən(?=$|[tdz])/g, '$1n')
+    .replace(/([^aeiouæɑɔəɜɪʊʌːˈˌr])ə(d|dz|z|st|t|ts)$/, '$1ɪ$2')
+    .replace(/^rə(?=[^aeiouæɑɔəɜɪʊʌ]*[ˈˌ])/, 'rɪ');
+}
+
 const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
   'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -141,10 +153,10 @@ const unknown = new Set();
 
 function lookup(word) {
   const w = word.toLowerCase();
-  if (OVERRIDES[w]) return OVERRIDES[w];
-  if (dictionary[w]) return arpabetToIpa(dictionary[w]);
+  if (OVERRIDES[w]) return dictStyle(OVERRIDES[w]).replace(/ /g, '\u00a0');
+  if (dictionary[w]) return dictStyle(arpabetToIpa(dictionary[w]));
   if (/'s$/.test(w) && dictionary[w.slice(0, -2)]) {
-    const base = arpabetToIpa(dictionary[w.slice(0, -2)]);
+    const base = dictStyle(arpabetToIpa(dictionary[w.slice(0, -2)]));
     return base + (/[szʃʒ]$|tʃ$|dʒ$/.test(base) ? 'ɪz' : /[ptkfθ]$/.test(base) ? 's' : 'z');
   }
   unknown.add(word);
@@ -154,7 +166,7 @@ function lookup(word) {
 function lettersIpa(letters) {
   const parts = letters.toLowerCase().split('').map((c) => LETTERS[c].replace('ˈ', ''));
   parts[parts.length - 1] = 'ˈ' + parts[parts.length - 1];
-  return parts.join(' ');
+  return parts.join('\u00a0');
 }
 
 /** 한 토큰(공백으로 나눈 단위) → IPA 조각들 */
@@ -169,7 +181,7 @@ function tokenIpa(raw) {
   if (/^R-\d+[A-Z]?$/.test(tok)) return [LETTERS.r].concat(numberWords(tok.slice(2).replace(/[A-Z]$/, '')).map(lookup), /[A-Z]$/.test(tok) ? [LETTERS[tok.slice(-1).toLowerCase()]] : []);
   if (tok === 'BTU/h') return [lettersIpa('BTU'), 'pər', lookup('hour')];
   const lower = tok.toLowerCase();
-  if (OVERRIDES[lower]) return [OVERRIDES[lower]];
+  if (OVERRIDES[lower]) return [dictStyle(OVERRIDES[lower]).replace(/ /g, '\u00a0')];
   // 대문자 약어는 글자 이름으로 (CFM → siː ef ˈem). 숫자가 붙으면 숫자에 강세 (CO2 → siː oʊ ˈtuː)
   if (/^[A-Z]{2,}\d*$|^[A-Z]\d+$/.test(tok)) {
     const m = tok.match(/^([A-Z]+)(\d*)$/);
@@ -182,7 +194,10 @@ function tokenIpa(raw) {
   return [lookup(tok)];
 }
 
-/** 표현·용어 전체 → IPA (괄호 안 풀이는 빼고 읽는 부분만) */
+/**
+ * 표현·용어 전체 → IPA (괄호 안 풀이는 빼고 읽는 부분만).
+ * 영어 단어 하나에 IPA 묶음 하나가 대응하도록 단어 사이는 공백, 한 단어 안(숫자·약어)은 줄바꿈 없는 공백(U+00A0)으로 잇는다.
+ */
 export function toIpa(text) {
   const cleaned = String(text).replace(/\s*\([^)]*\)/g, '').trim();
   const toks = cleaned.split(/\s+/);
@@ -195,7 +210,8 @@ export function toIpa(text) {
       out.push(w);
       return;
     }
-    tokenIpa(t).forEach((p) => out.push(p));
+    const parts = tokenIpa(t);
+    if (parts.length) out.push(parts.join('\u00a0'));
   });
   return out.join(' ');
 }

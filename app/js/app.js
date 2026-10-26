@@ -232,6 +232,20 @@
     return '<p class="ipa' + (extra ? ' ' + extra : '') + '" lang="en-fonipa">/' + esc(ipa) + '/</p>';
   };
 
+  /**
+   * 영어 문장 + 발음기호. 단어 수와 발음 묶음 수가 맞으면 단어마다 바로 아래에 발음을 붙이고,
+   * 맞지 않으면(AI가 만든 표현 등) 문장 아래 한 줄로 보여 준다.
+   */
+  App.sentenceHtml = function (en, ipa, cls) {
+    const words = String(en).split(/\s+/).filter(Boolean);
+    const groups = ipa ? String(ipa).split(' ') : [];
+    if (!ipa || App.state.settings.showIpa === false) return '<p class="' + cls + '">' + esc(en) + '</p>';
+    if (groups.length !== words.length) return '<div class="en-block"><p class="' + cls + '">' + esc(en) + '</p>' + App.ipaHtml(ipa) + '</div>';
+    return '<p class="' + cls + ' ruby">' + words.map(function (w, i) {
+      return '<span class="rw"><span class="rw-en">' + esc(w) + '</span><span class="rw-ipa" lang="en-fonipa">' + esc(groups[i]) + '</span></span>';
+    }).join('') + '</p>';
+  };
+
   /** text 에서 base 와 다른 단어에 밑줄 (비슷한 보기끼리 어디가 다른지 보여 줄 때) */
   App.markDiff = function (text, base) {
     if (base == null || base === text) return esc(text);

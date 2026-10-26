@@ -48,7 +48,8 @@ test('레슨 id 와 표현 id 가 고유하다', () => {
 });
 
 // 발음기호: 미국식 IPA 글자·강세·장음 기호만 (사전에 없는 단어는 ? 로 남으므로 걸러진다)
-const IPA_RE = /^[a-zæɑɔəɜɪʊʌŋθðʃʒɡˈˌː]+(?: (?:[a-zæɑɔəɜɪʊʌŋθðʃʒɡˈˌː]+|\/))*$/;
+// 영어 단어 하나에 발음 묶음 하나 (묶음 사이는 공백, 숫자·약어처럼 한 단어 안은 U+00A0)
+const IPA_RE = /^[a-zæɑɔəɜɪʊʌŋθðʃʒɡˈˌː]+(?:[ \u00a0](?:[a-zæɑɔəɜɪʊʌŋθðʃʒɡˈˌː]+|\/))*$/;
 
 for (const lesson of LESSONS) {
   test(`[${lesson.id}] 콘텐츠 형식이 올바르다`, () => {
@@ -60,6 +61,7 @@ for (const lesson of LESSONS) {
       assert.ok(C.makeBlank(e.en, e.blank), `${e.id}: 빈칸 단어 "${e.blank}" 가 문장에 없음`);
       assert.ok(Array.isArray(e.swaps) && e.swaps.length, `${e.id}: 비슷한 오답(swaps) 누락`);
       assert.match(e.ipa || '', IPA_RE, `${e.id}: 발음기호(ipa) 누락 또는 형식 오류 — npm run ipa`);
+      assert.equal(e.ipa.split(' ').length, e.en.split(/\s+/).length, `${e.id}: 단어 수와 발음 묶음 수가 다름 — npm run ipa`);
       const ranges = e.swaps.map(sw => {
         const [from, alts] = sw.split('>');
         assert.ok(from && alts, `${e.id}: "${sw}" 는 "바꿀 부분>오답1|오답2" 형식이어야 함`);

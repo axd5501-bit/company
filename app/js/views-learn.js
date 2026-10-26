@@ -156,7 +156,7 @@
         '</section>' +
         '<div class="home-grid">' +
         '<section class="card today"><div class="eyebrow">오늘의 표현 · ' + esc(tod.lesson.title) + '</div>' +
-        '<p class="display-en">' + esc(tod.expr.en) + '</p>' + App.ipaHtml(tod.expr.ipa) + '<p class="muted">' + esc(tod.expr.ko) + '</p>' +
+        App.sentenceHtml(tod.expr.en, tod.expr.ipa, 'display-en') + '<p class="muted">' + esc(tod.expr.ko) + '</p>' +
         (tod.expr.tip ? '<p class="tip">💡 ' + esc(tod.expr.tip) + '</p>' : '') +
         '<div class="actions">' + App.speakButtons(tod.expr.en) + App.favButton(tod.expr.id) + '</div></section>' +
         '<section class="card week"><div class="card-head"><div class="eyebrow">최근 7일 학습량</div><span class="legend-goal">하루 목표 ' + C.DAILY_GOAL + ' XP</span></div>' + weekChart() + '</section>' +
@@ -290,13 +290,13 @@
     let howto = '표현을 듣고 소리 내어 따라 해 보세요.';
     if (App.CAN_RECORD) howto += ' <b>따라 말하기</b>로 내 발음을 녹음해 원어민 발음과 비교할 수 있어요.';
     if (App.SR) howto += ' <b>말하고 채점</b>을 누르면 발화를 인식해 점수를 매깁니다.';
-    if (App.state.settings.showIpa !== false) howto += ' 발음기호는 미국식이며 <b>ˈ</b> 바로 뒤 음절을 세게, <b>ː</b> 앞 모음을 길게 읽습니다.';
+    if (App.state.settings.showIpa !== false) howto += ' 단어 아래 발음기호는 미국식이며 <b>ˈ</b> 바로 뒤 음절을 세게, <b>ː</b> 앞 모음을 길게 읽습니다.';
 
     const list = l.expressions.map(function (e, i) {
       return '<article class="expr card">' +
         '<div class="expr-num mono">' + ('0' + (i + 1)).slice(-2) + '</div><div class="grow">' +
-        '<div class="expr-top"><p class="en">' + esc(e.en) + '</p>' + App.favButton(e.id) + '</div>' +
-        App.ipaHtml(e.ipa) + '<p class="ko">' + esc(e.ko) + '</p>' +
+        '<div class="expr-top">' + App.sentenceHtml(e.en, e.ipa, 'en') + App.favButton(e.id) + '</div>' +
+        '<p class="ko">' + esc(e.ko) + '</p>' +
         (e.tip ? '<p class="tip">💡 ' + esc(e.tip) + '</p>' : '') +
         '<div class="actions">' + App.speakButtons(e.en) + App.practiceButtons(e.id) + '</div>' +
         '<div class="practice-result">' + App.practiceResultHtml(e.id, e.en) + '</div></div></article>';

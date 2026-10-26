@@ -135,7 +135,7 @@
 
     let prompt;
     if (stage.id === 'repeat') {
-      prompt = '<div class="eyebrow">듣고 따라 말하세요</div><p class="drill-en">' + esc(p.en) + '</p>' + App.ipaHtml(p.ipa) +
+      prompt = '<div class="eyebrow">듣고 따라 말하세요</div>' + App.sentenceHtml(p.en, p.ipa, 'drill-en') +
         '<p class="muted">' + esc(p.ko) + '</p><div class="actions centered">' + App.speakButtons(p.en) + '</div>';
     } else {
       const hint = hintText(p.en, dr.hint);

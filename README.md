@@ -51,6 +51,8 @@ HVAC 트랙은 실무 단위와 개념을 함께 다룹니다: 냉동톤↔kW↔
 
 **발음기호**: 모든 표현과 기술 용어에 미국식 발음기호(IPA)가 붙어 있습니다.
 - 표시되는 곳: 레슨, 용어 카드, 복습 카드, 표현 사전, 오디오 학습, 퀴즈 해설
+- 레슨·복습 카드·스피킹 드릴에서는 영어 단어마다 바로 아래에 그 단어의 발음이 붙습니다.
+- 네이버·YBM 사전과 같은 표기를 씁니다 (unit ˈjuːnɪt, sensible ˈsensəbl, action ˈækʃn). 발음기호 전용 글꼴(Noto Sans 서브셋)로 표시합니다.
 - 표기법
   - `ˈ` 바로 뒤 음절을 세게, `ː` 앞 모음을 길게 읽습니다.
   - 문장 속 a · the · to · of · for 같은 기능어는 실제로 말할 때처럼 약하게 적습니다 (예: Shall we get started? /ʃæl wiː ɡet ˈstɑːrtɪd/).
@@ -150,7 +152,7 @@ app/                    화면 (빌드 과정 없는 HTML/CSS/JS)
   js/views-speak.js     스피킹 드릴 (따라 말하기 → 영어로 말하기)
   js/views-more.js      복습 · 표현 사전 · 내 기록 · 설정
   vendor/               번들된 Anthropic SDK (npm run build:vendor)
-  fonts/                Pretendard · IBM Plex Sans · JetBrains Mono (모두 SIL OFL 1.1)
+  fonts/                Pretendard · IBM Plex Sans · JetBrains Mono · Noto Sans 발음기호 서브셋 (모두 SIL OFL 1.1)
   manifest.webmanifest, sw.js, icons/   휴대폰 설치 · 오프라인 지원
 electron/main.js        데스크톱 창, 마이크 권한
 build/icon.png          데스크톱 앱 아이콘

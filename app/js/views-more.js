@@ -51,7 +51,7 @@
         '<div class="card flash' + (rv.flipped ? ' flipped' : '') + '"><div class="eyebrow">' + esc(p.source) + '</div>' +
         '<p class="flash-ko">' + esc(p.ko) + '</p>' +
         (rv.flipped
-          ? '<div class="flash-answer"><p class="en flash-en">' + esc(p.en) + '</p>' + App.ipaHtml(p.ipa) + (p.tip ? '<p class="tip">💡 ' + esc(p.tip) + '</p>' : '') +
+          ? '<div class="flash-answer">' + App.sentenceHtml(p.en, p.ipa, 'en flash-en') + (p.tip ? '<p class="tip">💡 ' + esc(p.tip) + '</p>' : '') +
             '<div class="actions centered">' + App.speakButtons(p.en) + App.favButton(id) + '</div></div>' +
             '<p class="muted small">얼마나 잘 떠올렸나요?</p><div class="grades">' + grades + '</div>'
           : '<p class="muted">영어로 어떻게 말할까요? 소리 내어 말해 본 뒤 정답을 확인하세요.</p>' +
@@ -232,8 +232,8 @@
         '<button class="btn soft" data-action="speak" data-text="Good morning, everyone. Shall we get started?">' + icon('speaker') + '음성 테스트</button></section>' +
         '<section class="card"><h3>발음기호</h3>' +
         '<label class="switch"><input type="checkbox" data-change="show-ipa"' + (st.settings.showIpa !== false ? ' checked' : '') + '><span class="track-sw"></span>영어 표현 아래에 발음기호 표시</label>' +
-        '<div class="ipa-guide"><p class="ipa">/ʃæl wiː ɡet ˈstɑːrtɪd/</p>' +
-        '<ul class="muted small"><li>미국식 발음 (CMU 발음 사전 기준)</li><li><b>ˈ</b> 바로 뒤 음절을 가장 세게, <b>ˌ</b> 은 조금 세게</li>' +
+        '<div class="ipa-guide">' + App.sentenceHtml('Shall we get started?', 'ʃæl wiː ɡet ˈstɑːrtɪd', 'en') +
+        '<ul class="muted small"><li>미국식 발음 · 표기는 네이버·YBM 사전 방식</li><li><b>ˈ</b> 바로 뒤 음절을 가장 세게, <b>ˌ</b> 은 조금 세게</li>' +
         '<li><b>ː</b> 앞 모음은 길게 · <b>ə</b> 는 힘을 뺀 약한 ‘어’</li><li>문장 속 a · the · to · of · for 등은 실제 말할 때처럼 약하게 표기 (tə, əv, fər)</li></ul></div></section>' +
         '<section class="card"><h3>' + icon('key') + ' AI 회의 파트너</h3>' + keyHtml + '</section>' +
         '<section class="card"><h3>학습 데이터</h3>' +

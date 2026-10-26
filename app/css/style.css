@@ -18,6 +18,14 @@
   font-display: swap;
   src: url("../fonts/IBMPlexSans.woff2") format("woff2-variations");
 }
+/* 발음기호 전용: Noto Sans 에서 IPA 글자만 뽑은 6KB 서브셋 (SIL OFL 1.1) */
+@font-face {
+  font-family: "BizTalk IPA";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/NotoSansIPA.woff2") format("woff2");
+}
 @font-face {
   font-family: "JetBrains Mono";
   font-weight: 100 800;
@@ -73,6 +81,7 @@
   /* 서체 */
   --font-body: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
   --font-display: "IBM Plex Sans", "Pretendard Variable", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-ipa: "BizTalk IPA", "Pretendard Variable", sans-serif;
   --font-mono: "JetBrains Mono", "Pretendard Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* 치수 */
   --radius: 18px;
@@ -598,14 +607,22 @@ input[type="range"] { width: 100%; accent-color: var(--primary); }
 .term-en { flex: 1; min-width: 0; font: 600 17px/1.35 var(--font-display); letter-spacing: 0; color: var(--text); }
 .term .fav { width: 30px; min-height: 30px; }
 .term-ko { font-size: 14px; font-weight: 600; color: var(--primary); margin: 4px 0 6px; }
-/* 발음기호: IBM Plex 에는 IPA 글자가 없어서 Pretendard 로 */
-.ipa { font-family: var(--font-body); font-size: 14px; font-weight: 450; color: var(--muted); letter-spacing: .01em; line-height: 1.5; margin: 2px 0 6px; overflow-wrap: anywhere; }
+/* 발음기호 */
+.ipa { font-family: var(--font-ipa); font-size: 14px; font-weight: 400; color: var(--muted); letter-spacing: .01em; line-height: 1.5; margin: 2px 0 6px; overflow-wrap: anywhere; }
 .term .ipa { margin: 0 0 2px; font-size: 13px; }
 .display-en + .ipa { font-size: 15px; margin: -4px 0 8px; }
 .flash-en + .ipa { font-size: 16px; margin: 4px 0 10px; }
 .player-ipa { font-size: 16px; margin: 0 0 6px; }
 .ipa-guide { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); }
-.ipa-guide .ipa { font-size: 18px; color: var(--primary); margin: 0 0 6px; }
+.ipa-guide .en { margin: 0 0 8px; font-size: 19px; }
+/* 단어마다 바로 아래에 발음기호 */
+.ruby { display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: .34em; row-gap: 6px; }
+.rw { display: inline-flex; flex-direction: column; align-items: flex-start; }
+.rw-ipa { font-family: var(--font-ipa); font-size: 13px; font-weight: 400; color: var(--muted); line-height: 1.35; letter-spacing: 0; white-space: nowrap; margin-top: 1px; }
+.drill-en.ruby, .flash-en.ruby { justify-content: center; }
+.display-en .rw-ipa, .drill-en .rw-ipa, .flash-en .rw-ipa { font-size: 15px; }
+.en-block { flex: 1; min-width: 0; }
+.en-block > p { margin-bottom: 2px; }
 .ipa-guide ul { display: grid; gap: 2px; padding-left: 18px; margin: 0; }
 .term-def { font-size: 13.5px; line-height: 1.6; color: var(--text-2); margin: 0 0 8px; padding: 8px 10px; border-radius: 10px; background: var(--surface-2); }
 .term-def b { color: var(--text); }
