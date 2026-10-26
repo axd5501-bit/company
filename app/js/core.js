@@ -129,6 +129,244 @@
     return a.length > 0 && a.join(' ') === b.join(' ');
   }
 
+  // ---------- 비슷한 오답 ----------
+  // 정답 문장에서 한두 곳만 바꾼 오답을 만든다. 보기끼리 내용이 너무 다르면 뜻을 몰라도 고를 수 있기 때문.
+  // 레슨 표현은 data.js 의 swaps("바꿀 부분>오답1|오답2")를 쓰고, 그 밖의 문장(기술 용어, AI 회의에서 저장한 표현)은
+  // 숫자 · 헷갈리는 짝 · 부정 규칙으로 자동으로 바꾼다.
+
+  const CONFUSABLE = [
+    ['increase', 'decrease'], ['increased', 'decreased'], ['higher', 'lower'], ['high', 'low'], ['more', 'less'],
+    ['maximum', 'minimum'], ['peak', 'average'], ['above', 'below'], ['before', 'after'], ['within', 'outside'],
+    ['first', 'last'], ['supply', 'return', 'exhaust'], ['sensible', 'latent'], ['superheat', 'subcooling'],
+    ['condenser', 'evaporator'], ['heating', 'cooling'], ['inlet', 'outlet'], ['upsize', 'downsize'],
+    ['oversize', 'undersize'], ['open', 'closed'], ['ahead', 'behind'], ['agree', 'disagree'], ['accept', 'reject'],
+    ['daily', 'weekly', 'monthly', 'quarterly'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+    ['morning', 'afternoon', 'evening'], ['always', 'never'], ['strong', 'weak'], ['large', 'small'],
+    ['faster', 'slower'], ['better', 'worse'], ['early', 'late'], ['outdoor', 'indoor'], ['internal', 'external'],
+    ['static', 'dynamic'], ['primary', 'secondary'], ['rated', 'measured'], ['nominal', 'actual'],
+    ['probability', 'severity'], ['correlation', 'causation'], ['latency', 'bandwidth', 'throughput'],
+    ['tolerance', 'clearance'], ['root', 'route'], ['upgrade', 'downgrade'], ['relative', 'absolute']
+  ];
+  const CONFUSABLE_OF = {};
+  CONFUSABLE.forEach(function (g) { g.forEach(function (w) { CONFUSABLE_OF[w] = g; }); });
+
+  const NEGATION = {
+    is: "isn't", are: "aren't", was: "wasn't", can: "can't", will: "won't", should: "shouldn't",
+    does: "doesn't", did: "didn't", do: "don't"
+  };
+  Object.keys(NEGATION).forEach(function (k) { NEGATION[NEGATION[k]] = k; });
+
+  const NUMBER_RE = /^(\$|±)?(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)(%|-[a-z]+)?$/i;
+
+  function formatNumber(v, withCommas) {
+    const s = String(Number(v.toPrecision(12)));
+    return withCommas ? s.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : s;
+  }
+
+  /** 숫자 토큰(0.05, 2,000, 15%, $300)을 그럴듯하게 틀린 값으로 */
+  function numberAlts(core) {
+    const m = core.match(NUMBER_RE);
+    if (!m) return [];
+    const pre = m[1] || '', raw = m[2], suf = m[3] || '';
+    const v = Number(raw.replace(/,/g, ''));
+    let vals;
+    if (raw.indexOf('.') !== -1) vals = [v * 10, v / 10, v * 2];
+    else if (v <= 12) vals = [v + 1, v + 2, v - 1, v + 3];
+    else {
+      const d = String(v);
+      vals = [d[1] !== '0' ? Number(d[1] + d[0] + d.slice(2)) : NaN, v * 10, Math.round(v / 10), v * 2];
+    }
+    const out = [];
+    vals.forEach(function (x) {
+      if (!(x > 0)) return;
+      const s = pre + formatNumber(x, raw.indexOf(',') !== -1) + suf;
+      if (s !== core && out.indexOf(s) === -1) out.push(s);
+    });
+    return out.slice(0, 3);
+  }
+
+  function matchCase(word, like) {
+    if (like.length > 1 && like === like.toUpperCase()) return word.toUpperCase();
+    if (like[0] !== like[0].toLowerCase()) return word[0].toUpperCase() + word.slice(1);
+    return word;
+  }
+
+  function isWordChar(c) { return /[A-Za-z0-9]/.test(c || ''); }
+
+  /** sentence 안에서 phrase 가 단어 경계로 처음 나오는 위치 (없으면 -1) */
+  function findPhrase(sentence, phrase) {
+    let i = sentence.indexOf(phrase);
+    while (i !== -1) {
+      const okStart = !isWordChar(phrase[0]) || !isWordChar(sentence[i - 1]);
+      const okEnd = !isWordChar(phrase[phrase.length - 1]) || !isWordChar(sentence[i + phrase.length]);
+      if (okStart && okEnd) return i;
+      i = sentence.indexOf(phrase, i + 1);
+    }
+    return -1;
+  }
+
+  /** swaps 문자열 목록 → 바꿀 자리 [{start, end, alts}] */
+  function swapSlots(sentence, swaps) {
+    const slots = [];
+    (swaps || []).forEach(function (sw) {
+      const k = sw.indexOf('>');
+      if (k < 1) return;
+      const from = sw.slice(0, k);
+      const start = findPhrase(sentence, from);
+      if (start === -1) return;
+      const alts = sw.slice(k + 1).split('|').filter(function (a) { return a && a !== from; });
+      if (alts.length) slots.push({ start: start, end: start + from.length, alts: alts });
+    });
+    return slots;
+  }
+
+  /** 규칙으로 찾은 바꿀 자리: 숫자, 헷갈리는 짝, 부정(첫 단어 제외 — 의문문은 그대로) */
+  function autoSlots(sentence) {
+    const slots = [];
+    const lower = ' ' + sentence.toLowerCase().replace(/[^a-z0-9']+/g, ' ') + ' ';
+    const re = /\S+/g;
+    let m, index = 0;
+    while ((m = re.exec(sentence))) {
+      const parts = m[0].match(/^([^A-Za-z0-9$±]*)(.*?)([^A-Za-z0-9%]*)$/);
+      const core = parts[2].replace(/’/g, "'");
+      const start = m.index + parts[1].length;
+      const key = core.toLowerCase();
+      let alts = numberAlts(core);
+      if (!alts.length && CONFUSABLE_OF[key]) {
+        alts = CONFUSABLE_OF[key].filter(function (w) { return w !== key && lower.indexOf(' ' + w + ' ') === -1; })
+          .map(function (w) { return matchCase(w, core); });
+      }
+      if (!alts.length && index > 0 && NEGATION[key]) alts = [matchCase(NEGATION[key], core)];
+      if (core && alts.length) slots.push({ start: start, end: start + parts[2].length, alts: alts });
+      index++;
+    }
+    return slots;
+  }
+
+  function applySlots(sentence, picks) {
+    return picks.slice().sort(function (a, b) { return b[0].start - a[0].start; }).reduce(function (s, p) {
+      return s.slice(0, p[0].start) + p[1] + s.slice(p[0].end);
+    }, sentence);
+  }
+
+  function pickOne(arr, rng) { return arr[Math.floor(rng() * arr.length)]; }
+
+  function wordKeys(text) { return String(text).split(/\s+/).filter(Boolean).map(wordKey); }
+
+  /**
+   * 보기 4개 중 '다른 보기들과 단어가 가장 많이 겹치는 것'을 고르는 요령으로 정답이 나오지 않는지.
+   * (예: That's a good point / good point / a good points / a well point → 정답이 다수결로 드러남)
+   */
+  function isFairSet(correct, wrong) {
+    const all = [correct].concat(wrong).map(wordKeys);
+    const score = all.map(function (w, i) {
+      return all.reduce(function (s, o, j) { return i === j ? s : s + lcsMatches(w, o).size; }, 0);
+    });
+    return score.slice(1).some(function (s) { return s >= score[0]; });
+  }
+
+  function combos3(arr) {
+    const out = [];
+    for (let i = 0; i < arr.length; i++) for (let j = i + 1; j < arr.length; j++) for (let k = j + 1; k < arr.length; k++) out.push([arr[i], arr[j], arr[k]]);
+    return out;
+  }
+
+  /**
+   * 정답 문장을 살짝 바꾼 오답 (최대 3개). 가능한 조합을 모두 만든 뒤 다수결 요령이 통하지 않는 것 중에서 고른다.
+   * - 한 자리만 바꿀 때: 그 자리에 서로 다른 값 3개 (보기 4개가 모두 같은 곳만 다름)
+   * - 두 자리 A·B 를 바꿀 때: A만 / B만 / A+B (2×2 — 어느 보기도 다수 쪽이 아님)
+   */
+  function nearMisses(sentence, swaps, rng) {
+    rng = rng || Math.random;
+    let slots = swapSlots(sentence, swaps);
+    const enough = function (ss) { return ss.length >= 2 || ss.some(function (s) { return s.alts.length >= 3; }); };
+    // "relative humidity (RH)" → "absolute humidity (RH)" 처럼 약어가 안 맞으면 오답이 티 나므로 자동 변형하지 않는다
+    if (!enough(slots) && !/\([A-Z]/.test(sentence)) {
+      const taken = slots;
+      slots = slots.concat(shuffle(autoSlots(sentence), rng).slice(0, 6).filter(function (a) {
+        return taken.every(function (h) { return a.end <= h.start || a.start >= h.end; });
+      }));
+    }
+    const one = function (s, alt) { return applySlots(sentence, [[s, alt]]); };
+    const clean = function (set) {
+      return set.filter(function (x, i) { return x !== sentence && set.indexOf(x) === i; });
+    };
+    const singles = [], pairs = [];
+    slots.forEach(function (s) {
+      if (s.alts.length >= 3) combos3(s.alts.slice(0, 5)).forEach(function (c) { singles.push(clean(c.map(function (alt) { return one(s, alt); }))); });
+    });
+    for (let i = 0; i < slots.length; i++) {
+      for (let j = i + 1; j < slots.length; j++) {
+        slots[i].alts.forEach(function (a) {
+          slots[j].alts.forEach(function (b) {
+            pairs.push(clean([one(slots[i], a), one(slots[j], b), applySlots(sentence, [[slots[i], a], [slots[j], b]])]));
+          });
+        });
+      }
+    }
+    const full = function (set) { return set.length === 3 && isFairSet(sentence, set); };
+    const fairSingles = singles.filter(full), fairPairs = pairs.filter(full);
+    let group = fairSingles.length && (!fairPairs.length || rng() < 0.5) ? fairSingles : fairPairs;
+    if (!group.length) group = singles.concat(pairs).filter(function (set) { return set.length; });
+    if (!group.length && slots.length) group = [clean(slots[0].alts.map(function (alt) { return one(slots[0], alt); }))];
+    return group.length ? pickOne(group, rng) : [];
+  }
+
+  function uniqueTokens(text) {
+    return tokenize(text).filter(function (t, i, a) { return a.indexOf(t) === i; });
+  }
+
+  /** 생김새가 얼마나 비슷한지 (단어 겹침 + 길이 + 같은 종류) 0~1 */
+  function similarity(a, b) {
+    const ta = uniqueTokens(a.en), tb = uniqueTokens(b.en);
+    const inter = ta.filter(function (t) { return tb.indexOf(t) !== -1; }).length;
+    const union = ta.length + tb.length - inter;
+    const la = a.en.length, lb = b.en.length;
+    return 0.6 * (union ? inter / union : 0) + 0.3 * (1 - Math.abs(la - lb) / Math.max(la, lb, 1)) +
+      (!!a.term === !!b.term ? 0.1 : 0);
+  }
+
+  /** item({en, swaps?, term?}) 의 오답 n개: 비슷한 문장이 우선, 모자라면 pool 에서 생김새가 비슷한 표현 */
+  function distractorsFor(item, pool, rng, n) {
+    rng = rng || Math.random;
+    n = n || 3;
+    const out = [];
+    const seen = {};
+    const add = function (en) {
+      const k = tokenize(en).join(' ');
+      if (!k || seen[k] || out.length >= n) return;
+      seen[k] = true;
+      out.push(en);
+    };
+    seen[tokenize(item.en).join(' ')] = true;
+    nearMisses(item.en, item.swaps, rng).forEach(add);
+    if (out.length < n) {
+      const ranked = pool.filter(function (p) { return p !== item && p.en; })
+        .map(function (p) { return { en: p.en, score: similarity(item, p) }; })
+        .sort(function (a, b) { return b.score - a.score; });
+      const top = Math.max(6, (n - out.length) * 2);
+      shuffle(ranked.slice(0, top), rng).concat(ranked.slice(top)).forEach(function (p) { add(p.en); });
+    }
+    return out;
+  }
+
+  function wordKey(w) {
+    return w.toLowerCase().replace(/’/g, "'").replace(/^[^a-z0-9$±가-힣]+|[^a-z0-9%가-힣]+$/g, '');
+  }
+
+  /**
+   * other 의 단어 중 base 와 다른 단어 표시. 보기끼리 차이를 눈으로 확인하게 한다.
+   * 절반 넘게 다르면(완전히 다른 문장) 표시하지 않는다.
+   */
+  function diffWords(base, other) {
+    const ow = String(other).split(/\s+/).filter(Boolean);
+    const bw = String(base).split(/\s+/).filter(Boolean);
+    const matched = lcsMatches(ow.map(wordKey), bw.map(wordKey));
+    const changed = ow.length - matched.size;
+    const show = changed > 0 && changed * 2 <= Math.max(ow.length, bw.length);
+    return ow.map(function (w, i) { return { text: w, diff: show && !matched.has(i) }; });
+  }
+
   function choiceQuestion(prompt, correct, distractors, rng, explain) {
     const options = shuffle([correct].concat(distractors), rng);
     return { type: 'choice', prompt: prompt, options: options, answer: options.indexOf(correct), explain: explain || '' };
@@ -149,10 +387,10 @@
     const terms = lesson.terms || [];
     if (terms.length >= 4) {
       const picked = shuffle(terms, rng).slice(0, 2);
-      const others = function (t) { return shuffle(terms.filter(function (x) { return x !== t; }), rng).slice(0, 3); };
-      const q1 = choiceQuestion('다음 뜻의 기술 용어는?', picked[0].en, others(picked[0]).map(function (x) { return x.en; }), rng, picked[0].ex);
+      const others = shuffle(terms.filter(function (x) { return x !== picked[1]; }), rng).slice(0, 3);
+      const q1 = choiceQuestion('다음 뜻의 기술 용어는?', picked[0].en, distractorsFor(picked[0], terms, rng), rng, picked[0].ex);
       q1.sub = picked[0].ko;
-      const q2 = choiceQuestion('다음 기술 용어의 뜻은?', picked[1].ko, others(picked[1]).map(function (x) { return x.ko; }), rng, picked[1].ex);
+      const q2 = choiceQuestion('다음 기술 용어의 뜻은?', picked[1].ko, others.map(function (x) { return x.ko; }), rng, picked[1].ex);
       q2.sub = picked[1].en;
       qs.push(q1, q2);
     }
@@ -163,9 +401,7 @@
       const e = exprs[i];
       const type = types[i % types.length];
       if (type === 'ko2en') {
-        const others = shuffle(lesson.expressions.filter(function (x) { return x !== e; }), rng)
-          .slice(0, 3).map(function (x) { return x.en; });
-        const q = choiceQuestion('다음 뜻에 맞는 영어 표현은?', e.en, others, rng, e.tip);
+        const q = choiceQuestion('다음 뜻에 맞는 영어 표현은?', e.en, distractorsFor(e, lesson.expressions, rng), rng, e.tip);
         q.sub = e.ko;
         qs.push(q);
       } else if (type === 'blank') {
@@ -347,13 +583,13 @@
 
   // ---------- 스피드 챌린지 ----------
 
-  /** 표현 풀에서 한국어 → 영어 4지선다 한 문제 */
+  /** 표현 풀에서 한국어 → 영어 4지선다 한 문제 (오답은 정답을 살짝 바꾼 문장) */
   function speedQuestion(pool, rng, avoidId) {
     const candidates = pool.filter(function (e) { return e.id !== avoidId; });
     const target = candidates[Math.floor(rng() * candidates.length)];
-    const others = shuffle(pool.filter(function (e) { return e.id !== target.id && e.en !== target.en; }), rng).slice(0, 3);
-    const options = shuffle([target].concat(others), rng);
-    return { id: target.id, ko: target.ko, options: options.map(function (o) { return o.en; }), answer: options.indexOf(target) };
+    const wrong = distractorsFor(target, pool.filter(function (e) { return e.id !== target.id; }), rng);
+    const options = shuffle([target.en].concat(wrong), rng);
+    return { id: target.id, ko: target.ko, options: options, answer: options.indexOf(target.en) };
   }
 
   // ---------- 표현 사전 ----------
@@ -443,6 +679,10 @@
     shuffle: shuffle,
     makeBlank: makeBlank,
     isBlankCorrect: isBlankCorrect,
+    nearMisses: nearMisses,
+    isFairSet: isFairSet,
+    distractorsFor: distractorsFor,
+    diffWords: diffWords,
     buildQuiz: buildQuiz,
     GRADES: GRADES,
     newCard: newCard,

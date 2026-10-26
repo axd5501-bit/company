@@ -14,13 +14,13 @@
       titleEn: 'Small Talk & Introductions',
       goal: '회의 시작 전 자연스럽게 대화를 열고 자신을 소개할 수 있다.',
       expressions: [
-        { en: "How was your weekend?", ko: "주말 어떻게 보내셨어요?", tip: "월요일 회의 전 가장 무난한 스몰토크 주제입니다.", blank: "weekend" },
-        { en: "Thanks for making the time today.", ko: "오늘 시간 내주셔서 감사합니다.", tip: "make time = (바쁜 중에) 시간을 내다", blank: "time" },
-        { en: "Let me briefly introduce myself.", ko: "간단히 제 소개를 드리겠습니다.", blank: "introduce" },
-        { en: "I'm in charge of overseas sales at our company.", ko: "저는 저희 회사에서 해외 영업을 담당하고 있습니다.", tip: "be in charge of + 업무 = ~을 담당하다", blank: "charge" },
-        { en: "I've heard a lot about your team.", ko: "팀에 대해 이야기 많이 들었습니다.", blank: "heard" },
-        { en: "It's great to finally meet you in person.", ko: "드디어 직접 뵙게 되어 반갑습니다.", tip: "이메일·화상으로만 연락하다 처음 대면할 때 씁니다.", blank: "person" },
-        { en: "Did you find the office okay?", ko: "사무실은 잘 찾아오셨어요?", blank: "find" }
+        { en: "How was your weekend?", ko: "주말 어떻게 보내셨어요?", tip: "월요일 회의 전 가장 무난한 스몰토크 주제입니다.", blank: "weekend", swaps: ["was>were|did|does"] },
+        { en: "Thanks for making the time today.", ko: "오늘 시간 내주셔서 감사합니다.", tip: "make time = (바쁜 중에) 시간을 내다", blank: "time", swaps: ["for>to", "making>make|made"] },
+        { en: "Let me briefly introduce myself.", ko: "간단히 제 소개를 드리겠습니다.", blank: "introduce", swaps: ["Let me>Let's me|Let I", "myself>me|mine"] },
+        { en: "I'm in charge of overseas sales at our company.", ko: "저는 저희 회사에서 해외 영업을 담당하고 있습니다.", tip: "be in charge of + 업무 = ~을 담당하다", blank: "charge", swaps: ["in charge of>in charge for|in charge with|on charge of", "overseas>domestic"] },
+        { en: "I've heard a lot about your team.", ko: "팀에 대해 이야기 많이 들었습니다.", blank: "heard", swaps: ["heard>hear|hearing", "a lot about>a lot to|many about"] },
+        { en: "It's great to finally meet you in person.", ko: "드디어 직접 뵙게 되어 반갑습니다.", tip: "이메일·화상으로만 연락하다 처음 대면할 때 씁니다.", blank: "person", swaps: ["in person>on person|by person|at person", "meet>met|meeting"] },
+        { en: "Did you find the office okay?", ko: "사무실은 잘 찾아오셨어요?", blank: "find", swaps: ["find>found|look|see"] }
       ],
       dialogue: {
         setting: '해외 파트너사 담당자가 처음으로 우리 회사를 방문했습니다.',
@@ -51,13 +51,13 @@
       titleEn: 'Opening & Setting the Agenda',
       goal: '회의를 시작하고 목적과 안건, 진행 방식을 안내할 수 있다.',
       expressions: [
-        { en: "Shall we get started?", ko: "시작할까요?", tip: "Shall we ~? 는 정중하게 제안하는 표현입니다.", blank: "started" },
-        { en: "The purpose of today's meeting is to review the Q3 budget.", ko: "오늘 회의의 목적은 3분기 예산을 검토하는 것입니다.", blank: "purpose" },
-        { en: "We have three items on the agenda today.", ko: "오늘 안건은 세 가지입니다.", tip: "item = (안건 목록의) 항목", blank: "agenda" },
-        { en: "Let's start with the first item.", ko: "첫 번째 안건부터 시작하죠.", blank: "item" },
-        { en: "We need to wrap up by 3 o'clock.", ko: "3시까지는 마무리해야 합니다.", tip: "wrap up = 마무리하다. 마감 시점에는 until 이 아니라 by 를 씁니다.", blank: "wrap" },
-        { en: "Jenny will be taking the minutes today.", ko: "오늘 회의록은 제니 씨가 작성해 주실 겁니다.", tip: "take the minutes = 회의록을 작성하다", blank: "minutes" },
-        { en: "Has everyone received a copy of the agenda?", ko: "모두 안건 자료 받으셨나요?", blank: "received" }
+        { en: "Shall we get started?", ko: "시작할까요?", tip: "Shall we ~? 는 정중하게 제안하는 표현입니다.", blank: "started", swaps: ["get>getting", "started>start|starting|starts"] },
+        { en: "The purpose of today's meeting is to review the Q3 budget.", ko: "오늘 회의의 목적은 3분기 예산을 검토하는 것입니다.", blank: "purpose", swaps: ["Q3>Q1|Q2|Q4", "is to review>is review|is to reviewing"] },
+        { en: "We have three items on the agenda today.", ko: "오늘 안건은 세 가지입니다.", tip: "item = (안건 목록의) 항목", blank: "agenda", swaps: ["three>two|four|five", "on the agenda>at the agenda|to the agenda"] },
+        { en: "Let's start with the first item.", ko: "첫 번째 안건부터 시작하죠.", blank: "item", swaps: ["start with>starting with|started with", "first>second|last|next"] },
+        { en: "We need to wrap up by 3 o'clock.", ko: "3시까지는 마무리해야 합니다.", tip: "wrap up = 마무리하다. 마감 시점에는 until 이 아니라 by 를 씁니다.", blank: "wrap", swaps: ["by>until|on", "3 o'clock>4 o'clock|5 o'clock"] },
+        { en: "Jenny will be taking the minutes today.", ko: "오늘 회의록은 제니 씨가 작성해 주실 겁니다.", tip: "take the minutes = 회의록을 작성하다", blank: "minutes", swaps: ["will be taking>will be take|will taking", "the minutes>the minute|the meeting"] },
+        { en: "Has everyone received a copy of the agenda?", ko: "모두 안건 자료 받으셨나요?", blank: "received", swaps: ["Has everyone>Have everyone|Is everyone", "received>receive|receiving"] }
       ],
       dialogue: {
         setting: '내가 주재하는 3분기 예산 검토 회의를 시작합니다.',
@@ -86,13 +86,13 @@
       titleEn: 'Giving Opinions',
       goal: '자신의 의견을 논리적이고 부드럽게 말하고, 다른 사람의 의견을 물을 수 있다.',
       expressions: [
-        { en: "In my opinion, we should focus on the domestic market first.", ko: "제 생각에는 국내 시장에 먼저 집중해야 합니다.", blank: "opinion" },
-        { en: "From my perspective, the timeline is a bit tight.", ko: "제 관점에서는 일정이 조금 빠듯합니다.", blank: "perspective" },
-        { en: "I strongly believe this is the right direction.", ko: "저는 이것이 옳은 방향이라고 확신합니다.", blank: "believe" },
-        { en: "What are your thoughts on this?", ko: "이것에 대해 어떻게 생각하세요?", tip: "'How do you think?'는 흔한 실수입니다. What do you think? 로 물어보세요.", blank: "thoughts" },
-        { en: "I'd like to hear from everyone before we decide.", ko: "결정하기 전에 모두의 의견을 듣고 싶습니다.", blank: "hear" },
-        { en: "If I may add something, we also need to consider the cost.", ko: "한 가지 덧붙이자면, 비용도 고려해야 합니다.", blank: "add" },
-        { en: "It seems to me that customers want a simpler design.", ko: "제가 보기에는 고객들이 더 단순한 디자인을 원하는 것 같습니다.", tip: "단정 짓지 않고 부드럽게 의견을 낼 때 좋습니다.", blank: "seems" }
+        { en: "In my opinion, we should focus on the domestic market first.", ko: "제 생각에는 국내 시장에 먼저 집중해야 합니다.", blank: "opinion", swaps: ["In my opinion>On my opinion|At my opinion|To my opinion", "domestic>overseas|global", "focus on>focus at"] },
+        { en: "From my perspective, the timeline is a bit tight.", ko: "제 관점에서는 일정이 조금 빠듯합니다.", blank: "perspective", swaps: ["From my>For my|By my", "tight>loose|relaxed"] },
+        { en: "I strongly believe this is the right direction.", ko: "저는 이것이 옳은 방향이라고 확신합니다.", blank: "believe", swaps: ["strongly>strong|hardly", "right>wrong"] },
+        { en: "What are your thoughts on this?", ko: "이것에 대해 어떻게 생각하세요?", tip: "'How do you think?'는 흔한 실수입니다. What do you think? 로 물어보세요.", blank: "thoughts", swaps: ["What are your thoughts>What is your thoughts|How are your thoughts|What are your thought", "on this>at this"] },
+        { en: "I'd like to hear from everyone before we decide.", ko: "결정하기 전에 모두의 의견을 듣고 싶습니다.", blank: "hear", swaps: ["hear from>hear to|listen from", "before>after|until"] },
+        { en: "If I may add something, we also need to consider the cost.", ko: "한 가지 덧붙이자면, 비용도 고려해야 합니다.", blank: "add", swaps: ["consider the>consider about the|considering the", "cost>schedule|quality"] },
+        { en: "It seems to me that customers want a simpler design.", ko: "제가 보기에는 고객들이 더 단순한 디자인을 원하는 것 같습니다.", tip: "단정 짓지 않고 부드럽게 의견을 낼 때 좋습니다.", blank: "seems", swaps: ["simpler>more simpler|simplest|more complex", "It seems to me>It seems me"] }
       ],
       dialogue: {
         setting: '내년 목표 시장을 정하는 팀 회의입니다.',
@@ -121,13 +121,13 @@
       titleEn: 'Agreeing & Disagreeing',
       goal: '상대의 의견에 동의하거나, 관계를 해치지 않고 정중하게 반대할 수 있다.',
       expressions: [
-        { en: "I completely agree with you.", ko: "전적으로 동의합니다.", blank: "agree" },
-        { en: "That's a good point.", ko: "좋은 지적입니다.", blank: "point" },
-        { en: "I see where you're coming from, but I have a different view.", ko: "무슨 말씀인지는 알겠지만, 저는 생각이 좀 다릅니다.", tip: "반대 의견 전에 상대 입장을 먼저 인정하는 쿠션 표현입니다.", blank: "coming" },
-        { en: "I'm afraid I have to disagree.", ko: "죄송하지만 동의하기 어렵습니다.", tip: "I'm afraid ~ 는 부정적인 내용을 부드럽게 만들어 줍니다.", blank: "afraid" },
-        { en: "I agree up to a point, but I have some concerns.", ko: "어느 정도는 동의하지만, 몇 가지 우려되는 점이 있습니다.", blank: "concerns" },
-        { en: "I'm not sure that's the best approach.", ko: "그게 최선의 방법인지는 잘 모르겠습니다.", blank: "approach" },
-        { en: "Let's find some middle ground.", ko: "서로 절충점을 찾아봅시다.", tip: "meet halfway 도 같은 의미로 자주 씁니다.", blank: "ground" }
+        { en: "I completely agree with you.", ko: "전적으로 동의합니다.", blank: "agree", swaps: ["I completely>I'm completely", "agree with>agree to|agree on"] },
+        { en: "That's a good point.", ko: "좋은 지적입니다.", blank: "point", swaps: ["a good>good|a well", "point>points"] },
+        { en: "I see where you're coming from, but I have a different view.", ko: "무슨 말씀인지는 알겠지만, 저는 생각이 좀 다릅니다.", tip: "반대 의견 전에 상대 입장을 먼저 인정하는 쿠션 표현입니다.", blank: "coming", swaps: ["where you're coming from>where are you coming from|what you're coming from|where you're going", "a different view>the same view"] },
+        { en: "I'm afraid I have to disagree.", ko: "죄송하지만 동의하기 어렵습니다.", tip: "I'm afraid ~ 는 부정적인 내용을 부드럽게 만들어 줍니다.", blank: "afraid", swaps: ["I'm afraid>I'm scary|I'm afraid of|I'm fear", "disagree>agree"] },
+        { en: "I agree up to a point, but I have some concerns.", ko: "어느 정도는 동의하지만, 몇 가지 우려되는 점이 있습니다.", blank: "concerns", swaps: ["up to a point>up at a point|until a point", "some concerns>some concerning|any concerns"] },
+        { en: "I'm not sure that's the best approach.", ko: "그게 최선의 방법인지는 잘 모르겠습니다.", blank: "approach", swaps: ["I'm not sure>I don't sure|I'm not surely|I'm sure", "best approach>best approaching"] },
+        { en: "Let's find some middle ground.", ko: "서로 절충점을 찾아봅시다.", tip: "meet halfway 도 같은 의미로 자주 씁니다.", blank: "ground", swaps: ["middle>center|medium", "ground>land|floor"] }
       ],
       dialogue: {
         setting: '신규 앱 출시 시점을 두고 제품 책임자와 의견이 갈립니다.',
@@ -156,13 +156,13 @@
       titleEn: 'Interrupting & Clarifying',
       goal: '정중하게 끼어들어 질문하고, 이해가 안 된 부분을 확인할 수 있다.',
       expressions: [
-        { en: "Sorry to interrupt, but could I ask a quick question?", ko: "말씀 중에 죄송하지만, 간단히 질문 하나 드려도 될까요?", blank: "interrupt" },
-        { en: "Could you elaborate on that?", ko: "그 부분을 좀 더 자세히 설명해 주시겠어요?", blank: "elaborate" },
-        { en: "Just to clarify, are we talking about the US or Europe?", ko: "확인차 여쭙자면, 미국 얘기인가요 유럽 얘기인가요?", blank: "clarify" },
-        { en: "Sorry, I didn't quite catch that.", ko: "죄송하지만, 잘 못 알아들었습니다.", tip: "catch = (말을) 알아듣다", blank: "catch" },
-        { en: "Could you say that again a bit more slowly?", ko: "조금만 더 천천히 다시 말씀해 주시겠어요?", blank: "slowly" },
-        { en: "So, what you're saying is that we need more staff?", ko: "그러니까 인력이 더 필요하다는 말씀이시죠?", tip: "상대의 말을 요약해서 제대로 이해했는지 확인하는 표현입니다.", blank: "saying" },
-        { en: "Could I just finish my point?", ko: "제 말을 마저 끝내도 될까요?", tip: "누군가 끼어들었을 때 정중하게 발언권을 지키는 표현입니다.", blank: "finish" }
+        { en: "Sorry to interrupt, but could I ask a quick question?", ko: "말씀 중에 죄송하지만, 간단히 질문 하나 드려도 될까요?", blank: "interrupt", swaps: ["Sorry to interrupt>Sorry for interrupt|Sorry to interrupting|Sorry to interruption", "a quick question>a quick questions"] },
+        { en: "Could you elaborate on that?", ko: "그 부분을 좀 더 자세히 설명해 주시겠어요?", blank: "elaborate", swaps: ["elaborate on>elaborate|elaborate in|elaborate at"] },
+        { en: "Just to clarify, are we talking about the US or Europe?", ko: "확인차 여쭙자면, 미국 얘기인가요 유럽 얘기인가요?", blank: "clarify", swaps: ["are we talking>are we talk|do we talking|are we talked", "the US>the UK"] },
+        { en: "Sorry, I didn't quite catch that.", ko: "죄송하지만, 잘 못 알아들었습니다.", tip: "catch = (말을) 알아듣다", blank: "catch", swaps: ["catch>caught|catching|catched"] },
+        { en: "Could you say that again a bit more slowly?", ko: "조금만 더 천천히 다시 말씀해 주시겠어요?", blank: "slowly", swaps: ["a bit more slowly>a bit more slow|a bit slowlier|a bit more quickly"] },
+        { en: "So, what you're saying is that we need more staff?", ko: "그러니까 인력이 더 필요하다는 말씀이시죠?", tip: "상대의 말을 요약해서 제대로 이해했는지 확인하는 표현입니다.", blank: "saying", swaps: ["what you're saying>what are you saying|what you saying|which you're saying", "more staff>more stuff|fewer staff"] },
+        { en: "Could I just finish my point?", ko: "제 말을 마저 끝내도 될까요?", tip: "누군가 끼어들었을 때 정중하게 발언권을 지키는 표현입니다.", blank: "finish", swaps: ["finish my point>finish my pointing|finish to my point|finish of my point"] }
       ],
       dialogue: {
         setting: '동료 Lisa가 신규 지역 확장 계획을 발표하는 중입니다.',
@@ -193,13 +193,13 @@
       titleEn: 'Updates & Presenting Data',
       goal: '프로젝트 진행 상황을 보고하고 수치와 그래프를 설명할 수 있다.',
       expressions: [
-        { en: "Let me give you a quick update on the project.", ko: "프로젝트 현황을 간단히 말씀드리겠습니다.", blank: "update" },
-        { en: "We're on track to meet the deadline.", ko: "마감일을 맞출 수 있도록 순조롭게 진행 중입니다.", tip: "on track = 계획대로 진행 중", blank: "track" },
-        { en: "We're running about two weeks behind schedule.", ko: "일정보다 2주 정도 늦어지고 있습니다.", tip: "반대로 일정보다 앞서 있으면 ahead of schedule", blank: "behind" },
-        { en: "As you can see from this chart, sales increased by 15%.", ko: "이 차트에서 보시다시피, 매출이 15% 증가했습니다.", tip: "증감의 폭은 by 로 나타냅니다.", blank: "chart" },
-        { en: "Revenue dropped slightly in the second quarter.", ko: "2분기에 매출이 소폭 하락했습니다.", blank: "slightly" },
-        { en: "This is mainly due to higher shipping costs.", ko: "이는 주로 배송비 상승 때문입니다.", blank: "due" },
-        { en: "The key takeaway here is that customer retention is improving.", ko: "여기서 핵심은 고객 유지율이 개선되고 있다는 점입니다.", tip: "takeaway = 핵심 메시지, 시사점", blank: "takeaway" }
+        { en: "Let me give you a quick update on the project.", ko: "프로젝트 현황을 간단히 말씀드리겠습니다.", blank: "update", swaps: ["give you a quick update>give to you a quick update|give you a quick updating|give you quick update"] },
+        { en: "We're on track to meet the deadline.", ko: "마감일을 맞출 수 있도록 순조롭게 진행 중입니다.", tip: "on track = 계획대로 진행 중", blank: "track", swaps: ["on track>in track|on truck|at track", "meet the deadline>meet with the deadline|miss the deadline"] },
+        { en: "We're running about two weeks behind schedule.", ko: "일정보다 2주 정도 늦어지고 있습니다.", tip: "반대로 일정보다 앞서 있으면 ahead of schedule", blank: "behind", swaps: ["behind>ahead of|behind of", "two weeks>two week|three weeks"] },
+        { en: "As you can see from this chart, sales increased by 15%.", ko: "이 차트에서 보시다시피, 매출이 15% 증가했습니다.", tip: "증감의 폭은 by 로 나타냅니다.", blank: "chart", swaps: ["increased by>increased to|decreased by|increased for", "15%>50%|1.5%"] },
+        { en: "Revenue dropped slightly in the second quarter.", ko: "2분기에 매출이 소폭 하락했습니다.", blank: "slightly", swaps: ["dropped slightly>dropped sharply|rose slightly|dropped slight", "second>third|first"] },
+        { en: "This is mainly due to higher shipping costs.", ko: "이는 주로 배송비 상승 때문입니다.", blank: "due", swaps: ["mainly due to>main due to|mainly due for|mainly due of", "higher>lower"] },
+        { en: "The key takeaway here is that customer retention is improving.", ko: "여기서 핵심은 고객 유지율이 개선되고 있다는 점입니다.", tip: "takeaway = 핵심 메시지, 시사점", blank: "takeaway", swaps: ["improving>declining|improve", "retention>attention|retaining"] }
       ],
       dialogue: {
         setting: '임원 회의에서 Atlas 프로젝트 현황을 보고합니다.',
@@ -229,13 +229,13 @@
       titleEn: 'Negotiating & Problem Solving',
       goal: '조건을 제안·조율하고, 즉답이 어려울 때 정중하게 보류할 수 있다.',
       expressions: [
-        { en: "What if we extended the contract to two years?", ko: "계약을 2년으로 연장하면 어떨까요?", tip: "What if + 과거형 = '~하면 어떨까요?' 하는 부드러운 가정 제안", blank: "extended" },
-        { en: "We'd be willing to lower the price if you increase the order volume.", ko: "주문량을 늘려 주신다면 가격을 낮출 의향이 있습니다.", blank: "willing" },
-        { en: "That's a bit beyond our budget.", ko: "그건 저희 예산을 조금 넘어섭니다.", blank: "budget" },
-        { en: "Is there any flexibility on the delivery date?", ko: "납기일은 조정이 가능할까요?", blank: "flexibility" },
-        { en: "Let's look at this from a different angle.", ko: "이 문제를 다른 각도에서 봅시다.", blank: "angle" },
-        { en: "I think we can both benefit from this deal.", ko: "이번 거래로 양측 모두 이익을 볼 수 있다고 생각합니다.", tip: "win-win 이라는 표현도 자주 씁니다.", blank: "benefit" },
-        { en: "I'll need to check with my manager before I can confirm.", ko: "확정하기 전에 상사와 확인해 봐야 합니다.", blank: "confirm" }
+        { en: "What if we extended the contract to two years?", ko: "계약을 2년으로 연장하면 어떨까요?", tip: "What if + 과거형 = '~하면 어떨까요?' 하는 부드러운 가정 제안", blank: "extended", swaps: ["to two>until two|by two", "years>months"] },
+        { en: "We'd be willing to lower the price if you increase the order volume.", ko: "주문량을 늘려 주신다면 가격을 낮출 의향이 있습니다.", blank: "willing", swaps: ["lower>raise|low", "increase>decrease|reduce"] },
+        { en: "That's a bit beyond our budget.", ko: "그건 저희 예산을 조금 넘어섭니다.", blank: "budget", swaps: ["beyond>within|under", "a bit>a bit of|a few"] },
+        { en: "Is there any flexibility on the delivery date?", ko: "납기일은 조정이 가능할까요?", blank: "flexibility", swaps: ["Is there>Are there", "flexibility>flexible", "delivery date>delivery data|payment date"] },
+        { en: "Let's look at this from a different angle.", ko: "이 문제를 다른 각도에서 봅시다.", blank: "angle", swaps: ["from a different angle>from a different angel|in a different angle|at a different angle", "look at this>look this|see at this"] },
+        { en: "I think we can both benefit from this deal.", ko: "이번 거래로 양측 모두 이익을 볼 수 있다고 생각합니다.", tip: "win-win 이라는 표현도 자주 씁니다.", blank: "benefit", swaps: ["benefit from>benefit to|benefit of|benefit with"] },
+        { en: "I'll need to check with my manager before I can confirm.", ko: "확정하기 전에 상사와 확인해 봐야 합니다.", blank: "confirm", swaps: ["check with>check to|check at|check for", "before>after"] }
       ],
       dialogue: {
         setting: '고객사 구매 담당자와 공급 조건을 협상합니다. 나는 공급사 측입니다.',
@@ -265,13 +265,13 @@
       titleEn: 'Virtual Meetings',
       goal: '화상회의에서 자주 생기는 연결·음성·화면 공유 상황에 대처할 수 있다.',
       expressions: [
-        { en: "Can everyone hear me okay?", ko: "제 목소리 잘 들리시나요?", blank: "hear" },
-        { en: "I think you're on mute.", ko: "음소거 상태이신 것 같아요.", blank: "mute" },
-        { en: "Sorry, you're breaking up a little.", ko: "죄송하지만, 소리가 조금 끊겨요.", tip: "break up = (통화·영상이) 끊기다. break down(고장 나다)과 구분하세요.", blank: "breaking" },
-        { en: "Let me share my screen.", ko: "제 화면을 공유하겠습니다.", blank: "share" },
-        { en: "Can you see my screen now?", ko: "이제 제 화면 보이시나요?", blank: "screen" },
-        { en: "My connection is unstable, so I'll turn off my camera.", ko: "연결이 불안정해서 카메라를 끄겠습니다.", blank: "connection" },
-        { en: "I'll drop the link in the chat.", ko: "채팅창에 링크를 올려 드릴게요.", tip: "drop / post / share a link in the chat 모두 자연스럽습니다.", blank: "chat" }
+        { en: "Can everyone hear me okay?", ko: "제 목소리 잘 들리시나요?", blank: "hear", swaps: ["hear me>hears me|listen me|hear to me"] },
+        { en: "I think you're on mute.", ko: "음소거 상태이신 것 같아요.", blank: "mute", swaps: ["on mute>in mute|at mute", "you're>your|you"] },
+        { en: "Sorry, you're breaking up a little.", ko: "죄송하지만, 소리가 조금 끊겨요.", tip: "break up = (통화·영상이) 끊기다. break down(고장 나다)과 구분하세요.", blank: "breaking", swaps: ["breaking up>breaking down|breaking out|breaking off", "a little>a few"] },
+        { en: "Let me share my screen.", ko: "제 화면을 공유하겠습니다.", blank: "share", swaps: ["Let me share>Let me sharing|Let me to share|Let's me share"] },
+        { en: "Can you see my screen now?", ko: "이제 제 화면 보이시나요?", blank: "screen", swaps: ["see>look|seeing|saw"] },
+        { en: "My connection is unstable, so I'll turn off my camera.", ko: "연결이 불안정해서 카메라를 끄겠습니다.", blank: "connection", swaps: ["turn off>turn on|turn out|turn down", "unstable>stable"] },
+        { en: "I'll drop the link in the chat.", ko: "채팅창에 링크를 올려 드릴게요.", tip: "drop / post / share a link in the chat 모두 자연스럽습니다.", blank: "chat", swaps: ["drop>dropping|dropped|drops"] }
       ],
       dialogue: {
         setting: '내가 호스트인 화상회의가 시작되었습니다.',
@@ -302,13 +302,13 @@
       titleEn: 'Wrapping Up & Action Items',
       goal: '논의 내용을 요약하고, 담당자와 기한을 정해 회의를 마무리할 수 있다.',
       expressions: [
-        { en: "Let's wrap things up.", ko: "이제 마무리하죠.", blank: "wrap" },
-        { en: "To sum up, we've agreed to postpone the launch.", ko: "요약하자면, 출시를 연기하기로 합의했습니다.", tip: "To sum up / In summary / To summarize 모두 사용 가능합니다.", blank: "sum" },
-        { en: "Let's go over the action items.", ko: "실행 항목을 한번 정리해 봅시다.", tip: "action item = 회의 후 누가 무엇을 할지 정한 할 일", blank: "action" },
-        { en: "Who's going to take care of this?", ko: "이건 누가 맡아 주실 건가요?", blank: "care" },
-        { en: "Could you send me the report by Friday?", ko: "금요일까지 보고서를 보내 주시겠어요?", blank: "Friday" },
-        { en: "I'll send out the meeting notes this afternoon.", ko: "오늘 오후에 회의록을 공유하겠습니다.", blank: "notes" },
-        { en: "Let's touch base next week.", ko: "다음 주에 다시 이야기 나눠요.", tip: "touch base = 간단히 다시 연락하거나 논의하다", blank: "base" }
+        { en: "Let's wrap things up.", ko: "이제 마무리하죠.", blank: "wrap", swaps: ["up>down|over|off"] },
+        { en: "To sum up, we've agreed to postpone the launch.", ko: "요약하자면, 출시를 연기하기로 합의했습니다.", tip: "To sum up / In summary / To summarize 모두 사용 가능합니다.", blank: "sum", swaps: ["To sum up>To sum|Sum up", "postpone>cancel|advance|speed up"] },
+        { en: "Let's go over the action items.", ko: "실행 항목을 한번 정리해 봅시다.", tip: "action item = 회의 후 누가 무엇을 할지 정한 할 일", blank: "action", swaps: ["go over>go on|go out|go off"] },
+        { en: "Who's going to take care of this?", ko: "이건 누가 맡아 주실 건가요?", blank: "care", swaps: ["take care of>take care for|take care with|take care about"] },
+        { en: "Could you send me the report by Friday?", ko: "금요일까지 보고서를 보내 주시겠어요?", blank: "Friday", swaps: ["by>until|till", "Friday>Monday|Thursday"] },
+        { en: "I'll send out the meeting notes this afternoon.", ko: "오늘 오후에 회의록을 공유하겠습니다.", blank: "notes", swaps: ["afternoon>morning|evening", "send out>sent out|sending out"] },
+        { en: "Let's touch base next week.", ko: "다음 주에 다시 이야기 나눠요.", tip: "touch base = 간단히 다시 연락하거나 논의하다", blank: "base", swaps: ["touch base>touch the base|touch bases|touch a base"] }
       ],
       dialogue: {
         setting: '회의 시간이 거의 끝나갑니다. 내가 회의를 마무리합니다.',
@@ -339,13 +339,13 @@
       titleEn: 'Brainstorming Ideas',
       goal: '자유롭게 아이디어를 끌어내고, 발전시키고, 좁혀 나가는 회의를 이끌 수 있다.',
       expressions: [
-        { en: "Let's throw some ideas around.", ko: "아이디어를 자유롭게 던져 봅시다.", tip: "throw ideas around = 부담 없이 아이디어를 내다", blank: "ideas" },
-        { en: "There are no bad ideas at this stage.", ko: "지금 단계에서는 나쁜 아이디어란 없습니다.", blank: "stage" },
-        { en: "What if we tried a subscription model?", ko: "구독 모델을 시도해 보면 어떨까요?", blank: "tried" },
-        { en: "Building on what Sarah said, we could also offer a free trial.", ko: "사라 씨 말씀에 덧붙여, 무료 체험도 제공할 수 있겠어요.", tip: "Building on ~ = ~의 아이디어를 발전시켜서", blank: "Building" },
-        { en: "That's an interesting idea. Can you tell us more?", ko: "흥미로운 아이디어네요. 좀 더 말씀해 주시겠어요?", blank: "interesting" },
-        { en: "Let's narrow it down to the top three ideas.", ko: "상위 세 개 아이디어로 좁혀 봅시다.", tip: "narrow down = 범위를 좁히다", blank: "narrow" },
-        { en: "Let's park that idea for now and come back to it later.", ko: "그 아이디어는 일단 보류하고 나중에 다시 이야기하죠.", tip: "park = (논의를) 잠시 보류하다. put ~ on hold 와 같은 뜻", blank: "park" }
+        { en: "Let's throw some ideas around.", ko: "아이디어를 자유롭게 던져 봅시다.", tip: "throw ideas around = 부담 없이 아이디어를 내다", blank: "ideas", swaps: ["around>away|off|down", "some ideas>some idea"] },
+        { en: "There are no bad ideas at this stage.", ko: "지금 단계에서는 나쁜 아이디어란 없습니다.", blank: "stage", swaps: ["There are no>There is no|There aren't no", "bad>good"] },
+        { en: "What if we tried a subscription model?", ko: "구독 모델을 시도해 보면 어떨까요?", blank: "tried", swaps: ["What if>How if|What about", "tried>trying"] },
+        { en: "Building on what Sarah said, we could also offer a free trial.", ko: "사라 씨 말씀에 덧붙여, 무료 체험도 제공할 수 있겠어요.", tip: "Building on ~ = ~의 아이디어를 발전시켜서", blank: "Building", swaps: ["Building on>Building in|Build on|Building at", "free trial>paid trial|free trail"] },
+        { en: "That's an interesting idea. Can you tell us more?", ko: "흥미로운 아이디어네요. 좀 더 말씀해 주시겠어요?", blank: "interesting", swaps: ["an interesting idea>a interesting idea|an interested idea|an interesting ideas", "tell us more>tell us much|say us more"] },
+        { en: "Let's narrow it down to the top three ideas.", ko: "상위 세 개 아이디어로 좁혀 봅시다.", tip: "narrow down = 범위를 좁히다", blank: "narrow", swaps: ["narrow it down>narrow it up|narrow down it|narrow it out", "three>five|two"] },
+        { en: "Let's park that idea for now and come back to it later.", ko: "그 아이디어는 일단 보류하고 나중에 다시 이야기하죠.", tip: "park = (논의를) 잠시 보류하다. put ~ on hold 와 같은 뜻", blank: "park", swaps: ["Let's park>Let's parking|Let's parked", "come back to it>come back it|come back at it"] }
       ],
       dialogue: {
         setting: '신규 고객 유치 방안을 찾는 브레인스토밍 회의를 내가 진행합니다.',
@@ -375,13 +375,13 @@
       titleEn: 'Presentations & Q&A',
       goal: '발표를 구조 있게 진행하고, 예상치 못한 질문에도 침착하게 답할 수 있다.',
       expressions: [
-        { en: "Today, I'm going to walk you through our new marketing strategy.", ko: "오늘은 새로운 마케팅 전략을 차근차근 설명드리겠습니다.", tip: "walk ~ through = ~에게 단계별로 설명하다", blank: "walk" },
-        { en: "I'll be happy to take questions at the end.", ko: "질문은 마지막에 기꺼이 받겠습니다.", blank: "questions" },
-        { en: "Let's move on to the next slide.", ko: "다음 슬라이드로 넘어가겠습니다.", blank: "slide" },
-        { en: "That's a great question.", ko: "좋은 질문입니다.", tip: "답을 생각할 시간을 벌어 주는 표현이기도 합니다.", blank: "question" },
-        { en: "I don't have that information right now, but I'll get back to you.", ko: "지금은 그 정보가 없지만, 확인해서 다시 알려 드리겠습니다.", tip: "get back to ~ = 나중에 다시 연락하다", blank: "information" },
-        { en: "If I understand your question correctly, you're asking about the budget.", ko: "질문을 제대로 이해했다면, 예산에 대해 물으시는 거죠?", blank: "correctly" },
-        { en: "Does that answer your question?", ko: "답변이 되었을까요?", blank: "answer" }
+        { en: "Today, I'm going to walk you through our new marketing strategy.", ko: "오늘은 새로운 마케팅 전략을 차근차근 설명드리겠습니다.", tip: "walk ~ through = ~에게 단계별로 설명하다", blank: "walk", swaps: ["walk you through>walk you over|walk through you|walk you across", "new>old"] },
+        { en: "I'll be happy to take questions at the end.", ko: "질문은 마지막에 기꺼이 받겠습니다.", blank: "questions", swaps: ["at the end>in the end|at the last|on the end", "questions>answers"] },
+        { en: "Let's move on to the next slide.", ko: "다음 슬라이드로 넘어가겠습니다.", blank: "slide", swaps: ["move on to>move on at|move in to|move on of", "next>previous"] },
+        { en: "That's a great question.", ko: "좋은 질문입니다.", tip: "답을 생각할 시간을 벌어 주는 표현이기도 합니다.", blank: "question", swaps: ["a great>great|a greatly", "question>questions"] },
+        { en: "I don't have that information right now, but I'll get back to you.", ko: "지금은 그 정보가 없지만, 확인해서 다시 알려 드리겠습니다.", tip: "get back to ~ = 나중에 다시 연락하다", blank: "information", swaps: ["get back to you>get back you|get you back|get back at you"] },
+        { en: "If I understand your question correctly, you're asking about the budget.", ko: "질문을 제대로 이해했다면, 예산에 대해 물으시는 거죠?", blank: "correctly", swaps: ["you're asking about>you're asking for|you're asked about|you're asking", "budget>schedule"] },
+        { en: "Does that answer your question?", ko: "답변이 되었을까요?", blank: "answer", swaps: ["Does>Do|Is", "answer>answers"] }
       ],
       dialogue: {
         setting: '신규 마케팅 전략을 발표한 뒤 질의응답 시간입니다.',
@@ -411,13 +411,13 @@
       titleEn: 'Scheduling & Rescheduling',
       goal: '회의 일정을 잡고, 변경이 필요할 때 정중하게 조율할 수 있다.',
       expressions: [
-        { en: "Are you available next Tuesday afternoon?", ko: "다음 주 화요일 오후에 시간 괜찮으세요?", blank: "available" },
-        { en: "Does 10 a.m. work for you?", ko: "오전 10시 괜찮으세요?", tip: "work for ~ = ~에게 (일정이) 괜찮다", blank: "work" },
-        { en: "I'm afraid I'm tied up on Monday.", ko: "죄송하지만 월요일은 일정이 꽉 차 있습니다.", tip: "be tied up = 바빠서 시간이 없다", blank: "tied" },
-        { en: "Could we push the meeting back to Thursday?", ko: "회의를 목요일로 미룰 수 있을까요?", tip: "push back = 미루다 / move up = 앞당기다", blank: "push" },
-        { en: "Something urgent has come up, so I need to reschedule.", ko: "급한 일이 생겨서 일정을 변경해야 합니다.", blank: "reschedule" },
-        { en: "I'll send you a calendar invite.", ko: "캘린더 초대를 보내 드릴게요.", blank: "invite" },
-        { en: "Just a reminder that our meeting is tomorrow at 2.", ko: "내일 2시에 회의가 있다는 점 다시 알려 드립니다.", blank: "reminder" }
+        { en: "Are you available next Tuesday afternoon?", ko: "다음 주 화요일 오후에 시간 괜찮으세요?", blank: "available", swaps: ["Are you available next>Are you possible next|Are you available at next", "Tuesday>Thursday|Monday", "afternoon>morning"] },
+        { en: "Does 10 a.m. work for you?", ko: "오전 10시 괜찮으세요?", tip: "work for ~ = ~에게 (일정이) 괜찮다", blank: "work", swaps: ["Does>Do|Is", "a.m.>p.m.", "work for>works for|work to"] },
+        { en: "I'm afraid I'm tied up on Monday.", ko: "죄송하지만 월요일은 일정이 꽉 차 있습니다.", tip: "be tied up = 바빠서 시간이 없다", blank: "tied", swaps: ["tied up>tied out|tying up|tied off", "on Monday>in Monday|at Monday"] },
+        { en: "Could we push the meeting back to Thursday?", ko: "회의를 목요일로 미룰 수 있을까요?", tip: "push back = 미루다 / move up = 앞당기다", blank: "push", swaps: ["back>up|down", "Thursday>Tuesday"] },
+        { en: "Something urgent has come up, so I need to reschedule.", ko: "급한 일이 생겨서 일정을 변경해야 합니다.", blank: "reschedule", swaps: ["Something urgent>Urgent something|Something urgently", "has come up>has came up|has come out"] },
+        { en: "I'll send you a calendar invite.", ko: "캘린더 초대를 보내 드릴게요.", blank: "invite", swaps: ["send you a>send to you a|sending you a|send you an"] },
+        { en: "Just a reminder that our meeting is tomorrow at 2.", ko: "내일 2시에 회의가 있다는 점 다시 알려 드립니다.", blank: "reminder", swaps: ["tomorrow>today|yesterday", "at 2>at 3|on 2"] }
       ],
       dialogue: {
         setting: '외부 파트너와 다음 회의 일정을 잡고, 며칠 뒤 일정을 변경합니다.',
@@ -448,13 +448,13 @@
       titleEn: 'Design Review',
       goal: '시스템 구조와 설계 판단의 근거를 설명하고, 기술적 질문과 반론에 답할 수 있다.',
       expressions: [
-        { en: "Let me walk you through the system architecture.", ko: "시스템 아키텍처를 단계별로 설명드리겠습니다.", blank: "architecture" },
-        { en: "This design meets all the functional requirements.", ko: "이 설계는 모든 기능 요구사항을 충족합니다.", tip: "functional / non-functional requirements = 기능 / 비기능 요구사항", blank: "requirements" },
-        { en: "The main trade-off here is performance versus cost.", ko: "여기서 핵심 트레이드오프는 성능 대 비용입니다.", tip: "trade-off = 하나를 얻으려면 다른 하나를 포기해야 하는 관계", blank: "trade-off" },
-        { en: "What are the design constraints we need to consider?", ko: "고려해야 할 설계 제약 조건은 무엇인가요?", blank: "constraints" },
-        { en: "Have we considered how this will scale?", ko: "이 구조가 규모가 커질 때 어떻게 확장될지 검토해 봤나요?", tip: "scale = (사용량·규모가 늘어날 때) 감당하며 확장되다", blank: "scale" },
-        { en: "I'd suggest building a prototype before we commit to this approach.", ko: "이 방식으로 확정하기 전에 프로토타입을 먼저 만들어 볼 것을 제안합니다.", tip: "commit to ~ = ~으로 확정하다, 전념하다", blank: "prototype" },
-        { en: "Can we freeze the spec by the end of this week?", ko: "이번 주 말까지 사양을 확정할 수 있을까요?", tip: "freeze the spec = 사양을 더 이상 바꾸지 않도록 동결하다", blank: "freeze" }
+        { en: "Let me walk you through the system architecture.", ko: "시스템 아키텍처를 단계별로 설명드리겠습니다.", blank: "architecture", swaps: ["through>thorough|threw|though"] },
+        { en: "This design meets all the functional requirements.", ko: "이 설계는 모든 기능 요구사항을 충족합니다.", tip: "functional / non-functional requirements = 기능 / 비기능 요구사항", blank: "requirements", swaps: ["meets>meet|meets with", "all the>the all|all of", "functional>non-functional"] },
+        { en: "The main trade-off here is performance versus cost.", ko: "여기서 핵심 트레이드오프는 성능 대 비용입니다.", tip: "trade-off = 하나를 얻으려면 다른 하나를 포기해야 하는 관계", blank: "trade-off", swaps: ["trade-off>trade-in|trade-out|trade-offs", "versus>plus"] },
+        { en: "What are the design constraints we need to consider?", ko: "고려해야 할 설계 제약 조건은 무엇인가요?", blank: "constraints", swaps: ["constraints>constrains|restraints|contracts", "need to consider>need consider|need to considering"] },
+        { en: "Have we considered how this will scale?", ko: "이 구조가 규모가 커질 때 어떻게 확장될지 검토해 봤나요?", tip: "scale = (사용량·규모가 늘어날 때) 감당하며 확장되다", blank: "scale", swaps: ["how this will>how will this", "scale>scales|scaling"] },
+        { en: "I'd suggest building a prototype before we commit to this approach.", ko: "이 방식으로 확정하기 전에 프로토타입을 먼저 만들어 볼 것을 제안합니다.", tip: "commit to ~ = ~으로 확정하다, 전념하다", blank: "prototype", swaps: ["suggest building>suggest to build|suggest build|suggest built", "before>after"] },
+        { en: "Can we freeze the spec by the end of this week?", ko: "이번 주 말까지 사양을 확정할 수 있을까요?", tip: "freeze the spec = 사양을 더 이상 바꾸지 않도록 동결하다", blank: "freeze", swaps: ["by the end>until the end|in the end|on the end", "freeze>free|unfreeze"] }
       ],
       terms: [
         { en: "architecture", ko: "아키텍처, 시스템 구조", ex: "The new architecture separates the data layer from the UI.", def: "시스템을 이루는 구성 요소와 그 관계·역할 분담을 정한 전체 구조. 나중에 바꾸기 가장 비싼 결정이라 초기에 검토한다." },
@@ -494,13 +494,13 @@
       titleEn: 'Troubleshooting & Root Cause',
       goal: '장애 상황과 원인, 임시 조치와 재발 방지책을 논리적으로 보고할 수 있다.',
       expressions: [
-        { en: "We've identified the root cause of the failure.", ko: "고장의 근본 원인을 파악했습니다.", blank: "root" },
-        { en: "Were you able to reproduce the issue?", ko: "그 문제를 재현할 수 있었나요?", tip: "reproduce = (버그·결함을) 같은 조건에서 다시 일으키다", blank: "reproduce" },
-        { en: "The defect only occurs under high load.", ko: "이 결함은 고부하 상황에서만 발생합니다.", blank: "defect" },
-        { en: "As a temporary workaround, we rolled back to the previous version.", ko: "임시 해결책으로 이전 버전으로 롤백했습니다.", tip: "workaround = 임시방편 / roll back = 이전 상태로 되돌리다", blank: "workaround" },
-        { en: "The failure rate dropped from 3% to 0.5% after the fix.", ko: "수정 후 불량률이 3%에서 0.5%로 떨어졌습니다.", blank: "rate" },
-        { en: "We need to put corrective actions in place to prevent this from happening again.", ko: "재발 방지를 위한 시정 조치를 마련해야 합니다.", blank: "corrective" },
-        { en: "Let's do a quick post-mortem to see what we can learn.", ko: "무엇을 배울 수 있는지 간단히 사후 분석을 해 봅시다.", tip: "post-mortem = 장애·프로젝트 후 원인과 교훈을 정리하는 회의", blank: "post-mortem" }
+        { en: "We've identified the root cause of the failure.", ko: "고장의 근본 원인을 파악했습니다.", blank: "root", swaps: ["root cause>route cause|roots cause|root case", "identified>identify"] },
+        { en: "Were you able to reproduce the issue?", ko: "그 문제를 재현할 수 있었나요?", tip: "reproduce = (버그·결함을) 같은 조건에서 다시 일으키다", blank: "reproduce", swaps: ["Were you able to>Were you able|Was you able to|Did you able to", "reproduce>produce|reduce"] },
+        { en: "The defect only occurs under high load.", ko: "이 결함은 고부하 상황에서만 발생합니다.", blank: "defect", swaps: ["occurs>occur|is occurred", "high>low"] },
+        { en: "As a temporary workaround, we rolled back to the previous version.", ko: "임시 해결책으로 이전 버전으로 롤백했습니다.", tip: "workaround = 임시방편 / roll back = 이전 상태로 되돌리다", blank: "workaround", swaps: ["rolled back>rolled up|rolled over|rolled out", "previous>next|latest", "temporary>permanent"] },
+        { en: "The failure rate dropped from 3% to 0.5% after the fix.", ko: "수정 후 불량률이 3%에서 0.5%로 떨어졌습니다.", blank: "rate", swaps: ["0.5%>5%|0.05%", "3%>30%|0.3%", "after>before"] },
+        { en: "We need to put corrective actions in place to prevent this from happening again.", ko: "재발 방지를 위한 시정 조치를 마련해야 합니다.", blank: "corrective", swaps: ["in place>in a place|on place|at place", "prevent this from happening>prevent this to happen|prevent from this happening"] },
+        { en: "Let's do a quick post-mortem to see what we can learn.", ko: "무엇을 배울 수 있는지 간단히 사후 분석을 해 봅시다.", tip: "post-mortem = 장애·프로젝트 후 원인과 교훈을 정리하는 회의", blank: "post-mortem", swaps: ["post-mortem>pre-mortem|post-modern|post-motion", "what we can learn>what can we learn"] }
       ],
       terms: [
         { en: "root cause", ko: "근본 원인", ex: "A loose connector was the root cause of the outage.", def: "겉으로 드러난 증상이 아니라, 제거하면 문제가 재발하지 않는 근본 원인. '왜?'를 다섯 번 묻는 5 Whys 기법으로 파고든다." },
@@ -540,13 +540,13 @@
       titleEn: 'Testing & Quality',
       goal: '테스트 결과와 품질 지표를 정확한 용어로 보고하고, 출시 여부를 논의할 수 있다.',
       expressions: [
-        { en: "All test cases passed except for the stress test.", ko: "스트레스 테스트를 제외한 모든 테스트 케이스가 통과했습니다.", blank: "passed" },
-        { en: "The measurement is within the tolerance range.", ko: "측정값이 허용 오차 범위 안에 있습니다.", tip: "tolerance = 허용 오차 / out of tolerance = 허용 오차 초과", blank: "tolerance" },
-        { en: "We found a regression in the latest build.", ko: "최신 빌드에서 회귀 결함을 발견했습니다.", tip: "regression = 수정 후 예전에 잘 되던 기능이 다시 고장 나는 것", blank: "regression" },
-        { en: "What are the acceptance criteria for this feature?", ko: "이 기능의 인수 기준은 무엇인가요?", tip: "acceptance criteria = 완료·합격으로 인정하는 기준", blank: "criteria" },
-        { en: "The yield improved to 98% this month.", ko: "이번 달 수율이 98%로 개선되었습니다.", tip: "yield = 수율 (전체 생산량 중 양품 비율)", blank: "yield" },
-        { en: "We can't release it until QA signs off.", ko: "QA 승인이 나기 전에는 출시할 수 없습니다.", tip: "sign off (on ~) = (~을) 공식 승인하다", blank: "signs" },
-        { en: "Let's prioritize the critical bugs before the release.", ko: "출시 전에 치명적인 버그부터 우선 처리합시다.", blank: "prioritize" }
+        { en: "All test cases passed except for the stress test.", ko: "스트레스 테스트를 제외한 모든 테스트 케이스가 통과했습니다.", blank: "passed", swaps: ["except for>except of|expect for|accept for", "passed>past|failed"] },
+        { en: "The measurement is within the tolerance range.", ko: "측정값이 허용 오차 범위 안에 있습니다.", tip: "tolerance = 허용 오차 / out of tolerance = 허용 오차 초과", blank: "tolerance", swaps: ["within>without|outside|beyond", "tolerance>tolerant"] },
+        { en: "We found a regression in the latest build.", ko: "최신 빌드에서 회귀 결함을 발견했습니다.", tip: "regression = 수정 후 예전에 잘 되던 기능이 다시 고장 나는 것", blank: "regression", swaps: ["regression>progression|recession|digression", "latest>previous"] },
+        { en: "What are the acceptance criteria for this feature?", ko: "이 기능의 인수 기준은 무엇인가요?", tip: "acceptance criteria = 완료·합격으로 인정하는 기준", blank: "criteria", swaps: ["acceptance criteria>access criteria|acceptance criterion|acceptable criteria", "feature>future"] },
+        { en: "The yield improved to 98% this month.", ko: "이번 달 수율이 98%로 개선되었습니다.", tip: "yield = 수율 (전체 생산량 중 양품 비율)", blank: "yield", swaps: ["improved to>improved by|improved at", "98%>89%|9.8%"] },
+        { en: "We can't release it until QA signs off.", ko: "QA 승인이 나기 전에는 출시할 수 없습니다.", tip: "sign off (on ~) = (~을) 공식 승인하다", blank: "signs", swaps: ["signs off>signs on|signs up|sign off", "can't>can"] },
+        { en: "Let's prioritize the critical bugs before the release.", ko: "출시 전에 치명적인 버그부터 우선 처리합시다.", blank: "prioritize", swaps: ["critical>critic|minor|trivial", "before>after"] }
       ],
       terms: [
         { en: "test case", ko: "테스트 케이스", ex: "We added ten new test cases for the payment module.", def: "입력값, 실행 조건, 기대 결과를 정의한 하나의 테스트 시나리오. 기대 결과가 명확해야 합격·불합격을 판정할 수 있다." },
@@ -587,13 +587,13 @@
       titleEn: 'Specs, Units & Numbers',
       goal: '공차·정격·단위·유효숫자를 정확한 영어로 읽고, 사양을 수치로 설명할 수 있다.',
       expressions: [
-        { en: "The tolerance is plus or minus 0.05 millimeters.", ko: "공차는 ±0.05mm입니다.", tip: "± 는 plus or minus 로 읽습니다. 0.05 는 'zero point zero five'", blank: "minus" },
-        { en: "The motor is rated at 3 kilowatts.", ko: "이 모터의 정격 출력은 3kW입니다.", tip: "be rated at ~ = 정격이 ~이다", blank: "rated" },
-        { en: "The maximum operating temperature is 85 degrees Celsius.", ko: "최대 동작 온도는 섭씨 85도입니다.", tip: "°C = degrees Celsius, °F = degrees Fahrenheit", blank: "operating" },
-        { en: "This part weighs about 40% less than the previous design.", ko: "이 부품은 이전 설계보다 약 40% 가볍습니다.", blank: "weighs" },
-        { en: "The output is an order of magnitude higher than we expected.", ko: "출력이 예상보다 약 10배 높습니다.", tip: "order of magnitude = 10배 단위의 차이", blank: "magnitude" },
-        { en: "Please convert all values to metric units.", ko: "모든 값을 미터법 단위로 변환해 주세요.", tip: "metric(미터법) ↔ imperial(인치·파운드 단위)", blank: "metric" },
-        { en: "The measured value deviates from the nominal value by 2%.", ko: "측정값이 공칭값에서 2% 벗어납니다.", tip: "deviate from ~ = ~에서 벗어나다", blank: "nominal" }
+        { en: "The tolerance is plus or minus 0.05 millimeters.", ko: "공차는 ±0.05mm입니다.", tip: "± 는 plus or minus 로 읽습니다. 0.05 는 'zero point zero five'", blank: "minus", swaps: ["0.05>0.5|0.005|5", "millimeters>centimeters|micrometers"] },
+        { en: "The motor is rated at 3 kilowatts.", ko: "이 모터의 정격 출력은 3kW입니다.", tip: "be rated at ~ = 정격이 ~이다", blank: "rated", swaps: ["kilowatts>kilowatt-hours|kilovolts|kilojoules", "rated at>rated by|rated in"] },
+        { en: "The maximum operating temperature is 85 degrees Celsius.", ko: "최대 동작 온도는 섭씨 85도입니다.", tip: "°C = degrees Celsius, °F = degrees Fahrenheit", blank: "operating", swaps: ["maximum>minimum|average", "85>58|95", "Celsius>Fahrenheit"] },
+        { en: "This part weighs about 40% less than the previous design.", ko: "이 부품은 이전 설계보다 약 40% 가볍습니다.", blank: "weighs", swaps: ["less than>more than|less then", "weighs>weights|weight"] },
+        { en: "The output is an order of magnitude higher than we expected.", ko: "출력이 예상보다 약 10배 높습니다.", tip: "order of magnitude = 10배 단위의 차이", blank: "magnitude", swaps: ["an order of magnitude>an order of magnitudes|a order of magnitude|two orders of magnitude", "higher>lower"] },
+        { en: "Please convert all values to metric units.", ko: "모든 값을 미터법 단위로 변환해 주세요.", tip: "metric(미터법) ↔ imperial(인치·파운드 단위)", blank: "metric", swaps: ["metric>imperial|matrix|metrics"] },
+        { en: "The measured value deviates from the nominal value by 2%.", ko: "측정값이 공칭값에서 2% 벗어납니다.", tip: "deviate from ~ = ~에서 벗어나다", blank: "nominal", swaps: ["nominal>normal|minimal|maximum", "deviates from>deviates to"] }
       ],
       terms: [
         { en: "nominal value", ko: "공칭값", def: "도면·사양서에 적힌 설계 기준값. 실제 제품은 공차 범위 안에서 이 값과 조금씩 다르다. 예: 공칭 두께 4 mm, 실측 3.98 mm.", ex: "The nominal thickness is 4 millimeters." },
@@ -633,13 +633,13 @@
       titleEn: 'Risk & Safety',
       goal: 'FMEA·안전계수·이중화 같은 개념으로 위험을 평가하고 대책을 논의할 수 있다.',
       expressions: [
-        { en: "We ran an FMEA to identify potential failure modes.", ko: "잠재적인 고장 모드를 찾기 위해 FMEA를 수행했습니다.", tip: "FMEA = Failure Mode and Effects Analysis (고장 모드 영향 분석)", blank: "potential" },
-        { en: "This risk has a high severity but a low probability.", ko: "이 리스크는 심각도는 높지만 발생 가능성은 낮습니다.", blank: "severity" },
-        { en: "We designed it with a safety factor of two.", ko: "안전계수 2로 설계했습니다.", blank: "factor" },
-        { en: "Our mitigation plan is to add a redundant sensor.", ko: "완화 대책은 이중화 센서를 추가하는 것입니다.", tip: "redundant = 이중화된, 예비의", blank: "mitigation" },
-        { en: "Is this design compliant with the ISO standard?", ko: "이 설계는 ISO 표준을 준수하나요?", blank: "compliant" },
-        { en: "That controller is a single point of failure.", ko: "그 컨트롤러는 단일 고장점입니다.", tip: "single point of failure = 그 하나가 고장 나면 전체가 멈추는 지점", blank: "single" },
-        { en: "Let's escalate this to the safety committee.", ko: "이 건은 안전위원회로 올립시다.", tip: "escalate = 상위 단계로 보고·이관하다", blank: "escalate" }
+        { en: "We ran an FMEA to identify potential failure modes.", ko: "잠재적인 고장 모드를 찾기 위해 FMEA를 수행했습니다.", tip: "FMEA = Failure Mode and Effects Analysis (고장 모드 영향 분석)", blank: "potential", swaps: ["failure modes>failure models|failure modules|failure moods", "an FMEA>a FMEA"] },
+        { en: "This risk has a high severity but a low probability.", ko: "이 리스크는 심각도는 높지만 발생 가능성은 낮습니다.", blank: "severity", swaps: ["a high severity>a low severity", "a low probability>a high probability"] },
+        { en: "We designed it with a safety factor of two.", ko: "안전계수 2로 설계했습니다.", blank: "factor", swaps: ["safety factor>safe factor|safety fact", "two>three|twelve"] },
+        { en: "Our mitigation plan is to add a redundant sensor.", ko: "완화 대책은 이중화 센서를 추가하는 것입니다.", tip: "redundant = 이중화된, 예비의", blank: "mitigation", swaps: ["mitigation>migration|litigation|motivation", "add>remove", "redundant>abundant"] },
+        { en: "Is this design compliant with the ISO standard?", ko: "이 설계는 ISO 표준을 준수하나요?", blank: "compliant", swaps: ["compliant>complaint|compliance|complacent"] },
+        { en: "That controller is a single point of failure.", ko: "그 컨트롤러는 단일 고장점입니다.", tip: "single point of failure = 그 하나가 고장 나면 전체가 멈추는 지점", blank: "single", swaps: ["single point of failure>single point of failures|single failure of point|single point for failure", "controller>contractor"] },
+        { en: "Let's escalate this to the safety committee.", ko: "이 건은 안전위원회로 올립시다.", tip: "escalate = 상위 단계로 보고·이관하다", blank: "escalate", swaps: ["escalate>escape|escalator|accelerate", "committee>commitment"] }
       ],
       terms: [
         { en: "FMEA", ko: "고장 모드 영향 분석", def: "부품·공정별로 '어떻게 고장 나는지(모드), 그러면 무슨 일이 생기는지(영향), 왜 생기는지(원인)'를 표로 정리하는 기법. 심각도×발생도×검출도로 RPN(위험 우선순위)을 계산해 대책 순서를 정한다.", ex: "The FMEA showed that the seal is our biggest risk." },
@@ -681,13 +681,13 @@
       titleEn: 'Performance & Data Analysis',
       goal: '지연 시간·백분위수·표준편차·상관관계 같은 개념으로 데이터를 해석하고 결론을 말할 수 있다.',
       expressions: [
-        { en: "Average latency went up from 120 to 300 milliseconds.", ko: "평균 지연 시간이 120ms에서 300ms로 늘었습니다.", blank: "latency" },
-        { en: "The system can handle 5,000 requests per second.", ko: "이 시스템은 초당 5,000건의 요청을 처리할 수 있습니다.", tip: "requests per second (RPS) = 초당 요청 수", blank: "handle" },
-        { en: "Let's run a benchmark before and after the change.", ko: "변경 전후로 벤치마크를 돌려 봅시다.", blank: "benchmark" },
-        { en: "This data point looks like an outlier.", ko: "이 데이터는 이상치로 보입니다.", blank: "outlier" },
-        { en: "The difference is statistically significant.", ko: "그 차이는 통계적으로 유의미합니다.", tip: "우연으로 생긴 차이가 아니라고 볼 수 있다는 뜻", blank: "significant" },
-        { en: "The standard deviation is large, so the process isn't stable.", ko: "표준편차가 커서 공정이 안정적이지 않습니다.", blank: "deviation" },
-        { en: "There's a strong correlation, but that doesn't prove causation.", ko: "강한 상관관계가 있지만, 그것이 인과관계를 증명하지는 않습니다.", blank: "correlation" }
+        { en: "Average latency went up from 120 to 300 milliseconds.", ko: "평균 지연 시간이 120ms에서 300ms로 늘었습니다.", blank: "latency", swaps: ["milliseconds>microseconds|seconds|minutes", "went up>went down"] },
+        { en: "The system can handle 5,000 requests per second.", ko: "이 시스템은 초당 5,000건의 요청을 처리할 수 있습니다.", tip: "requests per second (RPS) = 초당 요청 수", blank: "handle", swaps: ["5,000>500|50,000", "second>minute|hour", "can handle>can handles"] },
+        { en: "Let's run a benchmark before and after the change.", ko: "변경 전후로 벤치마크를 돌려 봅시다.", blank: "benchmark", swaps: ["benchmark>bookmark|landmark", "before and after>before or after|only after"] },
+        { en: "This data point looks like an outlier.", ko: "이 데이터는 이상치로 보입니다.", blank: "outlier", swaps: ["outlier>outline|outlet|outliner", "looks like>looks"] },
+        { en: "The difference is statistically significant.", ko: "그 차이는 통계적으로 유의미합니다.", tip: "우연으로 생긴 차이가 아니라고 볼 수 있다는 뜻", blank: "significant", swaps: ["statistically>statistical", "significant>significance|insignificant"] },
+        { en: "The standard deviation is large, so the process isn't stable.", ko: "표준편차가 커서 공정이 안정적이지 않습니다.", blank: "deviation", swaps: ["deviation>derivation|division", "large>small", "isn't>is"] },
+        { en: "There's a strong correlation, but that doesn't prove causation.", ko: "강한 상관관계가 있지만, 그것이 인과관계를 증명하지는 않습니다.", blank: "correlation", swaps: ["strong correlation>strong causation", "prove causation>prove correlation", "doesn't>does"] }
       ],
       terms: [
         { en: "latency", ko: "지연 시간", def: "요청을 보낸 뒤 응답이 돌아오기까지 걸리는 시간. 낮을수록 좋다. 평균만 보면 일부 사용자의 느린 경험이 가려진다.", ex: "Network latency between the two data centers is 40 milliseconds." },
@@ -729,13 +729,13 @@
       titleEn: 'Load Calculation & Equipment Sizing',
       goal: '냉방 부하와 장비 용량을 현열·잠열, 냉동톤·kW 단위로 설명하고 과대 선정의 문제를 설득할 수 있다.',
       expressions: [
-        { en: "The peak cooling load for this floor is about 120 kilowatts.", ko: "이 층의 최대 냉방 부하는 약 120kW입니다.", blank: "load" },
-        { en: "We need to account for both sensible and latent heat.", ko: "현열과 잠열을 모두 고려해야 합니다.", tip: "sensible heat = 현열(온도) / latent heat = 잠열(습기)", blank: "latent" },
-        { en: "The unit is rated at 10 tons, which is about 35 kilowatts.", ko: "이 장비는 10톤급으로, 약 35kW입니다.", tip: "1 ton(냉동톤) = 12,000 BTU/h ≈ 3.52 kW", blank: "tons" },
-        { en: "If we oversize the unit, it will short-cycle and won't dehumidify properly.", ko: "장비를 과대 선정하면 단속 운전(쇼트 사이클)이 생기고 제습이 제대로 안 됩니다.", blank: "oversize" },
-        { en: "What outdoor design conditions did you use?", ko: "어떤 외기 설계 조건을 사용하셨나요?", blank: "design" },
-        { en: "Internal heat gains from people and equipment are higher than we assumed.", ko: "인원과 기기에서 나오는 내부 발열이 가정보다 높습니다.", tip: "heat gain = 실내로 들어오는(발생하는) 열", blank: "gains" },
-        { en: "Let's add a 10% safety margin, but no more than that.", ko: "여유율은 10%로 두되, 그 이상은 두지 맙시다.", blank: "margin" }
+        { en: "The peak cooling load for this floor is about 120 kilowatts.", ko: "이 층의 최대 냉방 부하는 약 120kW입니다.", blank: "load", swaps: ["peak>average|minimum", "cooling>heating", "kilowatts>kilowatt-hours|kilovolts"] },
+        { en: "We need to account for both sensible and latent heat.", ko: "현열과 잠열을 모두 고려해야 합니다.", tip: "sensible heat = 현열(온도) / latent heat = 잠열(습기)", blank: "latent", swaps: ["sensible>sensitive", "latent>latest", "account for>account to"] },
+        { en: "The unit is rated at 10 tons, which is about 35 kilowatts.", ko: "이 장비는 10톤급으로, 약 35kW입니다.", tip: "1 ton(냉동톤) = 12,000 BTU/h ≈ 3.52 kW", blank: "tons", swaps: ["35>3.5|350|120"] },
+        { en: "If we oversize the unit, it will short-cycle and won't dehumidify properly.", ko: "장비를 과대 선정하면 단속 운전(쇼트 사이클)이 생기고 제습이 제대로 안 됩니다.", blank: "oversize", swaps: ["oversize>undersize", "short-cycle>short-circuit", "dehumidify>humidify"] },
+        { en: "What outdoor design conditions did you use?", ko: "어떤 외기 설계 조건을 사용하셨나요?", blank: "design", swaps: ["outdoor>indoor", "did you use>did you used|do you used"] },
+        { en: "Internal heat gains from people and equipment are higher than we assumed.", ko: "인원과 기기에서 나오는 내부 발열이 가정보다 높습니다.", tip: "heat gain = 실내로 들어오는(발생하는) 열", blank: "gains", swaps: ["Internal heat gains>External heat gains|Internal heat losses", "higher than>lower than|higher then"] },
+        { en: "Let's add a 10% safety margin, but no more than that.", ko: "여유율은 10%로 두되, 그 이상은 두지 맙시다.", blank: "margin", swaps: ["10%>1%|100%", "no more than>no less than"] }
       ],
       terms: [
         { en: "cooling load", ko: "냉방 부하", def: "실내를 설계 온·습도로 유지하려고 제거해야 하는 열량. 일사, 외피 전도, 인원, 조명, 기기, 침기, 외기 도입에서 생기며, 시간대별로 계산한 최대값(peak)으로 장비를 고른다.", ex: "The west-facing offices have the highest cooling load in the afternoon." },
@@ -777,13 +777,13 @@
       titleEn: 'Airflow & Duct Design',
       goal: '풍량·정압·압력 손실·환기 횟수를 영어로 설명하고 현장 간섭(clash)과 덕트 변경을 협의할 수 있다.',
       expressions: [
-        { en: "The design airflow for this zone is 2,000 CFM.", ko: "이 존의 설계 풍량은 2,000 CFM입니다.", tip: "CFM = cubic feet per minute. 1 CFM ≈ 1.7 m³/h(CMH)", blank: "airflow" },
-        { en: "The external static pressure is higher than the fan can handle.", ko: "외부 정압이 팬이 감당할 수 있는 수준보다 높습니다.", blank: "static" },
-        { en: "We need to upsize this duct to reduce the pressure drop.", ko: "압력 손실을 줄이려면 이 덕트 사이즈를 키워야 합니다.", blank: "upsize" },
-        { en: "The lab needs at least 10 air changes per hour.", ko: "실험실은 시간당 최소 10회의 환기가 필요합니다.", tip: "ACH = air changes per hour (환기 횟수)", blank: "changes" },
-        { en: "Each VAV box will control the airflow to its zone.", ko: "각 VAV 박스가 해당 존의 풍량을 제어합니다.", blank: "control" },
-        { en: "Can we reroute the duct to avoid the beam?", ko: "보를 피하도록 덕트 경로를 바꿀 수 있을까요?", tip: "덕트가 구조물·배관과 부딪치는 것을 clash(간섭)라고 합니다", blank: "reroute" },
-        { en: "The supply diffusers are causing drafts near the windows.", ko: "급기 디퓨저 때문에 창가에 드래프트(찬 기류)가 생깁니다.", blank: "drafts" }
+        { en: "The design airflow for this zone is 2,000 CFM.", ko: "이 존의 설계 풍량은 2,000 CFM입니다.", tip: "CFM = cubic feet per minute. 1 CFM ≈ 1.7 m³/h(CMH)", blank: "airflow", swaps: ["2,000>200|20,000", "CFM>CMH|FPM"] },
+        { en: "The external static pressure is higher than the fan can handle.", ko: "외부 정압이 팬이 감당할 수 있는 수준보다 높습니다.", blank: "static", swaps: ["external>internal", "static>dynamic|statistic", "higher>lower"] },
+        { en: "We need to upsize this duct to reduce the pressure drop.", ko: "압력 손실을 줄이려면 이 덕트 사이즈를 키워야 합니다.", blank: "upsize", swaps: ["upsize>downsize", "reduce>increase"] },
+        { en: "The lab needs at least 10 air changes per hour.", ko: "실험실은 시간당 최소 10회의 환기가 필요합니다.", tip: "ACH = air changes per hour (환기 횟수)", blank: "changes", swaps: ["at least>at most|at last", "hour>minute|day"] },
+        { en: "Each VAV box will control the airflow to its zone.", ko: "각 VAV 박스가 해당 존의 풍량을 제어합니다.", blank: "control", swaps: ["Each VAV box>Each VAV boxes|Each CAV box", "its zone>it's zone|it zone"] },
+        { en: "Can we reroute the duct to avoid the beam?", ko: "보를 피하도록 덕트 경로를 바꿀 수 있을까요?", tip: "덕트가 구조물·배관과 부딪치는 것을 clash(간섭)라고 합니다", blank: "reroute", swaps: ["reroute>reboot|rebuild|remove", "avoid>void"] },
+        { en: "The supply diffusers are causing drafts near the windows.", ko: "급기 디퓨저 때문에 창가에 드래프트(찬 기류)가 생깁니다.", blank: "drafts", swaps: ["supply>return|exhaust", "drafts>drifts|drafting"] }
       ],
       terms: [
         { en: "CFM / CMH", ko: "풍량 단위", def: "CFM = 분당 입방피트, CMH = 시간당 입방미터(m³/h). 1 CFM ≈ 1.7 CMH. 한국 도면은 CMH, 미국 장비 자료는 CFM을 쓰므로 환산해서 비교한다.", ex: "Please convert the airflow from CFM to cubic meters per hour." },
@@ -825,13 +825,13 @@
       titleEn: 'Refrigeration Cycle & Equipment',
       goal: '냉동 사이클과 칠러·압축기 문제를 과열도·과냉각도·COP·GWP 같은 개념으로 진단하고 설명할 수 있다.',
       expressions: [
-        { en: "The chiller is running at only 40% load most of the time.", ko: "칠러가 대부분의 시간 동안 40% 부하로만 운전됩니다.", blank: "chiller" },
-        { en: "The compressor keeps tripping on high head pressure.", ko: "압축기가 고압(응축 압력) 이상으로 계속 트립됩니다.", tip: "trip = 보호 장치가 작동해 정지하다 / head pressure = 응축(고압) 측 압력", blank: "tripping" },
-        { en: "Can you check the superheat and subcooling?", ko: "과열도와 과냉각도를 확인해 주시겠어요?", blank: "superheat" },
-        { en: "The condenser coil is dirty, so heat rejection is poor.", ko: "응축기 코일이 오염돼서 방열이 잘 안 됩니다.", tip: "heat rejection = 응축기에서 열을 외부로 버리는 것", blank: "rejection" },
-        { en: "This unit has a COP of 4.5 at full load.", ko: "이 장비는 정격 부하에서 COP가 4.5입니다.", blank: "COP" },
-        { en: "We're switching to a low-GWP refrigerant like R-32.", ko: "R-32 같은 저GWP 냉매로 전환하고 있습니다.", tip: "GWP = global warming potential (지구온난화지수)", blank: "refrigerant" },
-        { en: "The cooling tower approach is 4 degrees, which is normal.", ko: "냉각탑 어프로치가 4도로 정상입니다.", tip: "approach = 냉각탑 출구 수온 − 외기 습구온도. 작을수록 성능이 좋다", blank: "approach" }
+        { en: "The chiller is running at only 40% load most of the time.", ko: "칠러가 대부분의 시간 동안 40% 부하로만 운전됩니다.", blank: "chiller", swaps: ["40%>4%|14%|80%", "most of the time>most of time|the most of time"] },
+        { en: "The compressor keeps tripping on high head pressure.", ko: "압축기가 고압(응축 압력) 이상으로 계속 트립됩니다.", tip: "trip = 보호 장치가 작동해 정지하다 / head pressure = 응축(고압) 측 압력", blank: "tripping", swaps: ["high head>low head|high suction|high heat", "keeps tripping>keeps to trip|keep tripping"] },
+        { en: "Can you check the superheat and subcooling?", ko: "과열도와 과냉각도를 확인해 주시겠어요?", blank: "superheat", swaps: ["superheat>overheat|superheating", "subcooling>overcooling|subheating"] },
+        { en: "The condenser coil is dirty, so heat rejection is poor.", ko: "응축기 코일이 오염돼서 방열이 잘 안 됩니다.", tip: "heat rejection = 응축기에서 열을 외부로 버리는 것", blank: "rejection", swaps: ["condenser>evaporator|condensation", "rejection>reflection|injection", "poor>good"] },
+        { en: "This unit has a COP of 4.5 at full load.", ko: "이 장비는 정격 부하에서 COP가 4.5입니다.", blank: "COP", swaps: ["4.5>45|0.45|5.4", "full load>part load|no load"] },
+        { en: "We're switching to a low-GWP refrigerant like R-32.", ko: "R-32 같은 저GWP 냉매로 전환하고 있습니다.", tip: "GWP = global warming potential (지구온난화지수)", blank: "refrigerant", swaps: ["low-GWP>high-GWP|low-GDP", "refrigerant>refrigerator", "R-32>R-22|R-410A"] },
+        { en: "The cooling tower approach is 4 degrees, which is normal.", ko: "냉각탑 어프로치가 4도로 정상입니다.", tip: "approach = 냉각탑 출구 수온 − 외기 습구온도. 작을수록 성능이 좋다", blank: "approach", swaps: ["approach>range|approval", "4 degrees>40 degrees|0.4 degrees"] }
       ],
       terms: [
         { en: "refrigeration cycle", ko: "냉동 사이클", def: "압축 → 응축 → 팽창 → 증발을 반복하며 열을 옮기는 사이클. 증발기에서 실내(또는 냉수)의 열을 흡수하고, 응축기에서 그 열과 압축 일을 바깥으로 버린다.", ex: "Let's walk through the refrigeration cycle step by step." },
@@ -873,13 +873,13 @@
       titleEn: 'Commissioning & TAB',
       goal: '시운전·TAB 결과를 설계값 대비 수치로 보고하고, 잔여 하자와 일정을 건축주와 협의할 수 있다.',
       expressions: [
-        { en: "We're in the middle of testing, adjusting, and balancing.", ko: "지금 TAB(시험·조정·균형) 작업을 진행하고 있습니다.", blank: "balancing" },
-        { en: "The measured airflow is within 10% of the design value.", ko: "측정 풍량이 설계값의 ±10% 이내입니다.", blank: "measured" },
-        { en: "This room is short of air by about 15%.", ko: "이 실은 풍량이 약 15% 부족합니다.", tip: "be short of ~ = ~이 부족하다", blank: "short" },
-        { en: "We'll add this item to the punch list.", ko: "이 항목을 펀치 리스트(잔여 하자 목록)에 추가하겠습니다.", blank: "punch" },
-        { en: "Has the functional performance test been completed?", ko: "기능 성능 시험은 완료됐나요?", blank: "functional" },
-        { en: "The damper was stuck closed, so we've adjusted it.", ko: "댐퍼가 닫힌 채로 고착돼 있어서 조정했습니다.", blank: "damper" },
-        { en: "Can we schedule a walkthrough with the owner next week?", ko: "다음 주에 건축주와 현장 점검 일정을 잡을 수 있을까요?", tip: "walkthrough = 현장을 함께 돌며 점검하는 것", blank: "walkthrough" }
+        { en: "We're in the middle of testing, adjusting, and balancing.", ko: "지금 TAB(시험·조정·균형) 작업을 진행하고 있습니다.", blank: "balancing", swaps: ["balancing>bouncing|bargaining", "in the middle of>in the middle|at middle of"] },
+        { en: "The measured airflow is within 10% of the design value.", ko: "측정 풍량이 설계값의 ±10% 이내입니다.", blank: "measured", swaps: ["within>without|outside", "10%>1%|50%"] },
+        { en: "This room is short of air by about 15%.", ko: "이 실은 풍량이 약 15% 부족합니다.", tip: "be short of ~ = ~이 부족하다", blank: "short", swaps: ["short of>short for|shortage of|shorter", "15%>50%|5%"] },
+        { en: "We'll add this item to the punch list.", ko: "이 항목을 펀치 리스트(잔여 하자 목록)에 추가하겠습니다.", blank: "punch", swaps: ["punch list>lunch list|bunch list|punch line", "add>remove"] },
+        { en: "Has the functional performance test been completed?", ko: "기능 성능 시험은 완료됐나요?", blank: "functional", swaps: ["Has the>Have the|Is the", "been completed>been completing|be completed"] },
+        { en: "The damper was stuck closed, so we've adjusted it.", ko: "댐퍼가 닫힌 채로 고착돼 있어서 조정했습니다.", blank: "damper", swaps: ["stuck closed>stuck open|stuck close|stock closed", "damper>dumper"] },
+        { en: "Can we schedule a walkthrough with the owner next week?", ko: "다음 주에 건축주와 현장 점검 일정을 잡을 수 있을까요?", tip: "walkthrough = 현장을 함께 돌며 점검하는 것", blank: "walkthrough", swaps: ["walkthrough>walkout|breakthrough|workout", "next week>last week"] }
       ],
       terms: [
         { en: "commissioning (Cx)", ko: "커미셔닝", def: "설계부터 운영까지 시스템이 건축주 요구사항(OPR, owner's project requirements)대로 설치·작동하는지 검증하는 품질 관리 과정. 장비를 처음 돌려 보는 시운전(start-up)보다 넓은 개념이다.", ex: "The commissioning agent will review the test reports." },
@@ -921,13 +921,13 @@
       titleEn: 'Energy Savings & Controls',
       goal: 'BMS 트렌드 데이터로 문제를 찾고 VFD·이코노마이저·DCV 같은 절감 방안을 근거와 함께 제안할 수 있다.',
       expressions: [
-        { en: "Let's check the trend data in the BMS.", ko: "BMS의 트렌드 데이터를 확인해 봅시다.", tip: "BMS = building management system (건물 자동제어 시스템)", blank: "trend" },
-        { en: "Adding a VFD to the supply fan will save a lot of energy.", ko: "급기팬에 VFD(인버터)를 달면 에너지를 많이 절약할 수 있습니다.", blank: "save" },
-        { en: "The economizer lets us use outdoor air for free cooling.", ko: "이코노마이저로 외기를 이용한 프리쿨링을 할 수 있습니다.", blank: "economizer" },
-        { en: "We can reset the supply air temperature setpoint based on demand.", ko: "부하에 따라 급기 온도 설정값을 리셋할 수 있습니다.", blank: "setpoint" },
-        { en: "Demand-controlled ventilation adjusts outdoor air based on CO2 levels.", ko: "수요 제어 환기는 CO2 농도에 따라 외기량을 조절합니다.", blank: "ventilation" },
-        { en: "Can you send me the sequence of operations?", ko: "제어 시퀀스 문서를 보내 주시겠어요?", blank: "sequence" },
-        { en: "The heating and cooling valves are fighting each other.", ko: "난방 밸브와 냉방 밸브가 동시에 열려 서로 싸우고 있습니다.", tip: "동시 냉난방(simultaneous heating and cooling)은 대표적인 에너지 낭비입니다", blank: "fighting" }
+        { en: "Let's check the trend data in the BMS.", ko: "BMS의 트렌드 데이터를 확인해 봅시다.", tip: "BMS = building management system (건물 자동제어 시스템)", blank: "trend", swaps: ["trend>trendy|trained", "data>date"] },
+        { en: "Adding a VFD to the supply fan will save a lot of energy.", ko: "급기팬에 VFD(인버터)를 달면 에너지를 많이 절약할 수 있습니다.", blank: "save", swaps: ["save>safe|waste", "supply>exhaust|return", "a lot of>a lots of"] },
+        { en: "The economizer lets us use outdoor air for free cooling.", ko: "이코노마이저로 외기를 이용한 프리쿨링을 할 수 있습니다.", blank: "economizer", swaps: ["lets us use>lets us to use|lets us using|lets us used", "outdoor>indoor|return"] },
+        { en: "We can reset the supply air temperature setpoint based on demand.", ko: "부하에 따라 급기 온도 설정값을 리셋할 수 있습니다.", blank: "setpoint", swaps: ["based on>based in|base on|based with", "supply>return"] },
+        { en: "Demand-controlled ventilation adjusts outdoor air based on CO2 levels.", ko: "수요 제어 환기는 CO2 농도에 따라 외기량을 조절합니다.", blank: "ventilation", swaps: ["CO2>CO|O2|NO2", "adjusts outdoor>adjust outdoor|adjusts indoor"] },
+        { en: "Can you send me the sequence of operations?", ko: "제어 시퀀스 문서를 보내 주시겠어요?", blank: "sequence", swaps: ["sequence>frequency|consequence", "operations>operators|options"] },
+        { en: "The heating and cooling valves are fighting each other.", ko: "난방 밸브와 냉방 밸브가 동시에 열려 서로 싸우고 있습니다.", tip: "동시 냉난방(simultaneous heating and cooling)은 대표적인 에너지 낭비입니다", blank: "fighting", swaps: ["fighting each other>fighting to each other|fighting each others|fitting each other", "valves>values"] }
       ],
       terms: [
         { en: "BMS / BAS", ko: "건물 자동제어 시스템", def: "공조·조명·설비를 감시하고 제어하는 시스템(building management/automation system). 트렌드(trend) 기록으로 운전 이상을 찾는 것이 에너지 진단의 출발점이다.", ex: "The BMS shows the fan running all night." },
@@ -969,13 +969,13 @@
       titleEn: 'Indoor Air Quality & Comfort',
       goal: '덥다·춥다·답답하다는 민원을 CO2·습도·외기량 데이터로 설명하고 개선 계획을 제시할 수 있다.',
       expressions: [
-        { en: "We've been getting a lot of hot and cold complaints on the fifth floor.", ko: "5층에서 덥다, 춥다는 민원이 많이 들어오고 있습니다.", tip: "hot and cold calls = 냉난방 민원", blank: "complaints" },
-        { en: "The CO2 levels in the meeting room exceed 1,500 ppm in the afternoon.", ko: "오후에 회의실 CO2 농도가 1,500ppm을 넘습니다.", tip: "실내 CO2 는 보통 1,000ppm 이하로 관리합니다", blank: "exceed" },
-        { en: "We should increase the outdoor air rate to meet ASHRAE 62.1.", ko: "ASHRAE 62.1 기준을 충족하려면 외기 도입량을 늘려야 합니다.", blank: "outdoor" },
-        { en: "Relative humidity should stay between 40 and 60 percent.", ko: "상대습도는 40~60%로 유지해야 합니다.", blank: "humidity" },
-        { en: "Let's upgrade the filters to MERV 13.", ko: "필터를 MERV 13 등급으로 올립시다.", blank: "filters" },
-        { en: "There's condensation on the ductwork because it isn't insulated.", ko: "덕트가 보온되지 않아서 표면에 결로가 생겼습니다.", blank: "condensation" },
-        { en: "We'll replace the filters on a quarterly maintenance schedule.", ko: "분기별 유지보수 일정에 맞춰 필터를 교체하겠습니다.", blank: "quarterly" }
+        { en: "We've been getting a lot of hot and cold complaints on the fifth floor.", ko: "5층에서 덥다, 춥다는 민원이 많이 들어오고 있습니다.", tip: "hot and cold calls = 냉난방 민원", blank: "complaints", swaps: ["fifth>fifteenth|sixth", "complaints>compliments|complains"] },
+        { en: "The CO2 levels in the meeting room exceed 1,500 ppm in the afternoon.", ko: "오후에 회의실 CO2 농도가 1,500ppm을 넘습니다.", tip: "실내 CO2 는 보통 1,000ppm 이하로 관리합니다", blank: "exceed", swaps: ["1,500>150|15,000", "exceed>exceeds|excess", "afternoon>morning"] },
+        { en: "We should increase the outdoor air rate to meet ASHRAE 62.1.", ko: "ASHRAE 62.1 기준을 충족하려면 외기 도입량을 늘려야 합니다.", blank: "outdoor", swaps: ["increase>decrease", "62.1>90.1|55"] },
+        { en: "Relative humidity should stay between 40 and 60 percent.", ko: "상대습도는 40~60%로 유지해야 합니다.", blank: "humidity", swaps: ["40 and 60>40 to 60|40 and 80|20 and 60", "Relative>Absolute"] },
+        { en: "Let's upgrade the filters to MERV 13.", ko: "필터를 MERV 13 등급으로 올립시다.", blank: "filters", swaps: ["upgrade>downgrade|upgrading", "13>8|3"] },
+        { en: "There's condensation on the ductwork because it isn't insulated.", ko: "덕트가 보온되지 않아서 표면에 결로가 생겼습니다.", blank: "condensation", swaps: ["condensation>compensation|condemnation", "isn't insulated>is insulated|isn't isolated"] },
+        { en: "We'll replace the filters on a quarterly maintenance schedule.", ko: "분기별 유지보수 일정에 맞춰 필터를 교체하겠습니다.", blank: "quarterly", swaps: ["quarterly>monthly|yearly|quarter", "replace>repair|replay"] }
       ],
       terms: [
         { en: "indoor air quality (IAQ)", ko: "실내 공기질", def: "CO2, 미세먼지(PM2.5), 휘발성 유기화합물(VOC), 온습도 등으로 평가하는 실내 공기 상태. 업무 집중도와 건강에 직접 영향을 준다.", ex: "Poor IAQ can cause headaches and fatigue." },

@@ -9,6 +9,7 @@
 
   const SIM_SECONDS = 25;
   const SPEED_SECONDS = 60;
+  const SPEED_REVEAL_MS = 1800;
 
   let showKo = false;
 
@@ -249,8 +250,10 @@
       if (sp.phase === 'done') {
         const missed = sp.missed.map(function (id) {
           const e = App.phrase(id);
-          return '<li><span class="muted small">' + esc(e.ko) + '</span><div class="wrong-row"><b>' + esc(e.en) + '</b>' +
-            '<button class="btn icon-only" data-action="speak" data-text="' + esc(e.en) + '">' + icon('speaker') + '</button></div></li>';
+          const mine = sp.picks[id];
+          return '<li><span class="muted small">' + esc(e.ko) + '</span><div class="wrong-row"><b>' + App.markDiff(e.en, mine) + '</b>' +
+            '<button class="btn icon-only" data-action="speak" data-text="' + esc(e.en) + '">' + icon('speaker') + '</button></div>' +
+            (mine ? '<div class="my-pick">내 답 · ' + App.markDiff(mine, e.en) + '</div>' : '') + '</li>';
         }).join('');
         return back + '<div class="card result-panel"><div class="speed-score">' + sp.score + '<small>점</small></div>' +
           '<h3>' + (sp.newBest ? '🏆 최고 기록 경신!' : '수고했어요!') + '</h3>' +
@@ -269,8 +272,10 @@
           let cls = 'option';
           if (sp.reveal != null) { if (i === q.answer) cls += ' correct'; else if (i === sp.reveal) cls += ' wrong'; }
           return '<button class="' + cls + '" data-action="speed-answer" data-i="' + i + '"' + (sp.reveal != null ? ' disabled' : '') + '>' +
-            '<span class="opt-key">' + (i + 1) + '</span><span>' + esc(o) + '</span></button>';
-        }).join('') + '</div></div><p class="muted small center">키보드 1~4 로도 답할 수 있어요</p>';
+            '<span class="opt-key">' + (i + 1) + '</span><span class="opt-text">' +
+            (sp.reveal != null ? App.optionText(q.options, i, q.answer, sp.reveal) : esc(o)) + '</span></button>';
+        }).join('') + '</div></div><p class="muted small center">' +
+        (sp.reveal != null ? '밑줄 친 단어가 정답과 다른 부분이에요 · 시간은 잠시 멈춰요' : '키보드 1~4 로도 답할 수 있어요') + '</p>';
     },
     keydown: function (e) {
       const sp = App.session.sp;
@@ -297,18 +302,22 @@
       speedNext();
       App.render();
     } else {
+      // 비슷한 보기끼리 어디가 다른지 볼 수 있게 정답을 잠깐 보여 주고, 그동안 시계는 멈춘다 (벌점 3초는 그대로)
+      const shownAt = Date.now();
       sp.combo = 0;
       sp.deadline -= 3000;
       sp.flash = 'no';
       sp.reveal = i;
       if (sp.missed.indexOf(sp.q.id) === -1) sp.missed.push(sp.q.id);
+      sp.picks[sp.q.id] = sp.q.options[i];
       App.render();
       setTimeout(function () {
         if (App.session.sp !== sp || sp.phase !== 'play') return;
+        sp.deadline += Date.now() - shownAt;
         sp.flash = null;
         speedNext();
         App.render();
-      }, 700);
+      }, SPEED_REVEAL_MS);
     }
   }
 
@@ -450,13 +459,14 @@
     'speed-intro': function () { App.session.sp.phase = 'intro'; App.render(); },
     'speed-start': function () {
       const prev = App.session.sp || {};
-      const sp = { phase: 'play', source: prev.source || 'all', score: 0, combo: 0, bestCombo: 0, missed: [], q: null };
+      const sp = { phase: 'play', source: prev.source || 'all', score: 0, combo: 0, bestCombo: 0, missed: [], picks: {}, q: null };
       sp.pool = speedPool(sp.source);
       if (sp.pool.length < 4) sp.pool = speedPool('all');
       sp.deadline = Date.now() + SPEED_SECONDS * 1000;
       App.session.sp = sp;
       speedNext();
       sp.tick = setInterval(function () {
+        if (sp.reveal != null) return;
         const left = sp.deadline - Date.now();
         if (left <= 0) return speedFinish();
         const t = document.getElementById('speed-time');

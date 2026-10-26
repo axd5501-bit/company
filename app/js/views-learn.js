@@ -507,8 +507,10 @@
       const passed = score >= C.QUIZ_PASS;
       const wrong = quiz.wrong.map(function (q) {
         const full = q.full || q.options[q.answer];
-        return '<li><span class="muted small">' + esc(q.sub || q.prompt) + '</span><div class="wrong-row"><b>' + esc(full) + '</b>' +
-          '<button class="btn icon-only" data-action="speak" data-text="' + esc(full) + '">' + icon('speaker') + '</button></div></li>';
+        const mine = q.type === 'choice' && q.picked != null ? q.options[q.picked] : null;
+        return '<li><span class="muted small">' + esc(q.sub || q.prompt) + '</span><div class="wrong-row"><b>' + App.markDiff(full, mine) + '</b>' +
+          '<button class="btn icon-only" data-action="speak" data-text="' + esc(full) + '">' + icon('speaker') + '</button></div>' +
+          (mine ? '<div class="my-pick">내 답 · ' + App.markDiff(mine, full) + '</div>' : '') + '</li>';
       }).join('');
       return '<div class="card result-panel"><div class="result-big">' + App.ring(score, 112, score + '<small>점</small>', passed ? 'ok' : 'warn') + '</div>' +
         '<h3>' + (passed ? '🎉 통과!' : '조금만 더 힘내요!') + '</h3>' +
@@ -530,8 +532,9 @@
           else if (i === a.picked) cls += ' wrong';
         }
         return '<button class="' + cls + '" data-action="quiz-choose" data-i="' + i + '"' + (a ? ' disabled' : '') + '>' +
-          '<span class="opt-key">' + 'ABCD'.charAt(i) + '</span><span>' + esc(opt) + '</span></button>';
-      }).join('') + '</div>';
+          '<span class="opt-key">' + 'ABCD'.charAt(i) + '</span><span class="opt-text">' +
+          (a ? App.optionText(q.options, i, q.answer, a.picked) : esc(opt)) + '</span></button>';
+      }).join('') + '</div>' + (a && !a.correct ? '<p class="diff-hint">밑줄 친 단어가 정답과 다른 부분이에요</p>' : '');
     } else if (q.type === 'blank') {
       bodyHtml = '<p class="en big sentence">' + esc(q.sentence) + '</p>' +
         '<div class="composer narrow"><input id="blank-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="단어 입력"' +
@@ -574,7 +577,7 @@
     const q = quiz.qs[quiz.i];
     quiz.answered = Object.assign({ correct: correct }, extra);
     if (correct) quiz.correct++;
-    else quiz.wrong.push(q);
+    else quiz.wrong.push(Object.assign({}, q, { picked: extra && extra.picked }));
     App.render();
     if (correct) App.award(C.XP.quizCorrect);
   }

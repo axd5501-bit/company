@@ -164,6 +164,74 @@ test('speedQuestion: 정답이 보기에 한 번만 있다', () => {
   }
 });
 
+test('speedQuestion: 표현에 swaps 가 있으면 정답을 살짝 바꾼 오답이 나온다', () => {
+  const pool = [
+    { id: 'a', en: 'Could you send me the report by Friday?', ko: '금요일까지 보고서 보내 주시겠어요?', swaps: ['by>until|till', 'Friday>Monday|Thursday'] },
+    { id: 'b', en: 'Shall we get started?', ko: '시작할까요?' },
+    { id: 'c', en: 'Let me share my screen.', ko: '화면 공유할게요.' },
+    { id: 'd', en: 'I think you are on mute.', ko: '음소거 되어 있어요.' }
+  ];
+  const rng = seeded(5);
+  for (let i = 0; i < 20; i++) {
+    const q = C.speedQuestion(pool, rng, 'b');
+    if (q.id !== 'a') continue;
+    assert.equal(q.options.length, 4);
+    for (const o of q.options) assert.match(o, /^Could you send me the report (by|until|till) (Friday|Monday|Thursday)\?$/);
+  }
+});
+
+test('nearMisses: 숫자는 한 곳만 바꾼 서로 다른 오답 3개', () => {
+  const s = 'The motor weighs 40 kilograms.';
+  const d = C.nearMisses(s, null, seeded(3));
+  assert.equal(new Set(d).size, 3);
+  for (const x of d) {
+    assert.notEqual(x, s);
+    assert.equal(C.diffWords(s, x).filter(w => w.diff).length, 1, x);
+  }
+  assert.deepEqual(C.nearMisses('The flow is 2,000 CFM.', null, seeded(1)).sort(),
+    ['The flow is 20,000 CFM.', 'The flow is 200 CFM.', 'The flow is 4,000 CFM.'].sort());
+});
+
+test('nearMisses: 두 자리를 바꿀 때는 2×2 조합이라 다수결로 정답이 드러나지 않는다', () => {
+  const s = 'This risk has a high severity but a low probability.';
+  const d = C.nearMisses(s, ['a high severity>a low severity', 'a low probability>a high probability'], seeded(1));
+  assert.deepEqual(d.slice().sort(), [
+    'This risk has a high severity but a high probability.',
+    'This risk has a low severity but a high probability.',
+    'This risk has a low severity but a low probability.'
+  ]);
+  assert.ok(C.isFairSet(s, d));
+  // 보기마다 서로 다른 단어를 바꾸면 정답이 '가장 많이 겹치는 보기'가 되어 드러난다
+  assert.equal(C.isFairSet("That's a good point.", ["That's good point.", "That's a good points.", "That's a well point."]), false);
+});
+
+test('nearMisses: swaps 가 없으면 반대말·부정으로 바꾸고 의문문 첫 단어는 그대로 둔다', () => {
+  assert.deepEqual(C.nearMisses('The valve is open.', null, seeded(2)).sort(),
+    ['The valve is closed.', "The valve isn't closed.", "The valve isn't open."].sort());
+  const d = C.nearMisses('Can we lower the supply temperature?', null, seeded(4));
+  assert.ok(d.length >= 2);
+  for (const x of d) assert.match(x, /^Can we /);
+  // 약어가 붙은 용어는 약어와 안 맞는 오답이 생기므로 자동으로 바꾸지 않는다
+  assert.deepEqual(C.nearMisses('relative humidity (RH)', null, seeded(1)), []);
+});
+
+test('distractorsFor: 비슷한 문장이 모자라면 생김새가 비슷한 표현으로 채운다', () => {
+  const pool = ['root cause', 'defect', 'roll back', 'corrective action', 'failure rate'].map(en => ({ en: en }));
+  for (let k = 1; k <= 10; k++) {
+    const d = C.distractorsFor(pool[0], pool, seeded(k));
+    assert.equal(d.length, 3);
+    assert.equal(new Set(d).size, 3);
+    assert.ok(!d.includes('root cause'));
+    assert.ok(d.includes('route cause'));
+  }
+});
+
+test('diffWords: 비슷한 보기에서 다른 단어만 표시하고, 완전히 다른 문장은 표시하지 않는다', () => {
+  const w = C.diffWords('Could you send me the report by Friday?', 'Could you send me the report until Friday?');
+  assert.deepEqual(w.filter(x => x.diff).map(x => x.text), ['until']);
+  assert.ok(C.diffWords('Shall we get started?', 'I think you are on mute.').every(x => !x.diff));
+});
+
 test('searchExpressions: 영어·한국어·팁 검색, 트랙·즐겨찾기 필터', () => {
   const lessons = [
     { id: 'a', track: 't1', expressions: [{ id: 'a-1', en: 'Shall we get started?', ko: '시작할까요?' }, { id: 'a-2', en: 'Let us wrap up', ko: '마무리하죠', tip: 'wrap up = 마무리' }] },

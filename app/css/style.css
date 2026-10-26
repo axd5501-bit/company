@@ -683,6 +683,15 @@ input[type="range"] { width: 100%; accent-color: var(--primary); }
 .option.correct .opt-key { background: var(--ok); color: #fff; }
 .option.wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
 .option.wrong .opt-key { background: var(--bad); color: #fff; }
+.opt-text { font-family: var(--font-display); line-height: 1.4; }
+/* 비슷한 보기끼리 다른 단어 */
+.diff-mark {
+  color: inherit; font-weight: 750; border-radius: 4px; padding: 0 2px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+}
+.diff-hint { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.my-pick { margin-top: 2px; font-family: var(--font-display); font-size: 14px; color: var(--bad); }
 
 .sentence { font-family: var(--font-display); font-weight: 600; line-height: 1.45; margin: 8px 0 14px; }
 .order-answer { min-height: 60px; padding: 10px; border: 2px dashed var(--border); border-radius: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; }

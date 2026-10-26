@@ -55,6 +55,18 @@ for (const lesson of LESSONS) {
     for (const e of lesson.expressions) {
       assert.ok(e.en && e.ko, `${e.id} 문장 누락`);
       assert.ok(C.makeBlank(e.en, e.blank), `${e.id}: 빈칸 단어 "${e.blank}" 가 문장에 없음`);
+      assert.ok(Array.isArray(e.swaps) && e.swaps.length, `${e.id}: 비슷한 오답(swaps) 누락`);
+      const ranges = e.swaps.map(sw => {
+        const [from, alts] = sw.split('>');
+        assert.ok(from && alts, `${e.id}: "${sw}" 는 "바꿀 부분>오답1|오답2" 형식이어야 함`);
+        const at = e.en.indexOf(from);
+        assert.ok(at !== -1, `${e.id}: "${from}" 가 문장에 없음`);
+        for (const a of alts.split('|')) assert.ok(a && a !== from, `${e.id}: 오답 "${a}" 가 비었거나 원문과 같음`);
+        return [at, at + from.length];
+      });
+      ranges.forEach((r, i) => ranges.forEach((q, j) => {
+        if (i < j) assert.ok(r[1] <= q[0] || q[1] <= r[0], `${e.id}: swaps 가 서로 겹침`);
+      }));
     }
 
     const d = lesson.dialogue;
@@ -96,6 +108,19 @@ for (const lesson of LESSONS) {
           assert.equal(q.type, 'order');
           assert.deepEqual(q.words.slice().sort(), q.answer.slice().sort());
         }
+      }
+    }
+  });
+
+  test(`[${lesson.id}] 표현마다 살짝 다른 오답 3개가 나오고 다수결로 정답이 드러나지 않는다`, () => {
+    for (const e of lesson.expressions) {
+      for (let seed = 1; seed <= 12; seed++) {
+        let x = seed * 7919;
+        const rng = () => { x = (x * 1103515245 + 12345) % 2147483648; return x / 2147483648; };
+        const d = C.nearMisses(e.en, e.swaps, rng);
+        assert.equal(d.length, 3, `${e.id}: 오답이 3개가 아님 ${JSON.stringify(d)}`);
+        assert.equal(new Set(d.concat(e.en)).size, 4, `${e.id}: 보기 중복`);
+        assert.ok(C.isFairSet(e.en, d), `${e.id}: 다수결로 정답이 드러남 ${JSON.stringify(d)}`);
       }
     }
   });

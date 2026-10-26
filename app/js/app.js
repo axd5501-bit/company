@@ -109,7 +109,7 @@
   /** 복습 카드·사전에서 쓰는 표현 조회 (레슨 표현 + 기술 용어 + AI 회의에서 저장한 표현) */
   App.phrase = function (id) {
     const item = EXPRS[id];
-    if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, tip: item.expr.tip, source: item.lesson.icon + ' ' + item.lesson.title };
+    if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, tip: item.expr.tip, swaps: item.expr.swaps, source: item.lesson.icon + ' ' + item.lesson.title };
     const t = TERMS[id];
     if (t) return { id: id, en: t.term.en, ko: t.term.ko, tip: (t.term.def ? t.term.def + '\n' : '') + '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
     const c = App.state.custom[id];
@@ -224,6 +224,22 @@
     return result.words.map(function (w) {
       return '<span class="' + (w.ok ? 'w-ok' : 'w-miss') + '">' + esc(w.text) + '</span>';
     }).join(' ');
+  };
+
+  /** text 에서 base 와 다른 단어에 밑줄 (비슷한 보기끼리 어디가 다른지 보여 줄 때) */
+  App.markDiff = function (text, base) {
+    if (base == null || base === text) return esc(text);
+    return C.diffWords(base, text).map(function (w) {
+      if (!w.diff) return esc(w.text);
+      const m = w.text.match(/^(.*?)([.,!?;:]*)$/);
+      return '<mark class="diff-mark">' + esc(m[1] || w.text) + '</mark>' + (m[1] ? esc(m[2]) : '');
+    }).join(' ');
+  };
+
+  /** 정답 공개 후 보기 문구: 오답은 정답과 다른 곳, 정답은 내가 고른 오답과 다른 곳을 표시 */
+  App.optionText = function (options, i, answer, picked) {
+    if (i === answer) return App.markDiff(options[i], picked != null && picked !== answer ? options[picked] : null);
+    return App.markDiff(options[i], options[answer]);
   };
 
   // ---------- 경험치 · 레벨 · 배지 ----------
