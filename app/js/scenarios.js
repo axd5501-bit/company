@@ -374,6 +374,98 @@
           ]
         }
       ]
+    },
+    {
+      id: 'spec-deviation',
+      icon: '📐',
+      title: '고객에게 공차 이탈 문제 설명하기',
+      track: 'eng-deep',
+      level: '고급',
+      brief: '납품한 부품 일부가 공차를 벗어났습니다. 고객사 품질 담당자에게 데이터로 원인과 대책을 설명하고 신뢰를 지키세요.',
+      you: '공급사 품질 엔지니어',
+      roles: { T: 'Mr. Tanaka (고객사 품질 담당)' },
+      steps: [
+        {
+          s: 'T', skill: 'clear',
+          en: "We measured your last shipment. Some parts are out of tolerance. What happened?",
+          ko: "지난 납품분을 측정해 보니 일부 부품이 공차를 벗어났어요. 무슨 일이죠?",
+          choices: [
+            { en: "Thank you for flagging this. About 3% of the parts exceed the tolerance by up to 0.02 millimeters.", grade: 2,
+              feedback: "먼저 알려 준 것에 감사하고, 불량 비율과 편차를 수치로 정확히 말했습니다.",
+              reply: { en: "Three percent is too high for us. What's the cause?", ko: "3%는 저희에겐 너무 높아요. 원인이 뭔가요?" } },
+            { en: "Some parts are a little bit wrong, I think.", grade: 1,
+              feedback: "'조금'은 엔지니어링 대화에서 정보가 없습니다. 비율과 수치로 말하세요.",
+              reply: { en: "How many, and by how much?", ko: "몇 개가, 얼마나요?" } },
+            { en: "Our measurements show everything is fine.", grade: 0,
+              feedback: "고객의 데이터를 근거 없이 부정하면 신뢰를 잃습니다.",
+              reply: { en: "Then why do our numbers say otherwise?", ko: "그럼 왜 저희 수치는 다르게 나오죠?" } }
+          ]
+        },
+        {
+          s: 'T', skill: 'clear',
+          en: "What's the root cause?",
+          ko: "근본 원인은 뭔가요?",
+          choices: [
+            { en: "A cutting tool wore out faster than expected, and our tool replacement schedule didn't catch it.", grade: 2,
+              feedback: "기술적 원인(공구 마모)과 관리상의 허점(교체 주기)을 함께 설명했습니다.",
+              reply: { en: "I see. So it's a process issue as well.", ko: "그렇군요. 공정 관리 문제이기도 하네요." } },
+            { en: "Maybe the machine had a problem.", grade: 1,
+              feedback: "추측은 원인 분석이 아닙니다. 확인된 사실을 말하세요.",
+              reply: { en: "'Maybe' isn't good enough. Did you check?", ko: "'아마'로는 부족해요. 확인은 해 봤나요?" } },
+            { en: "Your inspection gauge might be wrong.", grade: 0,
+              feedback: "확인 없이 고객의 측정 장비를 의심하면 관계가 나빠집니다.",
+              reply: { en: "Our gauge was calibrated last week.", ko: "저희 측정기는 지난주에 교정했어요." } }
+          ]
+        },
+        {
+          s: 'T', skill: 'lead',
+          en: "What are you going to do about the parts we already have?",
+          ko: "이미 받은 부품은 어떻게 하실 건가요?",
+          choices: [
+            { en: "We'll ship replacement parts this week and cover the cost of sorting your current stock.", grade: 2,
+              feedback: "고객 손실을 줄이는 구체적인 조치와 일정을 먼저 제시했습니다.",
+              reply: { en: "That would help a lot.", ko: "그러면 많이 도움이 되겠어요." } },
+            { en: "You can send them back if you want.", grade: 1,
+              feedback: "책임 있는 대응이라기보다 고객에게 일을 떠넘기는 말로 들립니다.",
+              reply: { en: "That puts all the work on us.", ko: "그러면 일은 전부 저희가 하게 되네요." } },
+            { en: "They're only slightly out of tolerance, so you can still use them.", grade: 0,
+              feedback: "공차를 벗어난 부품 사용을 권하면 품질·안전 문제로 번질 수 있습니다. 판단은 고객이 합니다.",
+              reply: { en: "That's not your decision to make.", ko: "그건 그쪽이 결정할 일이 아니에요." } }
+          ]
+        },
+        {
+          s: 'T', skill: 'polite',
+          en: "This is the second quality issue this year. We're losing confidence.",
+          ko: "올해 두 번째 품질 문제예요. 신뢰가 떨어지고 있어요.",
+          choices: [
+            { en: "I completely understand, and I apologize. We take this very seriously.", grade: 2,
+              feedback: "상대의 우려를 인정하고 변명 없이 사과했습니다.",
+              reply: { en: "Thank you. What will be different this time?", ko: "고마워요. 이번엔 무엇이 달라지나요?" } },
+            { en: "Sorry, but problems happen sometimes.", grade: 1,
+              feedback: "사과 뒤에 변명을 붙이면 사과의 효과가 사라집니다.",
+              reply: { en: "That's not very reassuring.", ko: "별로 안심이 안 되네요." } },
+            { en: "The first issue was not our fault.", grade: 0,
+              feedback: "지난 문제를 따지는 것은 지금의 신뢰 회복에 도움이 되지 않습니다.",
+              reply: { en: "We're talking about now.", ko: "지금 이야기를 하는 거예요." } }
+          ]
+        },
+        {
+          s: 'T', skill: 'lead',
+          en: "What will you change to prevent this from happening again?",
+          ko: "재발 방지를 위해 무엇을 바꾸실 건가요?",
+          choices: [
+            { en: "We'll shorten the tool replacement cycle, add in-line measurement, and share weekly SPC charts with you.", grade: 2,
+              feedback: "측정 가능한 시정 조치와 데이터 공유(SPC = 통계적 공정 관리)를 약속했습니다.",
+              reply: { en: "That's exactly what we need. Thank you.", ko: "바로 그게 저희가 원하던 거예요. 감사합니다." } },
+            { en: "We'll be more careful from now on.", grade: 1,
+              feedback: "'더 조심하겠다'는 확인할 수 없는 약속입니다. 무엇을 바꿀지 구체적으로 말하세요.",
+              reply: { en: "Careful how, exactly?", ko: "정확히 어떻게 조심한다는 거죠?" } },
+            { en: "It shouldn't happen again.", grade: 0,
+              feedback: "근거 없는 약속은 신뢰를 회복하지 못합니다.",
+              reply: { en: "You said that last time.", ko: "지난번에도 그렇게 말했어요." } }
+          ]
+        }
+      ]
     }
   ];
 

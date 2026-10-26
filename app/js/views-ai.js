@@ -34,6 +34,9 @@
     { id: 'incident-review', icon: '🚨', title: '장애 회고 (포스트모템)', you: '엔지니어링 리드',
       partner: 'Rachel Kim, Head of Operations',
       situation: 'The morning after a production outage. The meeting covers what happened, the timeline, customer impact, the root cause, the temporary workaround and corrective actions. Keep it blameless but demanding.' },
+    { id: 'spec-meeting', icon: '📏', title: '고객사와 사양·공차 협의', you: '공급사 설계 엔지니어',
+      partner: 'Kenji Tanaka, Quality Manager at an overseas customer',
+      situation: 'A technical meeting to agree on the specification of a new machined part: tolerances, materials, operating temperature range, units (metric vs. imperial), test methods and acceptance criteria. Ask for exact numbers and push back on vague answers.' },
     { id: 'custom', icon: '✏️', title: '직접 상황 만들기', custom: true }
   ];
 

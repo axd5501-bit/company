@@ -93,7 +93,7 @@
     const item = EXPRS[id];
     if (item) return { id: id, en: item.expr.en, ko: item.expr.ko, tip: item.expr.tip, source: item.lesson.icon + ' ' + item.lesson.title };
     const t = TERMS[id];
-    if (t) return { id: id, en: t.term.en, ko: t.term.ko, tip: '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
+    if (t) return { id: id, en: t.term.en, ko: t.term.ko, tip: (t.term.def ? t.term.def + '\n' : '') + '예문 · ' + t.term.ex, source: '🔧 기술 용어 · ' + t.lesson.title, term: true };
     const c = App.state.custom[id];
     if (c) return { id: id, en: c.en, ko: c.ko, tip: c.tip, source: '🤖 AI 회의에서 저장' };
     return null;

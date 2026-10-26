@@ -271,12 +271,14 @@
   function renderTerms(l) {
     if (!l.terms) return '';
     return '<section class="terms"><div class="section-head"><h2>' + icon('key') + ' 핵심 기술 용어</h2>' +
-      '<span class="muted small">회의에서 그대로 쓰이는 단어 ' + l.terms.length + '개 · 학습 완료 시 복습 카드로 추가돼요</span></div>' +
+      '<span class="muted small">회의에서 그대로 쓰이는 용어 ' + l.terms.length + '개와 공학 개념 · 학습 완료 시 복습 카드로 추가돼요</span></div>' +
       '<div class="term-grid">' + l.terms.map(function (t, i) {
         return '<article class="term"><div class="term-top"><span class="term-no mono">' + ('0' + (i + 1)).slice(-2) + '</span>' +
           '<span class="term-en">' + esc(t.en) + '</span>' +
           '<button class="btn icon-only small" data-action="speak" data-text="' + esc(t.en + '. ' + t.ex) + '" title="용어와 예문 듣기">' + icon('speaker') + '</button>' +
-          App.favButton(t.id) + '</div><p class="term-ko">' + esc(t.ko) + '</p><p class="term-ex">“' + esc(t.ex) + '”</p></article>';
+          App.favButton(t.id) + '</div><p class="term-ko">' + esc(t.ko) + '</p>' +
+          (t.def ? '<p class="term-def"><b>개념</b> ' + esc(t.def) + '</p>' : '') +
+          '<p class="term-ex">예문 · “' + esc(t.ex) + '”</p></article>';
       }).join('') + '</div></section>';
   }
 

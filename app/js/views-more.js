@@ -99,7 +99,7 @@
       });
     }
     const rows = results.map(function (r) {
-      return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, tip: r.expr.term ? '예문 · ' + r.expr.ex : r.expr.tip, term: r.expr.term,
+      return { id: r.expr.id, en: r.expr.en, ko: r.expr.ko, tip: r.expr.term ? (r.expr.def ? r.expr.def + '\n' : '') + '예문 · ' + r.expr.ex : r.expr.tip, term: r.expr.term,
         source: r.lesson.icon + ' ' + r.lesson.title, href: '#/lesson/' + r.lesson.id };
     })
       .concat(customs.map(function (id) { const p = App.phrase(id); return { id: id, en: p.en, ko: p.ko, tip: p.tip, source: p.source }; }));
@@ -231,7 +231,7 @@
         '<button class="btn danger" data-action="reset">학습 기록 초기화</button></div></section>' +
         '<section class="card"><h3>휴대폰에서 쓰기</h3><p class="muted small">웹 주소로 열었다면 브라우저 메뉴의 <b>홈 화면에 추가</b>를 누르세요. 앱처럼 아이콘이 생기고 오프라인에서도 열립니다.<br>' +
         'iPhone(Safari): 공유 버튼 → 홈 화면에 추가 · Android(Chrome): ⋮ 메뉴 → 홈 화면에 추가</p></section>' +
-        '<p class="muted small center">BizTalk English · 폰트: Pretendard, Bricolage Grotesque, JetBrains Mono (SIL OFL 1.1)</p>';
+        '<p class="muted small center">BizTalk English · 폰트: Pretendard, IBM Plex Sans, JetBrains Mono (SIL OFL 1.1)</p>';
     }
   };
 

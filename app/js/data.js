@@ -3,7 +3,7 @@
  * - expressions[].blank : 빈칸 퀴즈에서 비워 둘 단어 (en 안에 반드시 포함)
  * - dialogue.you        : 롤플레이에서 학습자가 맡는 역할
  * - situations[].answer : options 의 정답 인덱스 (화면에서는 섞여서 나옴)
- * - terms (선택)        : 기술 용어 카드 { en, ko, ex(예문) }. 퀴즈·복습·사전·스피드 챌린지에 함께 나온다
+ * - terms (선택)        : 기술 용어 카드 { en, ko, def(개념 설명), ex(예문) }. 퀴즈·복습·사전·스피드 챌린지에 함께 나온다
  */
 (function (root) {
   const LESSONS = [
@@ -457,14 +457,14 @@
         { en: "Can we freeze the spec by the end of this week?", ko: "이번 주 말까지 사양을 확정할 수 있을까요?", tip: "freeze the spec = 사양을 더 이상 바꾸지 않도록 동결하다", blank: "freeze" }
       ],
       terms: [
-        { en: "architecture", ko: "아키텍처, 시스템 구조", ex: "The new architecture separates the data layer from the UI." },
-        { en: "requirement", ko: "요구사항", ex: "Low latency is a key requirement for this system." },
-        { en: "specification (spec)", ko: "사양, 스펙", ex: "Please check the spec before you start coding." },
-        { en: "constraint", ko: "제약 조건", ex: "Power consumption is our biggest design constraint." },
-        { en: "trade-off", ko: "트레이드오프, 상충 관계", ex: "There's a trade-off between accuracy and speed." },
-        { en: "scalability", ko: "확장성", ex: "Scalability will matter once we have more users." },
-        { en: "prototype", ko: "시제품, 프로토타입", ex: "We'll test the prototype with real users next week." },
-        { en: "dependency", ko: "의존성 (다른 부품·시스템에 의존하는 관계)", ex: "This module has a dependency on a third-party library." }
+        { en: "architecture", ko: "아키텍처, 시스템 구조", ex: "The new architecture separates the data layer from the UI.", def: "시스템을 이루는 구성 요소와 그 관계·역할 분담을 정한 전체 구조. 나중에 바꾸기 가장 비싼 결정이라 초기에 검토한다." },
+        { en: "requirement", ko: "요구사항", ex: "Low latency is a key requirement for this system.", def: "시스템이 해야 할 일(기능 요구사항)과 갖춰야 할 품질(성능·보안·신뢰성 등 비기능 요구사항). 검증 가능하게 수치로 적는 것이 원칙이다." },
+        { en: "specification (spec)", ko: "사양, 스펙", ex: "Please check the spec before you start coding.", def: "요구사항을 수치·조건으로 구체화한 문서. 설계와 시험(검증)의 기준이 되며, 변경은 변경 관리 절차를 거친다." },
+        { en: "constraint", ko: "제약 조건", ex: "Power consumption is our biggest design constraint.", def: "설계가 넘으면 안 되는 한계. 예: 예산, 전력, 무게, 크기, 규제. 요구사항과 달리 협상 여지가 거의 없다." },
+        { en: "trade-off", ko: "트레이드오프, 상충 관계", ex: "There's a trade-off between accuracy and speed.", def: "한 성능을 높이면 다른 성능이 떨어지는 관계. 예: 정확도↑ ↔ 속도↓, 강도↑ ↔ 무게↑. 우선순위를 정해 선택한다." },
+        { en: "scalability", ko: "확장성", ex: "Scalability will matter once we have more users.", def: "사용량·데이터가 늘어도 자원을 추가해 성능을 유지하는 능력. 서버를 늘리는 수평 확장(scale out)과 서버 성능을 높이는 수직 확장(scale up)이 있다." },
+        { en: "prototype", ko: "시제품, 프로토타입", ex: "We'll test the prototype with real users next week.", def: "본격 개발 전에 핵심 가정이 맞는지 빠르게 검증하려고 만든 시제품. 실패해도 비용이 작을 때 실패하는 것이 목적이다." },
+        { en: "dependency", ko: "의존성 (다른 부품·시스템에 의존하는 관계)", ex: "This module has a dependency on a third-party library.", def: "다른 모듈·부품·외부 라이브러리가 있어야 동작하는 관계. 의존성이 많을수록 변경·공급 리스크가 커진다." }
       ],
       dialogue: {
         setting: '새 센서 플랫폼의 설계를 수석 아키텍트와 PM 앞에서 발표합니다.',
@@ -503,14 +503,14 @@
         { en: "Let's do a quick post-mortem to see what we can learn.", ko: "무엇을 배울 수 있는지 간단히 사후 분석을 해 봅시다.", tip: "post-mortem = 장애·프로젝트 후 원인과 교훈을 정리하는 회의", blank: "post-mortem" }
       ],
       terms: [
-        { en: "root cause", ko: "근본 원인", ex: "A loose connector was the root cause of the outage." },
-        { en: "reproduce", ko: "재현하다", ex: "We couldn't reproduce the bug on the test server." },
-        { en: "defect", ko: "결함", ex: "The defect was found during the final inspection." },
-        { en: "workaround", ko: "임시 해결책", ex: "Restarting the service is only a workaround." },
-        { en: "roll back", ko: "롤백하다 (이전 버전으로 되돌리다)", ex: "If the update fails, we'll roll back immediately." },
-        { en: "failure rate", ko: "고장률, 불량률", ex: "The failure rate is within the industry standard." },
-        { en: "corrective action", ko: "시정 조치", ex: "The supplier submitted a corrective action plan." },
-        { en: "post-mortem", ko: "사후 분석, 회고", ex: "The post-mortem showed we needed better monitoring." }
+        { en: "root cause", ko: "근본 원인", ex: "A loose connector was the root cause of the outage.", def: "겉으로 드러난 증상이 아니라, 제거하면 문제가 재발하지 않는 근본 원인. '왜?'를 다섯 번 묻는 5 Whys 기법으로 파고든다." },
+        { en: "reproduce", ko: "재현하다", ex: "We couldn't reproduce the bug on the test server.", def: "같은 조건에서 문제를 다시 일으키는 것. 재현이 돼야 원인 확인과 수정 효과 검증이 가능하다." },
+        { en: "defect", ko: "결함", ex: "The defect was found during the final inspection.", def: "요구사항이나 사양을 만족하지 못하는 결함. 소프트웨어에서는 bug, 제조에서는 nonconformance(부적합)라고도 한다." },
+        { en: "workaround", ko: "임시 해결책", ex: "Restarting the service is only a workaround.", def: "근본 원인은 그대로 두고 증상만 피하는 임시 조치. 반드시 영구 대책(permanent fix) 일정과 함께 관리해야 한다." },
+        { en: "roll back", ko: "롤백하다 (이전 버전으로 되돌리다)", ex: "If the update fails, we'll roll back immediately.", def: "문제가 생긴 변경을 취소하고 이전의 안정된 상태로 되돌리는 것. 배포 전에 롤백 방법을 준비해 두는 것이 기본이다." },
+        { en: "failure rate", ko: "고장률, 불량률", ex: "The failure rate is within the industry standard.", def: "일정 기간·수량 대비 고장 비율. 신뢰성 지표로 MTBF(평균 고장 간격, Mean Time Between Failures)도 함께 쓴다." },
+        { en: "corrective action", ko: "시정 조치", ex: "The supplier submitted a corrective action plan.", def: "원인을 제거해 재발을 막는 조치. 사전 예방 조치(preventive action)와 묶어 CAPA라고 부른다." },
+        { en: "post-mortem", ko: "사후 분석, 회고", ex: "The post-mortem showed we needed better monitoring.", def: "장애 후 타임라인·원인·영향·교훈·후속 조치를 정리하는 회고. 사람 탓보다 시스템 개선에 집중하는 blameless 방식이 표준이다." }
       ],
       dialogue: {
         setting: '어젯밤 생산 라인 제어 시스템에 장애가 발생했습니다. 다음 날 아침 원인 분석 회의입니다.',
@@ -549,14 +549,14 @@
         { en: "Let's prioritize the critical bugs before the release.", ko: "출시 전에 치명적인 버그부터 우선 처리합시다.", blank: "prioritize" }
       ],
       terms: [
-        { en: "test case", ko: "테스트 케이스", ex: "We added ten new test cases for the payment module." },
-        { en: "tolerance", ko: "허용 오차", ex: "The part is 0.02 mm out of tolerance." },
-        { en: "regression", ko: "회귀 (결함)", ex: "The regression was caused by last week's update." },
-        { en: "acceptance criteria", ko: "인수 기준", ex: "Let's agree on the acceptance criteria first." },
-        { en: "yield", ko: "수율", ex: "Low yield is increasing our production cost." },
-        { en: "sign off", ko: "(공식) 승인하다", ex: "The client signed off on the final design." },
-        { en: "bottleneck", ko: "병목", ex: "The database has become our main bottleneck." },
-        { en: "throughput", ko: "처리량", ex: "The new line doubled our throughput." }
+        { en: "test case", ko: "테스트 케이스", ex: "We added ten new test cases for the payment module.", def: "입력값, 실행 조건, 기대 결과를 정의한 하나의 테스트 시나리오. 기대 결과가 명확해야 합격·불합격을 판정할 수 있다." },
+        { en: "tolerance", ko: "허용 오차", ex: "The part is 0.02 mm out of tolerance.", def: "허용되는 치수·값의 변동 범위. 예: 10 ± 0.05 mm면 9.95~10.05 mm가 합격. 공차가 좁을수록 가공 비용이 올라간다." },
+        { en: "regression", ko: "회귀 (결함)", ex: "The regression was caused by last week's update.", def: "새 변경 때문에 기존에 잘 되던 기능이 다시 고장 나는 것. 변경할 때마다 기존 테스트를 다시 돌리는 회귀 테스트로 잡는다." },
+        { en: "acceptance criteria", ko: "인수 기준", ex: "Let's agree on the acceptance criteria first.", def: "기능이 '완료'로 인정받기 위해 충족해야 하는 구체적이고 검증 가능한 조건. 개발 시작 전에 합의한다." },
+        { en: "yield", ko: "수율", ex: "Low yield is increasing our production cost.", def: "전체 생산량 중 양품의 비율. 수율 95% = 100개 중 95개 양품. 수율이 1%만 올라도 원가에 큰 영향을 준다." },
+        { en: "sign off", ko: "(공식) 승인하다", ex: "The client signed off on the final design.", def: "책임자가 결과를 검토하고 공식 승인하는 것. 설계·시험·출시 같은 다음 단계로 넘어가는 관문(gate)이다." },
+        { en: "bottleneck", ko: "병목", ex: "The database has become our main bottleneck.", def: "전체 처리 속도를 제한하는 가장 느린 단계. 병목이 아닌 곳을 개선해도 전체 속도는 늘지 않는다(제약 이론)." },
+        { en: "throughput", ko: "처리량", ex: "The new line doubled our throughput.", def: "단위 시간당 처리량. 예: 시간당 생산 대수, 초당 처리 요청 수. 지연 시간(latency)과 함께 성능을 나타내는 두 축이다." }
       ],
       dialogue: {
         setting: '출시 2주 전, 테스트 결과를 공유하는 품질 점검 회의입니다.',
@@ -579,6 +579,148 @@
         { q: "수정 후 예전에 잘 되던 기능이 다시 고장 났을 때 쓰는 말은?", options: ["regression", "regeneration", "recession", "repetition"], answer: 0, explain: "regression test는 이런 결함을 잡기 위한 테스트입니다." },
         { q: "'QA 승인이 나야 출시할 수 있다'를 영어로?", options: ["We can't release it until QA signs off.", "We can't release it until QA signs in.", "We can't release until QA writes name.", "QA must sign up before release."], answer: 0, explain: "sign off on ~ = ~을 최종 승인하다." }
       ]
+    },
+    {
+      id: 'specs-units',
+      icon: '📏',
+      title: '사양·수치 말하기',
+      titleEn: 'Specs, Units & Numbers',
+      goal: '공차·정격·단위·유효숫자를 정확한 영어로 읽고, 사양을 수치로 설명할 수 있다.',
+      expressions: [
+        { en: "The tolerance is plus or minus 0.05 millimeters.", ko: "공차는 ±0.05mm입니다.", tip: "± 는 plus or minus 로 읽습니다. 0.05 는 'zero point zero five'", blank: "minus" },
+        { en: "The motor is rated at 3 kilowatts.", ko: "이 모터의 정격 출력은 3kW입니다.", tip: "be rated at ~ = 정격이 ~이다", blank: "rated" },
+        { en: "The maximum operating temperature is 85 degrees Celsius.", ko: "최대 동작 온도는 섭씨 85도입니다.", tip: "°C = degrees Celsius, °F = degrees Fahrenheit", blank: "operating" },
+        { en: "This part weighs about 40% less than the previous design.", ko: "이 부품은 이전 설계보다 약 40% 가볍습니다.", blank: "weighs" },
+        { en: "The output is an order of magnitude higher than we expected.", ko: "출력이 예상보다 약 10배 높습니다.", tip: "order of magnitude = 10배 단위의 차이", blank: "magnitude" },
+        { en: "Please convert all values to metric units.", ko: "모든 값을 미터법 단위로 변환해 주세요.", tip: "metric(미터법) ↔ imperial(인치·파운드 단위)", blank: "metric" },
+        { en: "The measured value deviates from the nominal value by 2%.", ko: "측정값이 공칭값에서 2% 벗어납니다.", tip: "deviate from ~ = ~에서 벗어나다", blank: "nominal" }
+      ],
+      terms: [
+        { en: "nominal value", ko: "공칭값", def: "도면·사양서에 적힌 설계 기준값. 실제 제품은 공차 범위 안에서 이 값과 조금씩 다르다. 예: 공칭 두께 4 mm, 실측 3.98 mm.", ex: "The nominal thickness is 4 millimeters." },
+        { en: "rated power", ko: "정격 출력", def: "장비가 연속으로 안전하게 낼 수 있도록 설계된 출력. 순간 최대 출력(peak power)보다 낮게 잡는다. 정격을 넘겨 쓰면 수명이 짧아진다.", ex: "Never run the pump above its rated power." },
+        { en: "operating range", ko: "동작 범위", def: "제조사가 성능을 보장하는 온도·전압·습도 등의 범위. 이 범위를 벗어나면 고장 나지 않더라도 사양 성능을 보장하지 않는다.", ex: "The sensor's operating range is minus 40 to 85 degrees." },
+        { en: "order of magnitude", ko: "자릿수 (10배 차이)", def: "값이 10배 단위로 차이 날 때 쓰는 표현. 두 자릿수(two orders of magnitude) 차이는 약 100배. 대략적인 규모를 빠르게 비교할 때 쓴다.", ex: "The new chip is two orders of magnitude faster." },
+        { en: "significant figures", ko: "유효숫자", def: "측정 정밀도를 나타내는 의미 있는 자릿수. 3.20은 유효숫자 3개로 0.01 단위까지 측정했다는 뜻이다. 계산 결과는 가장 부정확한 입력값의 정밀도를 넘을 수 없다.", ex: "Report the result to three significant figures." },
+        { en: "metric / imperial units", ko: "미터법 / 야드파운드법", def: "1 inch = 25.4 mm, 1 pound ≈ 0.454 kg, 1 psi ≈ 6.9 kPa. 해외 고객과는 도면에 단위를 반드시 함께 적는다. 단위 혼동은 실제 대형 사고의 원인이 되었다.", ex: "Our drawings use metric units, but the client uses imperial." },
+        { en: "datasheet", ko: "데이터시트", def: "부품의 정격, 동작 범위, 치수, 특성 그래프를 정리한 제조사 문서. 'typical(대표값)'과 'max/min(보증값)'을 구분해 읽어야 한다.", ex: "According to the datasheet, the typical current is 20 milliamps." },
+        { en: "calibration", ko: "교정", def: "측정 장비를 표준 기준값에 맞추고 오차를 확인하는 작업. 교정 주기가 지난 장비로 잰 값은 품질 증빙으로 인정받기 어렵다.", ex: "The gauge is due for calibration next month." }
+      ],
+      dialogue: {
+        setting: '해외 고객사 품질 담당자와 새 부품의 사양을 확인하는 화상회의입니다.',
+        you: 'A',
+        roles: { A: '나 (설계 엔지니어)', B: 'Mr. Tanaka (고객사 품질 담당)' },
+        lines: [
+          { s: 'B', en: "Can you confirm the key dimensions of the new bracket?", ko: "새 브래킷의 주요 치수를 확인해 주시겠어요?" },
+          { s: 'A', en: "Sure. The nominal thickness is 4 millimeters, and the tolerance is plus or minus 0.05 millimeters.", ko: "네. 공칭 두께는 4mm이고, 공차는 ±0.05mm입니다." },
+          { s: 'B', en: "And how about the weight?", ko: "무게는요?" },
+          { s: 'A', en: "This part weighs about 40% less than the previous design.", ko: "이 부품은 이전 설계보다 약 40% 가볍습니다." },
+          { s: 'B', en: "Impressive. What's the maximum operating temperature?", ko: "인상적이네요. 최대 동작 온도는요?" },
+          { s: 'A', en: "The maximum operating temperature is 85 degrees Celsius.", ko: "최대 동작 온도는 섭씨 85도입니다." },
+          { s: 'B', en: "Our team works in inches. Could you send the drawing in imperial units as well?", ko: "저희 팀은 인치를 써요. 도면을 인치 단위로도 보내 주실 수 있나요?" },
+          { s: 'A', en: "Of course. I'll send both versions, and all measurements come from calibrated equipment.", ko: "물론이죠. 두 버전 모두 보내 드리고, 모든 측정값은 교정된 장비로 잰 것입니다." }
+        ]
+      },
+      situations: [
+        { q: "'±0.05mm'를 영어로 읽으면?", options: ["plus or minus 0.05 millimeters", "more or less 0.05 millimeters", "up and down 0.05 millimeters", "around about 0.05 millimeters"], answer: 0, explain: "± 기호는 plus or minus 로 읽습니다." },
+        { q: "'예상보다 약 10배 높다'를 엔지니어답게 말하면?", options: ["It's an order of magnitude higher than expected.", "It's a degree higher than expected.", "It's ten levels higher than expected.", "It's one size bigger than expected."], answer: 0, explain: "order of magnitude 는 10배 단위의 차이를 뜻합니다." },
+        { q: "도면에 적힌 설계 기준값을 뜻하는 표현은?", options: ["nominal value", "normal value", "name value", "basic number"], answer: 0, explain: "nominal = 명목상의, 공칭의. 실제 측정값(measured value)과 구분합니다." }
+      ]
+    },
+    {
+      id: 'risk-safety',
+      icon: '⚠️',
+      title: '리스크 & 안전',
+      titleEn: 'Risk & Safety',
+      goal: 'FMEA·안전계수·이중화 같은 개념으로 위험을 평가하고 대책을 논의할 수 있다.',
+      expressions: [
+        { en: "We ran an FMEA to identify potential failure modes.", ko: "잠재적인 고장 모드를 찾기 위해 FMEA를 수행했습니다.", tip: "FMEA = Failure Mode and Effects Analysis (고장 모드 영향 분석)", blank: "potential" },
+        { en: "This risk has a high severity but a low probability.", ko: "이 리스크는 심각도는 높지만 발생 가능성은 낮습니다.", blank: "severity" },
+        { en: "We designed it with a safety factor of two.", ko: "안전계수 2로 설계했습니다.", blank: "factor" },
+        { en: "Our mitigation plan is to add a redundant sensor.", ko: "완화 대책은 이중화 센서를 추가하는 것입니다.", tip: "redundant = 이중화된, 예비의", blank: "mitigation" },
+        { en: "Is this design compliant with the ISO standard?", ko: "이 설계는 ISO 표준을 준수하나요?", blank: "compliant" },
+        { en: "That controller is a single point of failure.", ko: "그 컨트롤러는 단일 고장점입니다.", tip: "single point of failure = 그 하나가 고장 나면 전체가 멈추는 지점", blank: "single" },
+        { en: "Let's escalate this to the safety committee.", ko: "이 건은 안전위원회로 올립시다.", tip: "escalate = 상위 단계로 보고·이관하다", blank: "escalate" }
+      ],
+      terms: [
+        { en: "FMEA", ko: "고장 모드 영향 분석", def: "부품·공정별로 '어떻게 고장 나는지(모드), 그러면 무슨 일이 생기는지(영향), 왜 생기는지(원인)'를 표로 정리하는 기법. 심각도×발생도×검출도로 RPN(위험 우선순위)을 계산해 대책 순서를 정한다.", ex: "The FMEA showed that the seal is our biggest risk." },
+        { en: "severity", ko: "심각도", def: "고장이 일어났을 때 영향이 얼마나 큰지. 보통 1~10 척도로 평가하며, 사람의 안전에 영향을 주면 최고 등급이다.", ex: "Any failure that could injure an operator has the highest severity." },
+        { en: "probability", ko: "발생 가능성", def: "리스크가 실제로 일어날 가능성. 리스크는 흔히 '심각도 × 발생 가능성' 매트릭스로 평가하고, 둘 다 높은 칸부터 대책을 세운다.", ex: "We reduced the probability by changing the supplier." },
+        { en: "safety factor", ko: "안전계수", def: "실제로 견딜 수 있는 하중 ÷ 설계(예상) 하중. 안전계수 2 = 예상 하중의 2배까지 견딘다. 사람이 다치는 구조물일수록, 하중을 정확히 모를수록 크게 잡는다.", ex: "Lifting equipment usually needs a safety factor of at least four." },
+        { en: "redundancy", ko: "이중화", def: "핵심 부품·경로를 여러 개 두어 하나가 고장 나도 시스템이 계속 동작하게 하는 설계. 항공기 유압·서버 전원 등이 대표적이다.", ex: "We added redundancy to the power supply." },
+        { en: "single point of failure", ko: "단일 고장점", def: "이 하나가 고장 나면 전체 시스템이 멈추는 지점(SPOF). 이중화로 제거하거나, 제거할 수 없으면 감시와 예비품으로 대비한다.", ex: "The single database server is a single point of failure." },
+        { en: "mitigation", ko: "완화 (대책)", def: "리스크의 발생 가능성이나 영향을 줄이는 조치. 리스크 대응은 회피(avoid)·완화(mitigate)·전가(transfer)·수용(accept) 네 가지로 나뉜다.", ex: "Every high risk needs a mitigation plan and an owner." },
+        { en: "compliance", ko: "규정 준수", def: "법규·표준(예: ISO 9001 품질, ISO 26262 자동차 기능안전, IEC 61508, CE 마킹)을 만족하는 것. 시험 성적서와 문서로 증명해야 한다.", ex: "We need a third-party test report to show compliance." }
+      ],
+      dialogue: {
+        setting: '신규 자동화 설비의 위험성 평가 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (안전 엔지니어)', B: 'Dr. Weber (프로젝트 책임자)', C: 'Sam (설계 엔지니어)' },
+        lines: [
+          { s: 'B', en: "Where are we with the risk assessment?", ko: "위험성 평가는 어디까지 진행됐나요?" },
+          { s: 'A', en: "We ran an FMEA to identify potential failure modes. We found twelve, and one of them is critical.", ko: "잠재적인 고장 모드를 찾기 위해 FMEA를 수행했습니다. 12개를 찾았고, 그중 하나가 치명적입니다." },
+          { s: 'C', en: "Which one is it?", ko: "어떤 거죠?" },
+          { s: 'A', en: "The emergency stop relies on one controller. That controller is a single point of failure.", ko: "비상 정지가 컨트롤러 하나에 의존합니다. 그 컨트롤러는 단일 고장점입니다." },
+          { s: 'B', en: "How serious is it?", ko: "얼마나 심각한가요?" },
+          { s: 'A', en: "This risk has a high severity but a low probability. Our mitigation plan is to add a redundant sensor.", ko: "이 리스크는 심각도는 높지만 발생 가능성은 낮습니다. 완화 대책은 이중화 센서를 추가하는 것입니다." },
+          { s: 'C', en: "And is the frame strong enough?", ko: "프레임은 충분히 튼튼한가요?" },
+          { s: 'A', en: "Yes, we designed it with a safety factor of two.", ko: "네, 안전계수 2로 설계했습니다." },
+          { s: 'B', en: "Good. Is this design compliant with the ISO standard?", ko: "좋아요. 이 설계는 ISO 표준을 준수하나요?" },
+          { s: 'A', en: "Almost. Before we sign off, let's escalate this to the safety committee.", ko: "거의요. 승인하기 전에 이 건은 안전위원회로 올립시다." }
+        ]
+      },
+      situations: [
+        { q: "'안전계수 2로 설계했다'를 영어로?", options: ["We designed it with a safety factor of two.", "We designed it with two safeties.", "Our safety number is double.", "We made it two times safe factor."], answer: 0, explain: "safety factor = 견딜 수 있는 하중 ÷ 예상 하중" },
+        { q: "하나만 고장 나도 전체가 멈추는 지점을 뜻하는 표현은?", options: ["single point of failure", "one broken point", "main failure spot", "unique fault place"], answer: 0, explain: "이중화(redundancy)로 제거합니다." },
+        { q: "리스크를 줄이는 대책을 뜻하는 단어는?", options: ["mitigation", "migration", "meditation", "motivation"], answer: 0, explain: "철자가 비슷한 migration(이전)과 헷갈리지 마세요." }
+      ]
+    },
+    {
+      id: 'performance-data',
+      icon: '🖥️',
+      title: '성능 & 데이터 분석',
+      titleEn: 'Performance & Data Analysis',
+      goal: '지연 시간·백분위수·표준편차·상관관계 같은 개념으로 데이터를 해석하고 결론을 말할 수 있다.',
+      expressions: [
+        { en: "Average latency went up from 120 to 300 milliseconds.", ko: "평균 지연 시간이 120ms에서 300ms로 늘었습니다.", blank: "latency" },
+        { en: "The system can handle 5,000 requests per second.", ko: "이 시스템은 초당 5,000건의 요청을 처리할 수 있습니다.", tip: "requests per second (RPS) = 초당 요청 수", blank: "handle" },
+        { en: "Let's run a benchmark before and after the change.", ko: "변경 전후로 벤치마크를 돌려 봅시다.", blank: "benchmark" },
+        { en: "This data point looks like an outlier.", ko: "이 데이터는 이상치로 보입니다.", blank: "outlier" },
+        { en: "The difference is statistically significant.", ko: "그 차이는 통계적으로 유의미합니다.", tip: "우연으로 생긴 차이가 아니라고 볼 수 있다는 뜻", blank: "significant" },
+        { en: "The standard deviation is large, so the process isn't stable.", ko: "표준편차가 커서 공정이 안정적이지 않습니다.", blank: "deviation" },
+        { en: "There's a strong correlation, but that doesn't prove causation.", ko: "강한 상관관계가 있지만, 그것이 인과관계를 증명하지는 않습니다.", blank: "correlation" }
+      ],
+      terms: [
+        { en: "latency", ko: "지연 시간", def: "요청을 보낸 뒤 응답이 돌아오기까지 걸리는 시간. 낮을수록 좋다. 평균만 보면 일부 사용자의 느린 경험이 가려진다.", ex: "Network latency between the two data centers is 40 milliseconds." },
+        { en: "percentile (p99)", ko: "백분위수", def: "p99 지연 시간 300 ms = 전체 요청의 99%가 300 ms 안에 끝났다는 뜻. 평균보다 사용자가 체감하는 '느린 순간'을 잘 보여 줘서 성능 목표(SLO)에 많이 쓴다.", ex: "Our target is a p99 latency under 500 milliseconds." },
+        { en: "bandwidth", ko: "대역폭", def: "단위 시간에 전송할 수 있는 최대 데이터 양(예: 1 Gbps). 도로에 비유하면 대역폭은 차선 수, 지연 시간은 이동 시간이다. 대역폭을 늘려도 지연 시간이 줄지는 않는다.", ex: "Video calls need more bandwidth than voice calls." },
+        { en: "benchmark", ko: "벤치마크", def: "같은 조건에서 성능을 측정해 비교하는 기준 테스트. 변경 전후를 같은 장비·같은 데이터로 여러 번 측정해야 공정하게 비교할 수 있다.", ex: "The benchmark shows a 15% improvement." },
+        { en: "outlier", ko: "이상치", def: "다른 데이터와 크게 동떨어진 값. 측정 오류인지 실제 현상인지 먼저 확인하고, 이유 없이 지우면 안 된다.", ex: "We removed one outlier caused by a sensor error." },
+        { en: "standard deviation", ko: "표준편차", def: "데이터가 평균에서 얼마나 흩어져 있는지 나타내는 값(σ). 정규분포에서 약 68%가 ±1σ, 99.7%가 ±3σ 안에 들어온다. 품질 관리의 '6시그마'도 이 개념에서 나왔다.", ex: "The standard deviation dropped after we replaced the tool." },
+        { en: "statistical significance", ko: "통계적 유의성", def: "관찰된 차이가 우연히 생겼을 확률(p-value)이 충분히 낮은지(보통 0.05 미만). 표본이 작으면 큰 차이도 유의하지 않을 수 있다.", ex: "With only ten samples, the result isn't statistically significant." },
+        { en: "correlation vs. causation", ko: "상관관계 vs 인과관계", def: "두 값이 함께 변하는 것(상관)이 곧 한쪽이 다른 쪽의 원인(인과)이라는 뜻은 아니다. 제3의 요인이 둘 다를 움직였을 수 있으니, 조건을 바꿔 보는 실험으로 확인한다.", ex: "Remember, correlation is not causation." }
+      ],
+      dialogue: {
+        setting: '서비스 업데이트 후 앱이 느려졌다는 불만이 들어왔습니다. 데이터로 원인을 분석하는 회의입니다.',
+        you: 'A',
+        roles: { A: '나 (성능 엔지니어)', B: 'Olivia (엔지니어링 매니저)' },
+        lines: [
+          { s: 'B', en: "Customers say the app feels slower since the update. What does the data show?", ko: "업데이트 이후 앱이 느려졌다는 고객 의견이 있어요. 데이터는 어떻게 나왔나요?" },
+          { s: 'A', en: "Average latency went up from 120 to 300 milliseconds.", ko: "평균 지연 시간이 120ms에서 300ms로 늘었습니다." },
+          { s: 'B', en: "That's a big jump. Could it be just a few bad requests?", ko: "많이 늘었네요. 몇몇 이상한 요청 때문일 수도 있나요?" },
+          { s: 'A', en: "We checked. This data point looks like an outlier, but the p99 latency went up as well.", ko: "확인했습니다. 이 데이터는 이상치로 보이지만, p99 지연 시간도 함께 늘었습니다." },
+          { s: 'B', en: "The servers are also running hotter. Is that the cause?", ko: "서버 온도도 높아졌던데, 그게 원인인가요?" },
+          { s: 'A', en: "There's a strong correlation, but that doesn't prove causation.", ko: "강한 상관관계가 있지만, 그것이 인과관계를 증명하지는 않습니다." },
+          { s: 'B', en: "Fair enough. So how do we find out?", ko: "그렇네요. 그럼 어떻게 확인하죠?" },
+          { s: 'A', en: "Let's run a benchmark before and after the change, and check if the difference is statistically significant.", ko: "변경 전후로 벤치마크를 돌려 보고, 그 차이가 통계적으로 유의미한지 확인해 봅시다." },
+          { s: 'B', en: "Sounds good. And we still need 5,000 requests per second at peak, right?", ko: "좋아요. 그리고 피크 때는 여전히 초당 5,000건이 필요하죠?" },
+          { s: 'A', en: "Yes. The system can handle 5,000 requests per second, but only with the old configuration.", ko: "네. 시스템은 초당 5,000건을 처리할 수 있지만, 이전 설정에서만 그렇습니다." }
+        ]
+      },
+      situations: [
+        { q: "다른 데이터와 크게 동떨어진 값을 뜻하는 단어는?", options: ["outlier", "outsider", "outline", "overflow"], answer: 0, explain: "측정 오류인지 실제 현상인지 먼저 확인해야 합니다." },
+        { q: "'상관관계가 인과관계를 증명하지는 않는다'를 영어로?", options: ["Correlation doesn't prove causation.", "Relation doesn't make a reason.", "Together is not because.", "Connection isn't cause meaning."], answer: 0, explain: "데이터 분석 회의에서 정말 자주 나오는 문장입니다." },
+        { q: "'그 차이는 통계적으로 유의미하다'를 영어로?", options: ["The difference is statistically significant.", "The difference is statistic important.", "The difference is numerically meaningful.", "The difference is data significant."], answer: 0, explain: "보통 p-value가 0.05 미만일 때 이렇게 말합니다." }
+      ]
     }
   ];
 
@@ -593,7 +735,9 @@
     { id: 'results', icon: '📈', title: '보고 & 협상', titleEn: 'Reporting & Negotiation', color: 'amber',
       desc: '숫자로 보고하고, 발표하고, 조건을 협상하기', lessons: ['reporting', 'presentation-qa', 'negotiation'] },
     { id: 'engineering', icon: '🔧', title: '엔지니어링 미팅', titleEn: 'Engineering Meetings', color: 'rose',
-      desc: '설계 검토, 장애 분석, 테스트 결과를 기술 용어로 말하기', lessons: ['design-review', 'troubleshooting', 'testing-quality'] }
+      desc: '설계 검토, 장애 분석, 테스트 결과를 기술 용어로 말하기', lessons: ['design-review', 'troubleshooting', 'testing-quality'] },
+    { id: 'eng-deep', icon: '⚙️', title: '엔지니어링 심화', titleEn: 'Engineering Deep Dive', color: 'cyan',
+      desc: '수치·단위, 리스크·안전, 성능 데이터를 공학 개념과 함께 말하기', lessons: ['specs-units', 'risk-safety', 'performance-data'] }
   ];
 
   const LEVELS = {
@@ -601,7 +745,8 @@
     opinions: '기초', 'agree-disagree': '중급', brainstorming: '중급',
     clarifying: '기초', online: '기초', scheduling: '기초',
     reporting: '중급', 'presentation-qa': '중급', negotiation: '고급',
-    'design-review': '중급', troubleshooting: '중급', 'testing-quality': '중급'
+    'design-review': '중급', troubleshooting: '중급', 'testing-quality': '중급',
+    'specs-units': '중급', 'risk-safety': '고급', 'performance-data': '고급'
   };
 
   LESSONS.forEach(function (lesson) {
