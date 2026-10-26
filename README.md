@@ -182,12 +182,13 @@ tests/                  node:test 단위 테스트
   - `expressions[].blank`: 빈칸 퀴즈에서 비울 단어 (문장 안에 반드시 포함)
   - `expressions[].ipa`, `terms[].ipa`: 발음기호. 직접 쓰지 말고 `npm run ipa`로 채우세요. 사전에 없는 단어가 있으면 목록을 보여 주니 `scripts/ipa.mjs`의 `OVERRIDES`에 추가하면 됩니다.
   - `expressions[].swaps`: 비슷한 오답을 만드는 규칙. `"바꿀 부분>오답1|오답2"` 형식으로 쓰고, 문장 안의 겹치지 않는 자리 1~3곳을 지정합니다.
-    - 예: `["by>until|till", "Friday>Monday|Thursday"]`
+    - 예: `["report>proposal", "Friday>Monday"]` → `report by Monday` / `proposal by Friday` / `proposal by Monday`
+    - 오답도 **원어민이 실제로 쓰는 자연스러운 영어**여야 합니다. 문법이 틀린 문장(`until`/`till` 혼동, 시제 오류 등)을 쓰지 말고, 한두 단어 차이로 **뜻만 달라지게** 만드세요. 관사(a/an)가 바뀌는 단어는 관사까지 함께 바꿉니다(`an interesting idea>a risky idea`).
     - 자리가 2곳 이상이면 A만 / B만 / A+B를 바꾼 2×2 조합으로 오답을 만듭니다.
     - 한 자리에만 오답을 3개 넣을 때는 세 오답 모두 같은 단어를 바꿔야 합니다. 서로 다른 단어를 바꾸면 다수결로 정답이 드러나서 `npm test`가 실패합니다.
   - `terms` (선택): 기술 용어 카드 `{ en, ko, def(개념 설명), ex(예문) }`. 넣으면 레슨 화면·퀴즈(용어 문제 2개)·복습·사전·스피드 챌린지에 자동으로 반영됩니다.
   - `dialogue.you`: 롤플레이에서 학습자가 맡는 역할
-  - `situations[].answer`: 정답 보기 인덱스 (화면에서는 섞여서 나옴)
+  - `situations[].answer`: 정답 보기 인덱스 (화면에서는 섞여서 나옴). 상황 문제의 오답도 자연스러운 영어로, 상황에 맞지 않거나 뜻이 다른 문장을 넣습니다.
 - **시뮬레이션**: `app/js/scenarios.js`. 단계마다 평가 역량(`polite`/`clear`/`lead`)과 등급 0·1·2 답변 3개, 각 답변에 대한 상대 반응을 넣습니다.
 - 앱 파일을 바꾸면 `app/sw.js`의 `VERSION`을 올려야 휴대폰에 새 버전이 반영됩니다.
 

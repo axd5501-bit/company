@@ -56,8 +56,7 @@
     return '오늘 하루 수고 많으셨어요';
   }
 
-  const DAYS_EN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const MONTHS_EN = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const DAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
   /** 오늘의 회의 안건: 이어서 학습 → 복습 → 실전 */
   function agendaItems() {
@@ -67,7 +66,7 @@
     const due = C.dueCardIds(st.srs, Date.now()).length;
     const items = [];
     items.push(next
-      ? { href: '#/lesson/' + next.lesson.id + '/' + next.step.id, title: next.lesson.icon + ' ' + next.lesson.title, sub: 'LESSON ' + lessonNo(next.lesson) + ' · 다음 단계 ' + next.step.label, mins: 10 }
+      ? { href: '#/lesson/' + next.lesson.id + '/' + next.step.id, title: next.lesson.icon + ' ' + next.lesson.title, sub: '레슨 ' + lessonNo(next.lesson) + ' · 다음 단계 ' + next.step.label, mins: 10 }
       : { href: '#/practice', title: '🏆 모든 레슨 완료', sub: '실전 연습으로 감각을 유지하세요', mins: 5 });
     if (!learned) items.push({ href: next ? '#/lesson/' + next.lesson.id : '#/review', title: '🗂️ 복습 카드 만들기', sub: '핵심 표현 학습을 마치면 카드가 생겨요', mins: 2 });
     else if (due) items.push({ href: '#/review', title: '🔁 복습 카드 ' + due + '장', sub: '잊어버리기 직전에 다시 보기', mins: Math.max(2, Math.ceil(due / 4)) });
@@ -86,7 +85,7 @@
     const days = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-      days.push({ label: DAYS_EN[d.getDay()].charAt(0) + DAYS_EN[d.getDay()].slice(1).toLowerCase(), xp: st.xp[C.dateKey(d)] || 0, today: i === 0 });
+      days.push({ label: DAYS_KO[d.getDay()], xp: st.xp[C.dateKey(d)] || 0, today: i === 0 });
     }
     const max = Math.max(C.DAILY_GOAL, days.reduce(function (m, d) { return Math.max(m, d.xp); }, 0));
     const goalPct = (C.DAILY_GOAL / max) * 100;
@@ -121,7 +120,7 @@
         return '<a class="agenda-item' + (a.done ? ' done' : '') + '" href="' + a.href + '">' +
           '<span class="agenda-no">' + (a.done ? icon('check') : '0' + (i + 1)) + '</span>' +
           '<span class="agenda-text"><b>' + esc(a.title) + '</b><small>' + esc(a.sub) + '</small></span>' +
-          '<span class="agenda-time">' + (a.done ? 'DONE' : '~' + a.mins + ' MIN') + '</span></a>';
+          '<span class="agenda-time">' + (a.done ? '완료' : '약 ' + a.mins + '분') + '</span></a>';
       }).join('');
 
       const tools = [
@@ -143,7 +142,7 @@
 
       return '<section class="hero">' +
         '<div class="hero-main">' +
-        '<div class="hero-kicker"><span class="live-dot"></span>' + DAYS_EN[now.getDay()] + ' · ' + now.getDate() + ' ' + MONTHS_EN[now.getMonth()] + ' · DAILY STAND-UP</div>' +
+        '<div class="hero-kicker"><span class="live-dot"></span>' + (now.getMonth() + 1) + '월 ' + now.getDate() + '일 ' + DAYS_KO[now.getDay()] + '요일 · 오늘의 학습</div>' +
         '<h1>' + (st.name ? esc(st.name) + '님, ' : '') + greeting() + '</h1>' +
         '<p class="hero-sub">오늘 회의에서 바로 꺼내 쓸 영어, 10분이면 충분해요.</p>' +
         '<div class="hero-stats">' +
@@ -152,7 +151,7 @@
         '<div class="hero-level"><div class="hero-level-top"><span class="lv-chip">LV.' + lv.level + '</span><b>' + esc(lv.titleKo) + '</b><span class="mono small">' + lv.xp + ' XP</span></div>' +
         App.bar(lv.pct, 'on-dark') + '<span class="hero-label">다음 레벨까지 ' + (lv.next - lv.xp) + ' XP</span></div>' +
         '</div></div>' +
-        '<div class="agenda"><div class="agenda-head"><span>TODAY’S AGENDA</span><span class="mono">오늘의 안건 3</span></div>' + agenda + '</div>' +
+        '<div class="agenda"><div class="agenda-head"><span>오늘의 안건</span><span class="mono">3개</span></div>' + agenda + '</div>' +
         '</section>' +
         '<div class="home-grid">' +
         '<section class="card today"><div class="eyebrow">오늘의 표현 · ' + esc(tod.lesson.title) + '</div>' +
@@ -182,7 +181,7 @@
             return '<span class="seg' + (stepDone(ls, s.id) ? ' done' : '') + '" title="' + s.label + '"></span>';
           }).join('');
           return '<a class="lesson-card" href="#/lesson/' + l.id + '">' +
-            '<div class="lesson-top"><span class="lesson-code">L-' + lessonNo(l) + '</span>' + levelChip(l.level) +
+            '<div class="lesson-top"><span class="lesson-code">레슨 ' + lessonNo(l) + '</span>' + levelChip(l.level) +
             (l.terms ? '<span class="chip">용어 ' + l.terms.length + '</span>' : '') +
             (pct === 100 ? '<span class="chip done">' + icon('check') + '완료</span>' : '') + '</div>' +
             '<div class="lesson-title-row"><span class="lesson-icon">' + l.icon + '</span><div class="grow"><h3>' + esc(l.title) + '</h3>' +
@@ -191,7 +190,7 @@
             '<div class="lesson-foot"><div class="segs">' + steps + '</div><span class="mono small">' + pct + '%</span></div></a>';
         }).join('');
         return '<section class="track-section t-' + t.color + '" id="track-' + t.id + '">' +
-          '<header class="track-head"><span class="track-index mono">T' + (ti + 1) + '</span><span class="track-emoji big">' + t.icon + '</span><div class="grow">' +
+          '<header class="track-head"><span class="track-index mono">트랙 ' + (ti + 1) + '</span><span class="track-emoji big">' + t.icon + '</span><div class="grow">' +
           '<div class="eyebrow">' + esc(t.titleEn) + ' ' + App.focusTag(t.id) + '</div><h2>' + esc(t.title) + '</h2><p class="muted">' + esc(t.desc) + '</p></div>' +
           App.ring(trackProgress(t), 64) + '</header><div class="lesson-grid">' + cards + '</div></section>';
       }).join('');
@@ -238,7 +237,7 @@
       return '<header class="lesson-hero t-' + t.color + '">' +
         '<a class="back" href="#/courses/' + t.id + '">' + icon('back') + esc(t.title) + '</a>' +
         '<div class="lesson-hero-row"><div class="lesson-icon big">' + l.icon + '</div><div class="grow">' +
-        '<div class="hero-kicker">L-' + lessonNo(l) + ' · ' + esc(t.titleEn.toUpperCase()) + ' · ' + l.level + '</div>' +
+        '<div class="hero-kicker">레슨 ' + lessonNo(l) + ' · ' + esc(t.title) + ' · ' + l.level + '</div>' +
         '<h1>' + esc(l.title) + '</h1><p class="lesson-hero-en">' + esc(l.titleEn) + '</p><p class="lesson-hero-goal">' + esc(l.goal) + '</p></div>' +
         App.ring(pct, 76, null, 'on-dark') + '</div></header>' +
         '<nav class="stepper">' + stepper + '</nav><section class="tab-body">' + body + '</section>';

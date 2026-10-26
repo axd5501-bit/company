@@ -105,7 +105,7 @@
       .concat(customs.map(function (id) { const p = App.phrase(id); return { id: id, en: p.en, ko: p.ko, ipa: p.ipa, tip: p.tip, source: p.source }; }));
     if (!rows.length) return '<div class="card center muted">' + (pb.filter === 'favorites' ? '아직 즐겨찾기한 표현이 없어요. ☆ 를 눌러 추가해 보세요.' : '검색 결과가 없어요.') + '</div>';
     return '<p class="muted small result-count">' + rows.length + '개 표현</p>' + rows.map(function (r) {
-      return '<article class="pb-row card' + (r.term ? ' is-term' : '') + '"><div class="grow"><p class="en">' + (r.term ? '<span class="term-tag">TERM</span>' : '') + esc(r.en) + '</p>' + App.ipaHtml(r.ipa) + '<p class="muted">' + esc(r.ko) + '</p>' +
+      return '<article class="pb-row card' + (r.term ? ' is-term' : '') + '"><div class="grow"><p class="en">' + (r.term ? '<span class="term-tag">용어</span>' : '') + esc(r.en) + '</p>' + App.ipaHtml(r.ipa) + '<p class="muted">' + esc(r.ko) + '</p>' +
         (r.tip ? '<p class="tip small">💡 ' + esc(r.tip) + '</p>' : '') +
         (r.href ? '<a class="pb-source" href="' + r.href + '">' + esc(r.source) + '</a>' : '<span class="pb-source">' + esc(r.source) + '</span>') + '</div>' +
         '<div class="pb-actions"><button class="btn icon-only" data-action="speak" data-text="' + esc(r.en) + '" title="듣기">' + icon('speaker') + '</button>' +

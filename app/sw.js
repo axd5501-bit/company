@@ -2,7 +2,7 @@
  * 오프라인 캐시. 앱 파일을 바꾸면 VERSION 을 올려야 휴대폰에 새 버전이 반영된다.
  * (tests/pwa.test.js 가 ASSETS 목록과 실제 파일이 맞는지 확인한다)
  */
-const VERSION = 'biztalk-v2.7.0';
+const VERSION = 'biztalk-v2.7.1';
 const ASSETS = [
   './',
   'index.html',
